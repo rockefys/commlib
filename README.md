@@ -1,4 +1,4 @@
-[CommLib](http://https://github.com/Rockefys/commlib) [![Build Status](https://secure.travis-ci.org/twitter/bootstrap.png)](http://travis-ci.org/twitter/bootstrap)
+[commLib](http://https://github.com/rockefys/commlib) [![Build Status](https://secure.travis-ci.org/twitter/bootstrap.png)](http://travis-ci.org/twitter/bootstrap)
 =================
 
 Commlib is a common php web admin library build on [ThinkPHP](https://github.com/liu21st/thinkphp) and [Bootstrap](https://github.com/twitter/bootstrap)
@@ -8,8 +8,8 @@ Commlib is a common php web admin library build on [ThinkPHP](https://github.com
 
 Two quick start options are available:
 
-* [download the latest release](https://github.com/ROckefys/Commlib/zipball/master),
-* Clone the repo, `git clone git://github.com/Rockefys/Commlib.git`.
+* [download the latest release](https://github.com/rockefys/commlib/zipball/master),
+* Clone the repo, `git clone git://github.com/rockefys/commlib.git`.
 
 ## Bug tracker
 
