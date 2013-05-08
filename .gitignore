@@ -1,5 +1,4 @@
-#请勿删除此文件
-# 通常需要git忽略的文件
+# Numerous always-ignore extensions
 *.diff
 *.err
 *.orig
@@ -11,10 +10,8 @@
 *.vi
 *~
 *.sass-cache
-*.tmp
-*.bak
 
-# OS 或 IDE编辑器 产生的文件
+# OS or Editor folders
 .DS_Store
 ._*
 Thumbs.db
@@ -39,7 +36,8 @@ nbproject
 node_modules
 dist
 
-#TinkPHP编译目录
+
+#TinkPHP Compile directory
 Runtime
-#同步软件生成的副本
+#sync copy
 *conflicted copy*.*
