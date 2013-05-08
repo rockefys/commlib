@@ -1,0 +1,96 @@
+<div class="navbar navbar-fixed-top ">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			
+			<a class="brand" href="{:W('Parameter',MODULE_NAME,true)}">{:W('Parameter',MODULE_NAME,true)}</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+					<li class="active">
+						<a href="#"><i class="icon-home"></i>Home</a>
+					</li>
+					<li>
+						<a href="#">News</a>
+					</li>
+					<li>
+						<a href="#">Lib</a>
+					</li>
+					<li>
+						<a href="#">Project</a>
+					</li>
+					<li>
+						<a href="#">Wiki</a>
+					</li>
+					<li>
+						<a href="#">Download</a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						More<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="#">Action</a>
+							</li>
+							<li>
+								<a href="#">Other Action</a>
+							</li>
+							<li>
+								<a href="#">Something else here</a>
+							</li>
+							<li class="divider"/>
+							<li class="nav-header">导航头</li>
+							<li>
+								<a href="#">Separated link</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+					<form class="navbar-search " action="">
+						<!--<div class="input-prepend input-pend">-->
+							<input type="text" class="search-query span2" placeholder="search">
+							<span class="search-icon add-on">
+								<i class="icon-search"></i>
+							</span>
+						<!--</div>-->
+					</form>
+					</li>
+				</ul>
+				<ul class="nav pull-right">
+					<present name="Think.session.usename">
+						<li><a href="profile">{$Think.session.username}</a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Setting<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="#">Action</a>
+							</li>
+							<li>
+								<a href="#">Other Action</a>
+							</li>
+							<li>
+								<a href="#">Something else here</a>
+							</li>
+							<li class="divider"/>
+							<li class="nav-header">导航头</li>
+							<li>
+								<a href="#">Separated link</a>
+							</li>
+						</ul>
+					</li>
+					<else /> 
+						<li><a href="{:U('Login/index')}">Login</a></li>
+						<li><a href="{:U('Login/signup')}">Signup</a></li>
+					</present>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</div>

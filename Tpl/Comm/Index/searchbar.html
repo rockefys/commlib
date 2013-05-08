@@ -1,0 +1,23 @@
+<notempty name="cond">
+<div class="row-fluid">
+<form class="form-inline" action="{:U('query')}" method="POST" id="table-searchbar">
+<volist name="cond" id="con">
+  <switch name="con">
+    <case value="">
+    &nbsp;&nbsp;{$cname[$key]} <input type="txt" name="query[{$Key}]" class="input-medium span2">
+    </case>
+    <case value="false">
+    &nbsp;&nbsp;<label class="checkbox"><input type="checkbox" id="query[{$Key}]" />{$cname[$key]} </label>&nbsp;&nbsp;
+    </case>
+    <default />
+    {~$datas=$con()}{$cname[$key]} <select name="query[{$key}]" class="span2">
+        <volist name="datas" id="op">
+            <option value ="{$key}">{$op}</option>
+        </volist>
+    </select>
+</switch>
+</volist>
+   <button type="button" data-href="{$queryUrl}" onclick="table_search()" id="btnQuery" class="btn btn-tool"><i class="icon-search"></i></button>
+	</form>
+</div>
+</notempty>

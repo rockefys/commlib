@@ -1,0 +1,56 @@
+<div class="row-fluid">
+	<include file="./Tpl/Comm/Authority/toolbar.html"/>
+</div>
+<div class="row-fluid">
+	<div class="block span6">
+		<div class="block-title">
+			<i class="icon-th-list"></i><b class="break"></b><a href="#">角色列表</a>
+			<div class="more-icons pull-right">
+				<a class="btn-minimize" href="#"><i class="icon-chevron-up"></i></a>
+			</div>
+		</div>
+		<div class="block-content">
+			<table id="data-table" class="table table-condensed table-bordered table-striped table-hover">
+			    <thead>
+			        <tr class="align-center">
+			            <th></th>
+			            <volist name="columns" id="col" offset="1">
+			                    <th>{$col} <i class="icon-chevron-down"></i></th>
+			            </volist>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <volist name="data" id="vo" key="row">
+			        <tr>
+			            <volist name="columns" id="col" offset="0" length='1'>
+			                <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+			            </volist>
+			            
+			            <volist name="columns" id="col" offset="1">
+			                    <td>{$vo[$key]}</td>
+			            </volist>
+			        </tr>
+			        </volist>
+			    </tbody>
+			</table>
+			<include file="./Tpl/Comm/Index/pager.html"/>
+		</div>
+	</div>
+	<div class="block span6">
+		<div class="block-title">
+			<i class="icon-lock"></i><b class="break"></b><a href="#">权限模块</a>
+			<div class="more-icons pull-right">
+				<a class="btn-minimize" href="#"><i class="icon-chevron-up"></i></a>
+			</div>
+		</div>
+		<div class="block-content">
+			<div class="btn-group">
+			    <a class="select-all btn btn-small" data-target="tree" data-original-title="Refresh" rel="tooltip" data-placement="bottom">All</a>
+			    <a class="select-invert btn btn-small" data-target="tree" data-original-title="Refresh" rel="tooltip" data-placement="bottom">Invert</a>
+			    <a class="select-cancel btn btn-small" data-target="tree" data-original-title="Refresh" rel="tooltip" data-placement="bottom">Cancel</a>
+			</div>
+			<include file="./Tpl/Comm/Authority/authority.html"/>
+		</div>
+	</div>
+</div>
+

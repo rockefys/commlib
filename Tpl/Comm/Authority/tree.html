@@ -1,0 +1,30 @@
+<div class="well well-small span4">
+	<ul id="treeDemo" class="ztree"></ul>
+</div>
+<link href="__PUBLIC__/include/cssd/demo.css?v=<php>echo filemtime(__ROOT__.'Public/include/cssd/demo.css');</php>" rel="stylesheet">
+<link href="__PUBLIC__/include/zTree/css/zTreeStyle/zTreeStyle.css?v=<php>echo filemtime(__ROOT__.'Public/include/zTree/css/zTreeStyle/zTreeStyle.css');</php>" rel="stylesheet">
+<style type="text/css">
+	.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+</style>
+<script type="text/javascript">
+$(function(){
+head.js(
+	"__PUBLIC__/include/zTree/js/jquery.ztree.all-3.5.min.js",
+	"__PUBLIC__/include/js/tree.js",initTree
+	);
+});
+function initTree(){
+	$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+	$("#refreshNode").bind("click", {type:"refresh", silent:false}, refreshNode);
+	$("#refreshNodeSilent").bind("click", {type:"refresh", silent:true}, refreshNode);
+	$("#addNode").bind("click", {type:"add", silent:false}, refreshNode);
+	$("#addNodeSilent").bind("click", {type:"add", silent:true}, refreshNode);
+	$("#callbackTrigger").bind("change", {}, setTrigger);
+	$("#selectAll").bind("click", selectAll);
+	$("#addParent").bind("click", {isParent:true}, add);
+	$("#addLeaf").bind("click", {isParent:false}, add);
+	$("#addLeaf").bind("click", edit);
+	$("#remove").bind("click", remove);
+	$("#clearChildren").bind("click", clearChildren);
+}
+</script>

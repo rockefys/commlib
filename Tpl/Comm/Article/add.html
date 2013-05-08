@@ -1,0 +1,130 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<div class="control-group">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+        <input type="text" value="" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="title">标题</label>
+    <div class="controls">
+        <input type="text" value="" name="title" id="title" class="{required:true,maxlength:255,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="excerpt">摘要</label>
+    <div class="controls">
+                <textarea rows="3" name="excerpt" id="excerpt" class="{required:true,}"></textarea>
+        
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="content">内容</label>
+    <div class="controls">
+        <textarea rows="3" class="{required:true,}" ></textarea>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="author">作者</label>
+    <div class="controls">
+        <input type="text" value="0" name="author" id="author" class="{required:true,maxlength:60,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="author_id">作者ID</label>
+    <div class="controls">
+        <input type="text" value="" name="author_id" id="author_id" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="catgory">分类</label>
+    <div class="controls">
+        <input type="text" value="" name="catgory" id="catgory" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="post_date">发布日期</label>
+    <div class="controls">
+        <input type="text" class="{required:true,dateISO:true,date:true,}" name="post_date" id="post_date"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="name">名称</label>
+    <div class="controls">
+        <input type="text" value="" name="name" id="name" class="{maxlength:255,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="tags">标签</label>
+    <div class="controls">
+        <input type="text" value="" name="tags" id="tags" class="{maxlength:255,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="reference">引用地址</label>
+    <div class="controls">
+        <input type="text" value="" name="reference" id="reference" class="{maxlength:255,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="password">密码</label>
+    <div class="controls">
+        <input type="text" value="" name="password" id="password" class="{required:true,maxlength:20,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="type">文章类型</label>
+    <div class="controls">
+        <select name="type" class="">
+                
+            <option value ="post">post</option>
+            <option value ="news">news</option>
+            <option value ="blog">blog</option>
+        </select>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="status">状态</label>
+    <div class="controls">
+        <select name="status" class="">
+                
+            <option value ="inherit">inherit</option>
+            <option value ="publish">publish</option>
+            <option value ="private">private</option>
+            <option value ="draft">draft</option>
+            <option value ="deleted">deleted</option>
+        </select>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="thumbnails">缩略图</label>
+    <div class="controls">
+        <input type="text" value="" name="thumbnails" id="thumbnails" class="{maxlength:255,}" placeholder="">
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="attament">附件</label>
+    <div class="controls">
+        <input name="attament" id="attament" class="{}" type="checkbox" checked>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="comment_status">评论</label>
+    <div class="controls">
+        <select name="comment_status" class="">
+                
+            <option value ="open">open</option>
+            <option value ="closed">closed</option>
+            <option value ="registered_only">registered_only</option>
+        </select>
+        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="update_time">更新时间</label>
+    <div class="controls">
+        <input type="text" class="{dateISO:true,date:true,}" name="update_time" id="update_time"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>
+        <label class="help-inline"></label>
+    </div>
+</div></form>
+</div>

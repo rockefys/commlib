@@ -1,0 +1,13 @@
+<div class="row-fluid">
+    <ul class="news">
+      <volist name="data" id="news">
+          <li>
+            <a href="news/n/{$news.id}" class="title" target="_blank">{$news.title}</a>
+            <span class="time">{:substr($news['post_date'],0,-8)}</span>
+          </li>
+      </volist>
+    </ul>
+</div>
+<div class="row-fluid">
+  <include file="./Tpl/Comm/Index/pager.html"/>
+</div>

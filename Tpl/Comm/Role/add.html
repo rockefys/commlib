@@ -1,0 +1,31 @@
+{__NOLAYOUT__}
+<div class="container-fluid">
+<form class="form-inline" action="{:U('save')}" method="post">
+	<input type="hidden" name="{$pk}" value="{$id}">
+  <legend>Legend</legend>
+  <div class="control-group">
+    <label class="control-label" for="inputNumb">Numb</label>
+    <div class="controls">
+      <input type="text" name="numb" placeholder="Numb" value="{$numb}">
+      <span class="help-inline">Inline help text</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputName">Name</label>
+    <div class="controls">
+      <input type="text" name="name" placeholder="Name" value="{$name}">
+      <span class="help-inline">Inline help text</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" name="auto_numb"> Auto Numb
+      </label>
+      <!--
+      <button type="submit" class="btn btn-primary btn-large" value="Sumbit"></button>
+    -->
+    </div>
+  </div>
+</form>
+</div>

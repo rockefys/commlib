@@ -1,0 +1,381 @@
+<div class="well well-small span4">
+	<ul id="tree" class="ztree"></ul>
+</div>
+<div class="well well-small span4">
+    <input type="button" class="btn" id="addLeaf" value="插入" >
+    <input type="button" class="btn" id="editNode" value="编辑" >
+    <input type="button" class="btn" id="removeNode" value="删除" >
+    
+    <input type="button" class="btn" id="copyNode" value="复制" >
+    <input type="button" class="btn" id="cutNode" value="剪切" >
+    <input type="button" class="btn" id="pasteNode" value="粘贴">
+    <input type="button" class="btn" id="clearChildren" value="清空子节点">
+</div>
+<link href="__PUBLIC__/include/zTree/css/zTreeStyle/zTreeStyle.css?v=<php>echo filemtime(__ROOT__.'Public/include/zTree/css/zTreeStyle/zTreeStyle.css');</php>" rel="stylesheet">
+<style type="text/css">
+	.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+</style>
+
+<script type="text/javascript">
+$(function(){
+head.js(
+	"__PUBLIC__/include/zTree/js/jquery.ztree.all-3.5.min.js",initTree
+	);
+});
+
+var setting = {
+	view: {
+		selectedMulti: false,
+		addHoverDom: addHoverDom,
+		removeHoverDom: removeHoverDom
+	},
+	edit: {
+		drag: {
+			autoExpandTrigger: true,
+			prev: dropPrev,
+			inner: dropInner,
+			next: dropNext
+		},
+		enable: true,
+		showAddBtn: true,
+		showRemoveBtn: true,
+		showRenameBtn: true,
+		editNameSelectAll: true
+
+	},
+	data: {
+		keep: {
+			parent:false,
+			leaf:false
+		},
+		simpleData: {
+			enable: true
+		}
+	},
+	callback: {
+		beforeEditName: beforeEditName,
+		beforeRemove: beforeRemove,
+		beforeRename: beforeRename,
+		onRemove: onRemove,
+		onRename: onRename,
+		beforeDrag: beforeDrag,
+		beforeDrop: beforeDrop,
+		beforeDragOpen: beforeDragOpen,
+		onDrag: onDrag,
+		onDrop: onDrop,
+		onExpand: onExpand
+		
+	}
+};
+function initTree(){
+	$.ajax({
+		url:"allnodes",
+		type:'post',
+		cache : false,
+		success: function(msg){
+			var nodes =msg;
+			$.fn.zTree.init($("#tree"), setting, nodes);
+			$("#addParent").bind("click", {isParent:true}, add);
+			$("#addLeaf").bind("click", {isParent:false}, add);
+			$("#addLeaf").bind("click", edit);
+			$("#edit").bind("click", edit);
+			$("#editNode").bind("click", edit);
+			$("#remove").bind("click", remove);
+			$("#removeNode").bind("click", remove);
+			$("#clearChildren").bind("click", clearChildren);
+			$("#copyNode").bind("click", copy);
+			$("#cutNode").bind("click", cut);
+			$("#pasteNode").bind("click", paste);
+		}
+	});
+};
+
+function fontCss(treeNode) {
+	var aObj = $("#" + treeNode.tId + "_a");
+	aObj.removeClass("copy").removeClass("cut");
+	if (treeNode === curSrcNode) {
+		if (curType == "copy") {
+			aObj.addClass(curType);
+		} else {
+			aObj.addClass(curType);
+		}			
+	}
+}
+var log, className = "dark";
+function beforeDrag(treeId, treeNodes) {
+	return false;
+}
+function beforeClick(treeId, treeNode) {
+	return !treeNode.isCur;
+}
+function beforeEditName(treeId, treeNode) {
+	className = (className === "dark" ? "":"dark");
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.selectNode(treeNode);
+	return true;
+}
+function beforeRemove(treeId, treeNode) {
+	className = (className === "dark" ? "":"dark");
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.selectNode(treeNode);
+	return true;
+}
+function beforeRename(treeId, treeNode, newName) {
+	className = (className === "dark" ? "":"dark");
+	if (newName.length == 0) {
+		alert("节点名称不能为空.");
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		setTimeout(function(){zTree.editName(treeNode)}, 10);
+		return false;
+	}
+	return true;
+}
+function onRename(e, treeId, treeNode) {
+	$.ajax({
+	  type: "POST",
+	  url: "nodes",
+	  data: { id: treeNode.id,name: treeNode.name,pid: treeNode.pId,level:treeNode.level, type: (treeNode.id<0?"add":"edit") },
+	  success:(function(msg) {
+	  	if(treeNode.id<0)
+			if(msg>0)
+				treeNode.id=msg;
+		return(msg>0);
+	})});
+}
+function onRemove(e, treeId, treeNode) {
+	$.ajax({
+	  	type: "POST",
+	  	url: "nodes",
+	  	data: { id: treeNode.id, type: "del" },
+	  	success:(function(msg) {
+	  		return(msg==1);
+	})});
+}
+
+var newCount = 1;
+function addHoverDom(treeId, treeNode) {
+	var sObj = $("#" + treeNode.tId + "_span");
+	if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
+	var addStr = "<span class='button add' id='addBtn_" + treeNode.id
+		+ "' title='add node' onfocus='this.blur();'></span>";
+	sObj.after(addStr);
+	var btn = $("#addBtn_"+treeNode.id);
+	if (btn) btn.bind("click", function(){
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		var e ={data:{pId:treeNode.id,isParent:false}};
+		add(e);
+		return false;
+	});
+};
+function removeHoverDom(treeId, treeNode) {
+	$("#addBtn_"+treeNode.id).unbind().remove();
+};
+function selectAll() {
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.setting.edit.editNameSelectAll =  $("#selectAll").attr("checked");
+}
+var curSrcNode, curType;
+function setCurSrcNode(treeNode) {
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	if (curSrcNode) {
+		delete curSrcNode.isCur;
+		var tmpNode = curSrcNode;
+		curSrcNode = null;
+		fontCss(tmpNode);
+	}
+	curSrcNode = treeNode;
+	if (!treeNode) return;
+
+	curSrcNode.isCur = true;			
+	zTree.cancelSelectedNode();
+	fontCss(curSrcNode);
+}
+function copy(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes();
+	if (nodes.length == 0) {
+		alert("请先选择一个节点");
+		return;
+	}
+	curType = "copy";
+	setCurSrcNode(nodes[0]);
+}
+function cut(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes();
+	if (nodes.length == 0) {
+		alert("请先选择一个节点");
+		return;
+	}
+	curType = "cut";
+	setCurSrcNode(nodes[0]);
+}
+function paste(e) {
+	if (!curSrcNode) {
+		alert("请先选择一个节点进行 复制 / 剪切");
+		return;
+	}
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes(),
+	targetNode = nodes.length>0? nodes[0]:null;
+	if (curSrcNode === targetNode) {
+		alert("不能移动，源节点 与 目标节点相同");
+		return;
+	} else if (curType === "cut" && ((!!targetNode && curSrcNode.parentTId === targetNode.tId) || (!targetNode && !curSrcNode.parentTId))) {
+		alert("不能移动，源节点 已经存在于 目标节点中");
+		return;
+	} else if (curType === "copy") {
+		targetNode = zTree.copyNode(targetNode, curSrcNode, "inner");
+	} else if (curType === "cut") {
+		targetNode = zTree.moveNode(targetNode, curSrcNode, "inner");
+		if (!targetNode) {
+			alert("剪切失败，源节点是目标节点的父节点");
+		}
+		targetNode = curSrcNode;
+	}
+	setCurSrcNode();
+	delete targetNode.isCur;
+	zTree.selectNode(targetNode);
+}
+
+var newCount = 1;
+function add(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	isParent = e.data.isParent,
+	nodes = zTree.getSelectedNodes(),
+	treeNode = nodes[0];
+	if (treeNode) {
+		treeNode = zTree.addNodes(treeNode, {id:(-1 - newCount), pId:treeNode.id, isParent:isParent, name:"new node" + (newCount++)});
+	} else {
+		treeNode = zTree.addNodes(null, {id:(-1 - newCount), pId:0, isParent:isParent, name:"new node" + (newCount++)});
+	}
+	if (treeNode) {
+		zTree.editName(treeNode[0]);
+	} else {
+		alert("叶子节点被锁定，无法增加子节点");
+	}
+};
+function edit() {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes(),
+	treeNode = nodes[0];
+	if (nodes.length == 0) {
+		alert("请先选择一个节点");
+		return;
+	}
+	zTree.editName(treeNode);
+};
+function remove(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes(),
+	treeNode = nodes[0];
+	if (nodes.length == 0) {
+		alert("请先选择一个节点");
+		return;
+	}
+	var callbackFlag = $("#callbackTrigger").attr("checked");
+	zTree.removeNode(treeNode, callbackFlag);
+};
+function clearChildren(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getSelectedNodes(),
+	treeNode = nodes[0];
+	if (nodes.length == 0 || !nodes[0].isParent) {
+		alert("请先选择一个父节点");
+		return;
+	}
+	zTree.removeChildNodes(treeNode);
+};
+
+function dropPrev(treeId, nodes, targetNode) {
+	var pNode = targetNode.getParentNode();
+	if (pNode && pNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i=0,l=curDragNodes.length; i<l; i++) {
+			var curPNode = curDragNodes[i].getParentNode();
+			if (curPNode && curPNode !== targetNode.getParentNode() && curPNode.childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+function dropInner(treeId, nodes, targetNode) {
+	if (targetNode && targetNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i=0,l=curDragNodes.length; i<l; i++) {
+			if (!targetNode && curDragNodes[i].dropRoot === false) {
+				return false;
+			} else if (curDragNodes[i].parentTId && curDragNodes[i].getParentNode() !== targetNode && curDragNodes[i].getParentNode().childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+function dropNext(treeId, nodes, targetNode) {
+	var pNode = targetNode.getParentNode();
+	if (pNode && pNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i=0,l=curDragNodes.length; i<l; i++) {
+			var curPNode = curDragNodes[i].getParentNode();
+			if (curPNode && curPNode !== targetNode.getParentNode() && curPNode.childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+var curDragNodes, autoExpandNode;
+function beforeDrag(treeId, treeNodes) {
+	className = (className === "dark" ? "":"dark");
+	for (var i=0,l=treeNodes.length; i<l; i++) {
+		if (treeNodes[i].drag === false) {
+			curDragNodes = null;
+			return false;
+		} else if (treeNodes[i].parentTId && treeNodes[i].getParentNode().childDrag === false) {
+			curDragNodes = null;
+			return false;
+		}
+	}
+	curDragNodes = treeNodes;
+	return true;
+}
+function beforeDragOpen(treeId, treeNode) {
+	autoExpandNode = treeNode;
+	return true;
+}
+function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+	className = (className === "dark" ? "":"dark");
+	return true;
+}
+function onDrag(event, treeId, treeNodes) {
+	className = (className === "dark" ? "":"dark");
+}
+function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+	className = (className === "dark" ? "":"dark");
+	//alert(targetNode.name);
+	var tid=(targetNode==null?0:targetNode.id);
+	$.ajax({
+	  type: "POST",
+	  url: "nodes",
+	  data: { id: treeNodes[0].id,name: treeNodes[0].name,pid: tid,level:treeNodes[0].level+1, type: "edit" },
+	  success:(function(msg) {
+		return(msg>0);
+	})});
+}
+function onExpand(event, treeId, treeNode) {
+	if (treeNode === autoExpandNode) {
+		className = (className === "dark" ? "":"dark");
+	}
+}
+
+function setTrigger() {
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.setting.edit.drag.autoExpandTrigger = $("#callbackTrigger").attr("checked");
+}
+</script>

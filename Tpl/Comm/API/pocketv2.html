@@ -1,0 +1,23 @@
+<div class="row-fluid pocket">
+    <volist name='data' id="vo">
+      <div class="link">
+         <h4 class="link-title"><a href="{$vo.url}" title="{$vo.title}" target="_blank">{$vo.title}</a></h4>
+        <div class="link-meta">
+          <span class="link-url">
+            <php>$host=str_replace('www.','',parse_url($vo['url'],PHP_URL_HOST));</php>
+            <a href="{$host}">{$host}</a>
+          </span>
+          <notempty name="vo.tags">
+            &nbsp;|&nbsp;<span class="link-tags">
+            <ul class="tags unstyled"><i class="icon-tag" ></i>
+              <php>$tags = explode(',',$vo['tags']);</php>
+              <volist name="tags" id="tag">
+                <li><a href='#'>{$tag}</a></li>
+              </volist>
+            </ul>
+          </span>
+          </notempty>
+        </div>
+      </div>
+    </volist>
+</div>

@@ -1,0 +1,64 @@
+<div class="row-fluid">
+	<form class="form-inline" id="table-toolbar">
+	    <div class="btn-group">
+	    	<a class="btn btn-large">
+		    	<label class="checkbox">
+					<input type="checkbox" class="select-all">Batch
+				</label>
+		    </a>
+		</div>
+		<div class="btn-group ">
+			<a data-href="{:U('add')}" data-url="{:U('save')}" data-target="#add-modal" data-toggle="modal" role="button"  data-original-title="Add" rel="tooltip" data-placement="bottom" class="btn btn-add btn-large btn-tool"><i class="icon-plus"></i></a>
+			<a data-href="{:U('edit')}" data-target="#add-modal" role="button" data-original-title="Edit" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-edit"></i></a>
+			<a data-href="{:U('delete')}" data-original-title="Delete" rel="tooltip" data-placement="bottom" class="btn btn-large btn-delete btn-tool"><i class="icon-trash"></i></a>
+		</div>
+
+		<div class="btn-group">
+			<a href="{:U('folder')}" data-target="#modal" data-toggle="modal" data-original-title="Folder" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-folder-close"></i></a>
+			<a href="{:U('flag')}" data-target="#modal" data-toggle="modal" data-original-title="Flag" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-flag"></i></a>
+			<a href="{:U('tag')}" data-target="#modal" data-toggle="modal" data-original-title="Tags" rel="tooltip" data-placement="bottom" class="btn btn-large btn-tool"><i class="icon-tags"></i></a>
+		</div>
+
+		<div class="btn-group">
+			<a href="{:U('Index/uploads')}" data-target="#modal" data-toggle="modal" data-original-title="Import" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-circle-arrow-up"></i>
+			</a>
+			<a href="{:U('export')}" data-target="#modal" data-original-title="Export" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-download-alt"></i>
+			</a>
+			<a href="{:U('print')}" data-target="#modal" data-original-title="Print" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-print"></i>
+				<a href="{:U('setting')}" data-target="#modal" data-original-title="Setting" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-cog"></i>
+			</a>
+		</div>
+
+		<div class="btn-group">
+			<a href="#" data-toggle="dropdown"  data-original-title="Filter" rel="tooltip" data-placement="bottom" class="btn btn-large "><i class="icon-filter"></i></a>
+			<ul class="dropdown-menu">
+		    	<li><input type="search" class="light-table-filter input-medium" data-table="data-table" placeholder="Filtrer" autofocus /></li>
+			</ul>
+		    <a href="{:U('Refresh')}" style="margin-left: -1px;" data-target="#modal" data-original-title="Refresh" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-refresh"></i></a>
+		</div>
+		
+		<script type="text/javascript">
+		$(function(){
+			$('.dropdown-menu input, .dropdown-menu label').click(function(e) {
+		        e.stopPropagation();
+		    });
+		});
+		</script>
+		
+		<div class="btn-group">
+		    <a data-original-title ="More" rel="tooltip" data-placement="bottom" class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">More<label class="checkbox"></label>
+		    <span class="caret"></span>
+		    </a><div class="arrow"></div>
+		    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+		    	<li><a href="#">link</a></li>
+		    	<li><a href="#">link</a></li>
+		    	<li><a href="#">link</a></li>
+		    </ul>
+		</div>
+		
+		<div class="btn-group pull-right">
+			<a id="pre-page" data-original-data="Newer" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$prePage}><i class="icon-chevron-left"></i></a>
+			<a id="next-page" data-original-data="Older" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$nextPage}><i class="icon-chevron-right"></i></a>
+		</div>
+	</form>
+</div>

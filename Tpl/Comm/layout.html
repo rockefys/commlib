@@ -1,0 +1,22 @@
+<include file="Comm:Index:header"/>
+<body>
+<include file="Comm:Index:nav"/>
+<div class="container-fluid">
+	<div class="row-fluid wrapper">
+		<div class="span2 sidebar affix" >
+			<include file="Comm:Index:sidebar"/>
+		</div>
+		<div class="span10 pull-right">
+			<div class="content">
+				<include file="Comm:Index:navcur"/>
+			<!--<legend id="nav_cur">{:W('Nav',array('link'=>(MODULE_NAME.'/'.ACTION_NAME),'type'=>'cur'),false)}</legend>-->
+				{__CONTENT__}
+			</div>
+		</div>
+	</div>
+	<include file="Comm:Index:footer"/>
+	<include file="Comm:Index:modal"/>
+	<include file="Comm:Index:msg"/>
+</div>
+</body>
+</html>

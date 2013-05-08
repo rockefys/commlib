@@ -1,0 +1,87 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<div class="control-group">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+        <input type="text" value="" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="user_id">用户</label>
+    <div class="controls">
+        <div class="input-append" data-module='broadband_refer_user_1'>
+			<input type="text" value="" name="user_name" id="user_name" data-target="user_name" class="{digits:true,required}" placeholder="" readonly="readonly">
+            <input type="hidden" value="" name="user_id" id="user_id" data-target="user_id" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="" required>
+			<a data-target="#modal-refer" data-href="{:U('User/index','refer=broadband_refer_user_1')}" data-toggle="modal"><span class="add-on"><i class="icon-search"></i></span></a>
+		</div>
+		<label class="help-inline"></label>
+	</div>
+</div><div class="control-group">
+    <label class="control-label" for="phone">宽带手机号</label>
+    <div class="controls">
+        <input type="text" value="" name="phone" id="phone" class="{maxlength:255,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="cat_id">类别</label>
+    <div class="controls">
+        <input type="text" value="" name="cat_id" id="cat_id" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="start_date">安装日期</label>
+    <div class="controls">
+        <input type="text" class="{}" name="start_date" id="start_date"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="end_date">结束日期</label>
+    <div class="controls">
+        <input type="text" class="{dateISO:true,date:true,}" name="end_date" id="end_date"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="use_during">使用时长</label>
+    <div class="controls">
+                
+            <input type="text" class="{digits:true,range:[-32768,32767]}" value="" name="use_during" id="use_during" placeholder="">
+                <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="cost">安装费用</label>
+    <div class="controls">
+                
+            <input type="text" class="{number:true,}"  value="" name="cost" id="cost" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="manager">发展人</label>
+    <div class="controls">
+        <input type="text" value="" name="manager" id="manager" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="memo">备注</label>
+    <div class="controls">
+        <input type="text" value="" name="memo" id="memo" class="{maxlength:255,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="username">宽带账号</label>
+    <div class="controls">
+        <input type="text" value="" name="username" id="username" class="{maxlength:255,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="password">宽带密码</label>
+    <div class="controls">
+        <input type="text" value="" name="password" id="password" class="{maxlength:255,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="status">状态</label>
+    <div class="controls">
+        <input type="text" value="" name="status" id="status" class="{maxlength:20,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="update_user"></label>
+    <div class="controls">
+        <input type="text" value="" name="update_user" id="update_user" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="update_time"></label>
+    <div class="controls">
+        <input type="text" class="{dateISO:true,date:true,}" name="update_time" id="update_time"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>        <label class="help-inline"></label>
+    </div>
+</div></form>
+</div>

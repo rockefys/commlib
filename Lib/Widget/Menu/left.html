@@ -1,0 +1,35 @@
+{__NOLAYOUT__}
+<div class='sidebar-nav'>
+<div class="tab-content">
+<volist name="data" id="vo" empty="" >
+<eq name="pid" value="$vo.pid">
+			<li>
+				<a href="{:U($vo['link'])}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
+			</li>
+<else/>
+<neq name="i" value="1">
+	</ul>
+</div>
+</neq>
+	<div class='<eq name="i" value="1">tab-pane<else/>tab-pane</eq>' id="tab_{$vo.pid}">
+	  <ul class='nav nav-tabs nav-stacked'>
+			
+			<li>
+				<a href="{:U($vo['link'])}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
+			</li>
+</eq>
+	<assign name="pid" value="$vo.pid" />
+</volist>
+		</ul>
+	</div>
+</div>
+</div>
+<script>
+
+  $(function () {
+    $('a[href="#tab_'+{:W('Nav',array('link'=>(MODULE_NAME),'type'=>'pid'),false)}+'"]').tab('show');
+	var cur=$('a[href="{:U(MODULE_NAME.'/'.ACTION_NAME)}"]');
+	cur.parent('li').addClass("active");
+	cur.children('i').addClass('icon-white');
+  })
+</script>

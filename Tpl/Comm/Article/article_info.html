@@ -1,0 +1,10 @@
+<ul class="views unstyled">
+	<li><a href="#" ><i class="icon-user"></i> {$article.author}</a></li>
+	<li><a href="#" ><i class="icon-calendar"></i><span class="prettydate" title="{:date('c',strtotime($article['post_date']))}"><php>echo substr($article['post_date'],0,-3)</php></span></a></li>
+	<li><a ><i class="icon-eye-open"></i> {$article.views}</a></li>
+	<li><a ><i class="icon-comment"></i> {$article.comments} </a></li> 
+	<!--<li><a ><i class="icon-star"></i> {$article.favorite} </a></li>-->
+	<li><a ><i class="icon-thumbs-up"></i> {$article.good} </a></li>
+	<!--<li><a ><i class="icon-share-alt"></i> {$article.share} </a></li>
+	<li><a ><i class=" icon-signal"></i></a></li>-->
+</ul>

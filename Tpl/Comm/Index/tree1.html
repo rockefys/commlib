@@ -1,0 +1,37 @@
+<div class="well well-small span4">
+	<ul id="tree" class="ztree"></ul>
+</div>
+
+<link href="__PUBLIC__/include/zTree/css/zTreeStyle/zTreeStyle.css?v=<php>echo filemtime(__ROOT__.'Public/include/zTree/css/zTreeStyle/zTreeStyle.css');</php>" rel="stylesheet">
+<script type="text/javascript">
+$(function(){
+head.js(
+	"__PUBLIC__/include/zTree/js/jquery.ztree.all-3.5.min.js",initTree
+	);
+});
+var setting = {
+	view: {
+		showLine: true,
+		showIcon: true,
+		expandSpeed:"",
+		dblClickExpand :false,
+		selectedMulti: false
+	},
+	data: {
+		simpleData: {
+			enable: true
+		}
+	}
+};
+function initTree(){
+	$.ajax({
+		url:"allnodes",
+		type:'post',
+		cache : false,
+		success: function(msg){
+			var nodes =msg;
+			$.fn.zTree.init($("#tree"), setting, nodes);
+		}
+	});
+}
+</script>

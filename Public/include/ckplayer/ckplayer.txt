@@ -1,0 +1,1 @@
+{s->0}{b->0x000000}{x->ckplayer/ckplayer.xml}{p->1}

@@ -1,0 +1,110 @@
+<script type="text/javascript">
+$('#myModal').on('hidden', function () {
+  <!--
+  // do something…
+  /*
+  show   该事件在调用 show 方法时立刻触发。
+  shown  该事件在对话框已经呈现给用户后（要等CSS过渡效果生效后）触发。
+  hide   该事件在对话框使用 hide 方法时立刻触发。
+  hidden   该事件在对话框已经关闭后（要等CSS过渡效果生效后）触发。
+  */
+  -->
+})
+
+</script>
+<a href="#">Modal</a>
+<button type="button" data-toggle="modal" data-target="#modal">Launch modal</button>
+<pre class="prettyprint linenums" >
+&lt;button type="button" data-toggle="modal" data-target="#Modal">Launch modal&lt;/button&gt;
+</pre>
+<a href="#" rel="tooltip" data-placement="top" data-original-title="Tooltip">Tooltip</a>
+<pre class="prettyprint linenums" >
+&lt;a href="#" rel="tooltip" data-placement="top" data-original-title="Tooltip">Tooltip&lt;/a&gt;
+</pre>
+<a href="#">prettyprin</a>
+<pre class="prettyprint linenums" >
+&lt;pre class="prettyprint linenums" &gt;
+</pre>
+<pre class="prettyprint linenums" >
+public function index($columns,$select=null,$search){
+      //$columns {key=>value} ex.{'name'=>'姓名'}
+        import("ORG.Util.Page");
+        $Page = new Page($count,$page_size);
+    }
+</pre>
+<a href="#">typeahead</a>
+<input type="text" class="span3" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="[&quot;Alabama&quot;,&quot;Alaska&quot;,&quot;Arizona&quot;,&quot;Arkansas&quot;,&quot;California&quot;,&quot;Colorado&quot;,&quot;Connecticut&quot;,&quot;Delaware&quot;,&quot;Florida&quot;,&quot;Georgia&quot;,&quot;Hawaii&quot;,&quot;Idaho&quot;,&quot;Illinois&quot;,&quot;Indiana&quot;,&quot;Iowa&quot;,&quot;Kansas&quot;,&quot;Kentucky&quot;,&quot;Louisiana&quot;,&quot;Maine&quot;,&quot;Maryland&quot;,&quot;Massachusetts&quot;,&quot;Michigan&quot;,&quot;Minnesota&quot;,&quot;Mississippi&quot;,&quot;Missouri&quot;,&quot;Montana&quot;,&quot;Nebraska&quot;,&quot;Nevada&quot;,&quot;New Hampshire&quot;,&quot;New Jersey&quot;,&quot;New Mexico&quot;,&quot;New York&quot;,&quot;North Dakota&quot;,&quot;North Carolina&quot;,&quot;Ohio&quot;,&quot;Oklahoma&quot;,&quot;Oregon&quot;,&quot;Pennsylvania&quot;,&quot;Rhode Island&quot;,&quot;South Carolina&quot;,&quot;South Dakota&quot;,&quot;Tennessee&quot;,&quot;Texas&quot;,&quot;Utah&quot;,&quot;Vermont&quot;,&quot;Virginia&quot;,&quot;Washington&quot;,&quot;West Virginia&quot;,&quot;Wisconsin&quot;,&quot;Wyoming&quot;]">
+<pre class="prettyprint linenums" >
+&lt;input type="text" class="span3" data-provide="typeahead" data-items="4" data-source="[&quot;A1&quot;,&quot;A2&quot;] &gt;
+</pre>
+<p></p>
+<a href="#">Modal高级应用</a>
+<a data-toggle="modal" href="http://ideat.org/index.php/Role/add" data-target="#modal">click me</a>
+<a href="#"></a>
+<pre class="prettyprint linenums" >
+&lt;a data-toggle="modal" href="remote.html" data-target="#modal">click me &lt;/a&gt;
+</pre>
+<a href="#">模版布局</a>
+<pre class="prettyprint linenums" >
+&lt;layout.html&gt;
+</pre>
+<a href="#">跨模块调用</a>
+<pre class="prettyprint linenums">
+class IndexAction extends Action{
+    public function index(){
+        //实例化UserAction
+        $User = new UserAction();
+        //其他用户操作
+         //...
+        $this->display(); //输出页面模板
+    }
+}
+
+$this->display(); //输出页面模板
+$this->display('add');
+$this->display('user/add');
+
+
+A('User') //表示调用当前项目的User模块
+A('Admin://User') //表示调用Admin项目的User模块
+A('Admin/User') //表示调用Admin分组的User模块
+A('Admin://Tool/User') //表示调用Admin项目Tool分组的User模块
+
+R('User/info') //表示调用当前项目的User模块的info操作方法
+R('Admin/User/info') //表示调用Admin分组的User模块的info操作方法
+R('Admin://Tool/User/info') //表示调用Admin项目Tool分组的User模块的info操作方法
+</pre>
+<a href="#">URL生成</a>
+<pre class="prettyprint linenums" >
+U('[分组/模块/操作]?参数' [,'参数','伪静态后缀','是否跳转','显示域名'])
+U('User/add') // 生成User模块的add操作的URL地址
+U('Blog/read?id=1') // 生成Blog模块的read操作 并且id为1的URL地址
+U('Admin/User/select') // 生成Admin分组的User模块的select操作的URL地址
+U('Blog/cate',array('cate_id'=>1,'status'=>1))
+</pre>
+<a href="#">代码公用</a>
+<pre class="prettyprint linenums" >
+public function index(){
+  $table=MODULE_NAME;
+  $columns=C("columns.".MODULE_NAME);
+  $M= M($table);
+  $select=$M->where()->join()->order();
+  R('Comm/Table/index',array($columns,$select));
+}
+
+public function delete($M,$ids){
+  $id=$M->getPk();
+  $result=$M->where($id.' in('.$ids.')')->delete();
+  if($result){
+       $this->ajaxReturn(1,"success",1);
+  }
+  else{
+       $this->ajaxReturn(0,'fail',0);
+  }
+}
+</pre>
+<a href="#"></a>
+<pre class="prettyprint linenums" >
+&lt;&gt;
+</pre>
+

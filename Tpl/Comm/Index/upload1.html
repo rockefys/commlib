@@ -1,0 +1,52 @@
+<div id="bootstrapped-fine-uploader"></div>
+<link href="__PUBLIC__/include/css/fileuploader.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="__PUBLIC__/include/js/fileuploader.js"></script>
+<script type="text/javascript">
+$(function(){
+    createUploader();
+});
+  function createUploader() {
+    var uploader = new qq.FileUploader({
+      element: $('#bootstrapped-fine-uploader')[0],
+      action: '__PUBLIC__/upload/upload.php',
+      multiple: true,
+      sizeLimit: 1024000000,
+      enableTooltip: true,
+      responseProperty: 'error',
+      allowedExtensions: ['jpeg','jpg','png','rar','zip','7z','pdf','iso'],
+      uploadButtonText: '<i class="icon-upload"></i> Upload',
+      template: '<div class="qq-uploader ">' +
+                  '<pre class="qq-upload-drop-area span12"><span>{dragText}</span></pre>' +
+                  '<ul class="qq-upload-list" style="margin-top: 10px;"></ul>' +
+                  '<div class="qq-upload-button btn" style="width: auto;">{uploadButtonText}</div> <a href="" class="btn"><i class="icon-download"></i> Template</a>' +
+                '</div>',
+      classes: {
+        button: 'qq-upload-button',
+        drop: 'qq-upload-drop-area',
+        dropActive: 'qq-upload-drop-area-active',
+        dropDisabled: 'qq-upload-drop-area-disabled',
+        list: 'qq-upload-list',
+        progressBar: 'qq-progress-bar',
+        file: 'qq-upload-file',
+        spinner: 'qq-upload-spinner',
+        finished: 'qq-upload-finished',
+        size: 'qq-upload-size',
+        cancel: 'qq-upload-cancel',
+        failText: 'qq-upload-failed-text',
+        success: 'alert alert-success',
+        fail: 'alert alert-error',
+        successIcon: 'icon-ok',
+        failIcon: 'icon-remove'
+      },
+      showMessage: function(message) {
+        //$('.qq-upload-list').append('<div class="alert alert-error">' + message + '</div>');
+        alert(message,'error');
+      },
+       onComplete: function(id, fileName, responseJSON) {
+        if (responseJSON.success) {
+          $('.qq-upload-file').eq(id).html('<a href="__PUBLIC__/upload/'+responseJSON.filename+'">'+thumbName(fileName)+'</a>');
+        }
+      }
+    });
+  }
+</script>

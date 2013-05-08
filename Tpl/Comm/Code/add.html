@@ -1,0 +1,53 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<volist name="data" id="vo">
+
+<div class="control-group">
+    <label class="control-label" for="{$vo.Field}">{$vo.Comment}</label>
+    <div class="controls">
+        <php>$tp=substr($vo['Type'],0,4);</php>
+<switch name="tp">
+    <case value="varc|char|int(">
+    <input type="text" value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}" placeholder="">
+    </case>
+    <case value="text">
+        <textarea rows="3" class="{:validator($vo);}" ></textarea>
+    </case>
+    <case value="enum">
+        <select name="{$vo.Field}" class="">
+        <php>$ops = explode(',',substr($vo['Type'],5,-1));</php>
+        <volist name="ops" id="op">
+            <php>$op = substr($op,1,-1);</php>
+
+            <option value ="{$op}">{$op}</option>
+        </volist>
+
+        </select>
+    </case>
+    <case value="date|time">
+
+        <input type="text" class="{:validator($vo);}" name="{$vo.Field}" id="{$vo.Field}"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>
+    </case>
+    <case value="bit(">
+
+        <input name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}" type="checkbox" checked>
+    </case>
+    <default />
+        <if condition="(strpos($vo['Type'],'text')!==false) OR (strpos($vo['Type'],'bolb')!==false)">
+
+            <textarea rows="3" name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}"></textarea>
+        <elseif condition="strpos($vo['Type'],'int')!==false"/>
+
+            <input type="text" class="{:validator($vo);}" value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" placeholder="">
+        <else />
+
+            <input type="text" class="{:validator($vo);}"  value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" placeholder="">
+    </if>
+</switch>
+        <label class="help-inline"></label>
+    </div>
+</div>
+
+</volist>
+</form>
+</div>

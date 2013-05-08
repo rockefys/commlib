@@ -1,0 +1,15 @@
+<div class="row-fluid">
+<script type="text/javascript">
+$(function(){
+    $('.tab-{$Think.ACTION_NAME}').parent().addClass('active'); 
+});
+</script>
+<div class="tabbable topic">
+    <ul class="nav nav-tabs" id="nav-tab">
+<li><a class="tab-hero" href="{:U('Iuser/add')}">个人信息</a></li>
+<li><a class="tab-user" href="{:U('User/index')}">业务账号</a></li>
+<li><a class="tab-user" href="{:U('User/index')}">护照</a></li>
+<li><a class="tab-module" href="{:U('Module/index')}">Module</a></li>
+    </ul>
+</div>
+</div>

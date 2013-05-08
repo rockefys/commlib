@@ -1,0 +1,64 @@
+{__NOLAYOUT__}
+<include file="./Tpl/Comm/Index/header.html"/>
+<body class="signup-page">
+<div class="container">
+<div class="wrapper">
+    <include file="./Tpl/Comm/Login/nav.html"/>
+    <div class="form-signup border-radius6 border">
+      <form class="form-horizontal center" action="signup" method="post">
+        <fieldset>
+          <div  class="title">
+              <div class="controls">
+                  <h3>Join Twitter today. </h3>
+              </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="help-block">Username</label>
+              <input  value="{$username}" name="uname" class="email-input input-xlarge" type="text" id="inputEmail" placeholder="">
+              <label class="help-text-inline">Enter your first and last name.</label>
+            </div>
+            <div class="controls">
+              <label class="help-block">Email address</label>
+              <input  value="{$email}" name="mail" class="email-input input-xlarge" type="text" id="inputEmail" placeholder="">
+              <p class="help-text-inline">What’s your email address?</p>
+            </div>
+            <div class="controls">
+              <label class="help-block">Password</label>
+              <input type="text" name="pwd" type="password" class="input-xlarge" id="input03" placeholder="">
+              <p class="help-text-inline">6 characters or more! Be tricky.</p>
+            </div>
+            <div class="controls">
+              <label class="help-block">Confirm Password</label>
+              <input type="text" name="confirm" type="password" class="input-xlarge" id="input04" placeholder="">
+              <p class="help-text-inline"></p>
+            </div>
+          </div>
+          <div class="control-group">
+              <div class="controls">
+                  <include file="Comm:Login:recaptcha"/>
+              </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox">
+                  <input type="checkbox"><strong>I agree to the <a target="_blank" id="TosLink" href="#">Privacy Policy</a></strong>
+              </label>
+            </div>
+          </div>
+          <div class="">
+            <div class="controls">
+              <input type="submit" value="Create Account" class="btn btn-large primary"> 
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+          </div>
+        </fieldset>
+      </form>
+    </div>  
+</div>
+</div>
+<include file="./Tpl/Comm/Index/msg.html"/>
+</body>
+</html>

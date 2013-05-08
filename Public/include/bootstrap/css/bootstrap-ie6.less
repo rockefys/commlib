@@ -1,0 +1,520 @@
+body
+{
+  background: @white;
+  background-image: none;
+  padding: 0;
+}
+
+/* Original hacks by Jonathon Joyce (edited) */
+.row
+{
+  margin: 0;
+  margin-left:-20px;
+}
+
+.span1,
+.span2,
+.span3,
+.span4,
+.span5,
+.span6,
+.span7,
+.span8,
+.span9,
+.span10,
+.span11,
+.span12
+{
+  float: left;
+  display: inline;
+}
+
+.last-child
+{
+  margin-right: 0;
+}
+
+.margin-left-20
+{
+  float: left;
+  margin-left: 20px;
+}
+
+/* Navbar */
+.nav-collapse
+{
+  width: auto;
+}
+
+.nav li a
+{
+  display: block;
+}
+
+.navbar .nav .active a,
+.navbar .nav .active a:hover
+{
+  background-color: @black;
+  color: @white;
+  text-decoration: none;
+}
+
+.navbar .nav li
+{
+  display: block;
+  float: left;
+
+  a
+  {
+    float: none;
+    line-height: 19px;
+    padding: 10px 10px 11px;
+
+    &:hover
+    {
+      background-color: transparent;
+      color: @white;
+      text-decoration: none;
+    }
+  }
+}
+
+.navbar .nav .active a,
+.navbar .nav .active a:hover
+{
+  color: @white;
+  text-decoration: none;
+  background-color: @grayDarker;
+  background-color: @black;
+}
+
+.navbar .nav .open .dropdown-toggle,
+.navbar .nav .active .dropdown-toggle,
+.navbar .nav .open.active .dropdown-toggle
+{
+  background-color: transparent;
+}
+
+.navbar .nav .active .dropdown-toggle:hover
+{
+  color: @white;
+}
+
+.dropdown .dropdown-toggle
+{
+  margin-bottom: 1px;
+  position: relative;
+  top: 2px;
+  left: 0;
+}
+
+.dropdown-menu li
+{
+  width: 100%;
+}
+
+.dropdown-menu li a
+{
+  width: 100%;
+  padding: 3px 0 3px 5px;
+}
+
+.dropdown-menu li a:hover,
+.dropdown-menu .active a,
+.dropdown-menu .active a:hover
+{
+  background-color: @linkColor;
+  color: @white;
+  text-decoration: none;
+}
+
+/* Tabs */
+.nav-tabs li
+{
+  float: left;
+  display: inline;
+  margin-bottom: -2px;
+}
+
+.nav-tabs li a
+{
+  padding: 9px 12px;
+  line-height: 14px;
+  margin-right: 2px;
+}
+
+.nav-tabs li.active
+{
+  background: none;
+  border: 1px solid @tableBorder;
+  border-color: @grayLighter @grayLighter @tableBorder;
+}
+
+.tab-content .tab-pane
+{
+  display: none;
+
+  &.active
+  {
+    display: block;
+    background-color: transparent;
+  }
+}
+
+
+/* Forms */
+.button-reset
+{
+  height: auto;
+  width: auto;
+  margin-bottom: 0;
+}
+
+.input-text
+{
+  // 'inline-block' in IE6? o_O
+  display: inline-block;
+  .ie7-inline-block();
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  padding: 4px;
+  margin: 0;
+  margin-bottom: 9px;
+  border: 1px solid @btnBorder;
+  font-family: @sansFontFamily;
+}
+
+.help-inline
+{
+  display: block;
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  padding: 4px 0 4px 5px;
+}
+
+label.checkbox
+{
+  display: block;
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  width: 100%;
+  padding-left: 0;
+  margin: 0 0 9px -2px;
+}
+
+.input-checkbox
+{
+  width: auto;
+  float: left;
+  display: inline-block;
+  .ie7-inline-block();
+  padding: 0;
+  margin: 0;
+  height: auto;
+  border: none;
+}
+
+label.radio
+{
+  display: block;
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  width: 100%;
+  padding-left: 0;
+  margin: 0 0 9px -2px;
+}
+
+.input-radio
+{
+  width: auto;
+  float: left;
+  display: inline-block;
+  .ie7-inline-block();
+  padding: 0;
+  margin: 0;
+  height: auto;
+  border: none;
+}
+
+.form-inline label.checkbox
+{
+  display: inline-block;
+  .ie7-inline-block();
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  width: auto;
+  padding-left: 0;
+  margin: 0;
+}
+
+.form-inline .input-checkbox
+{
+  width: auto;
+  float: left;
+  display: inline-block;
+  .ie7-inline-block();
+  padding: 0;
+  margin: 0;
+  height: auto;
+  border: none;
+}
+
+legend
+{
+  width: auto;
+}
+
+.form-horizontal .help-block
+{
+  display: inline-block;
+  .ie7-inline-block();
+  margin-left: 3px;
+}
+
+.form-horizontal .control-label
+{
+  float: left;
+  display: inline-block;
+  .ie7-inline-block();
+  width: 140px;
+  text-align: right;
+  padding-top: 5px;
+}
+
+.form-horizontal label.checkbox
+{
+  display: inline-block;
+  .ie7-inline-block();
+  line-height: @baseLineHeight;
+  height: @baseLineHeight;
+  width: auto;
+  padding-left: 0;
+  margin: 0 9px 9px 0;
+}
+
+.form-horizontal .input-checkbox
+{
+  margin-left: -3px;
+}
+
+.form-horizontal .input-multiple
+{
+  height: auto;
+}
+
+.form-horizontal .input-file
+{
+  display: inline-block;
+  .ie7-inline-block();
+  line-height: 24px;
+  height: 24px;
+  width: 220px;
+  padding: 4px;
+}
+
+.btn-primary
+{
+  margin-right: 4px;
+}
+
+.disabled
+{
+  cursor:not-allowed;
+}
+
+.control-group
+{
+  &.warning
+  {
+    label,
+    .help-block,
+    .help-inline
+    {
+      color: @warningText;
+    }
+  }
+
+  &.error
+  {
+    label,
+    .help-block,
+    .help-inline
+    {
+      color: @errorText;
+    }
+  }
+
+  &.success
+  {
+    label,
+    .help-block,
+    .help-inline
+    {
+      color: @successText;
+    }
+  }
+}
+
+input, select
+{
+  &.span1,
+  &.span2,
+  &.span3,
+  &.span4,
+  &.span5,
+  &.span6,
+  &.span7,
+  &.span8,
+  &.span9,
+  &.span10,
+  &.span11,
+  &.span12
+  {
+    float: left;
+    display: inline-block;
+    .ie7-inline-block();
+    margin: 0;
+  }
+}
+
+/*
+  .docs-input-sizes input,
+  .docs-input-sizes select
+  {
+    display: block;
+    float: none;
+    margin: 0;
+    margin-bottom: 9px;
+  }
+*/
+
+input.btn,
+a.btn,
+button.btn
+{
+  height: auto;
+  width: auto;
+}
+
+.input-prepend input
+{
+  margin-top: 1px;
+}
+
+/* Icons */
+.icon-sprite
+{
+  background-image: url(@iconSpritePath);
+  background-repeat: no-repeat;
+  display: inline-block;
+  .ie7-inline-block();
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  width: 14px;
+  padding-left: 3px;
+}
+
+/* Navbar */
+.dropdown .caret
+{
+  font-size: 1px;
+  height: 2px;
+  background: none;
+  background-color: #292929;
+  color: #292929;
+}
+
+/* Pagination */
+.pagination-first-child
+{
+  border-left-width: 1px !important;
+}
+
+/* Images */
+ul.thumbnails
+{
+  margin-left: -20px;
+  float: none;
+  display: inline-block;
+  zoom: 1;
+  .ie7-inline-block();
+  clear: both;
+
+  li
+  {
+    float: left;
+    margin: 0 0 18px 20px;
+  }
+}
+
+/* Tooltips */
+.tooltip.top .tooltip-arrow,
+.tooltip.right .tooltip-arrow,
+.tooltip.bottom .tooltip-arrow,
+.tooltip.left .tooltip-arrow
+{
+  display: none;
+}
+
+.tooltip.top
+{
+  margin-top: 5px;
+}
+
+.tooltip.bottom
+{
+  margin-top: -5px;
+}
+
+/* Popover */
+.popover
+{
+  .opacity(100);
+
+  &.top
+  {
+    margin-top: -7px;
+  }
+
+  &.bottom
+  {
+    margin-top: 7px;
+  }
+
+  &.top .arrow,
+  &.right .arrow,
+  &.bottom .arrow,
+  &.left .arrow
+  {
+    display: none;
+  }
+}
+
+/* Buttons */
+.btn
+{
+  margin-left: 0;
+  padding: 2px 8px;
+
+  &:hover
+  {
+    .opacity(40);
+    background-color: transparent;
+    background-position: 0 0;
+    color: @black;
+  }
+}
+
+/* Modal */
+.modal
+{
+  position: relative;
+  _filter: alpha(opacity=99);
+  top: 55%;
+}
+
+.modal-header a.close
+{
+  cursor: pointer;
+}

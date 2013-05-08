@@ -1,0 +1,41 @@
+<volist name="list" id="article">
+<div class="row-fluid entry">
+  <div class="row-fluid">
+    <h3>
+      <a href="{$article.href}" class="title" target="_blank">{$article.description}</a>
+    </h3>
+  </div>
+  <div class="row-fluid">
+    <include file="./Tpl/Comm/Article/article_info.html"/>
+  </div>
+  <div class="row-fluid">
+    <notempty name="article.image">
+    <div class="span4 thumbnail">
+            <img src="{$article.image.src}" alt="{$article.image.caption}" />
+    </div>
+    </notempty>
+    
+    <div class="font16 span<notempty name='article.image'>8</notempty>" style="line-height: 26px;">
+      <p>
+        {$article.excerpt}{$article.href}
+      </p>
+    </div>
+  </div>
+  <div class="row-fluid">
+      <div class="span9">
+        <notempty name="article.tag">
+          <ul class="tags unstyled"><i class="icon-tag" ></i>
+            <php>$tags = explode(' ',$article['tag']);</php>
+            <volist name="tags" id="tag">
+                <li><a href='#'>{$tag}</a></li>
+            </volist>
+          </ul>
+        </notempty>
+      </div>
+      <div class="span3">
+        <a href="{:U('Index/article')}"class="join btn-large pull-right" type="button">Read More »</a>
+      </div>
+  </div>
+</div>
+<hr />
+</volist>

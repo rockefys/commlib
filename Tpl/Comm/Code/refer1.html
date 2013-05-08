@@ -1,0 +1,75 @@
+<script type="text/javascript">
+$(function(){
+    $("#id").val("{$module}");
+}); 
+</script>
+<div class="row-fluid">
+<form class="form-inline" action="{:U('edit')}" method="POST" id="table-searchbar">
+    表名 <select id="id" name="id" class="span2">
+        <volist name="Modules" id="vo">
+            <option value ="{$vo}">{$vo}</option>
+        </volist>
+    </select>
+    <button type="submit" data-href="{:U('index')}" id="btnQuery" class="btn btn-tool"><i class="icon-search"></i></button>
+    <button data-href="{:U('index')}" id="btnQuery" class="btn btn-tool"><i class="icon-zoom-in"></i></button>
+    <button data-href="{:U('index')}" id="btnQuery" class="btn btn-tool"><i class="icon-refresh"></i></button>
+</form>
+<form class="" action="{:U('save')}" method="POST">
+    分组 <select id="group" name="group" class="span2">
+    <volist name="group" id="vo">
+        <option value ="{$vo}">{$vo}</option>
+    </volist>
+    </select>
+    模块 <input type="text" name="module" value="{$module}" class="span2"/>
+    <input type="hidden" name="name" value="{$module}" class="span2"/>
+   <table  class="table table-condensed table-bordered table-striped table-hover">
+    <tbody>
+        <tr>
+            <th colspan="3">字段</th>
+            <th colspan="3">列表</th>
+            <th colspan="5">添加</th>
+        </tr>
+        <tr><th>引用</th>
+            <th>名称</th>
+            <th>标题</th>
+            <th>类型</th>
+            <th>查询</th>
+            <th>显示</th>
+            <th>顺序</th>
+            <th>表单类型</th>
+            <th>显示</th>
+            <th>顺序</th>
+            <th>验证</th>
+            <th>默认提示</th>
+        <tr>
+        <volist name="data" id="vo">
+        <tr><td></td>
+            <td>{$vo.Field}<input class="input-mini" type="hidden" name="query[{$vo.Field}][field]" value="{$vo.Field}" /></td>
+            <td><input class="input-mini" type="text" name="query[{$vo.Field}][title]" value="{$vo.Comment}" /></td>
+            <td>{$vo.Type}<input class="input-mini" type="hidden" name="query[{$vo.Field}][type]" value="{$vo.Type}" /></td>
+            <td><input name="query[{$vo.Field}][query_able]" type="checkbox" ></td>
+            <td><input name="query[{$vo.Field}][list_show]" type="checkbox" checked></td>
+            <td><input class="input-min input-mini" type="text" name="query[{$vo.Field}][list_order]" value="{$i}" /></td>
+            <td>
+                <select name="query[{$vo.Field}][control_type]" class="span12">
+                    <option value ="text" <php>echo (strpos($vo['Type'],'varchar')!==false) && ($vo['Key']!=='PRI')?'selected':'';</php>>文本框</option>
+                    <option value ="area" <php>echo strpos($vo['Type'],'text')!==false?'selected':'';</php> >多行文本框</option>
+                    <option value ="select" <php>echo strpos($vo['Type'],'enum')!==false?'selected':'' </php> >列表框</option>
+                    <option value ="date" <php>echo strpos($vo['Type'],'datetime')!==false?'selected':'';</php> >日期控件</option>
+                    <option value ="checkbox" <php>echo strpos($vo['Type'],'bit')!==false?'selected':'';</php> >复选框</option>
+                    <option value ="digit" <php>echo ((strpos($vo['Type'],'int')!==false) && ($vo['Key']!=='PRI'))?'selected':'';</php> >数字输入框</option>
+                    <option value ="hidden" <php>echo $vo['Key']==='PRI'?'selected':'';</php>>隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[{$vo.Field}][add_show]" type="checkbox" checked></td>
+            <td><input class="input-min input-mini" type="text" name="query[{$vo.Field}][add_order]" value="{$i}" /></td>
+            <td><input class="input-medium" type="text" name="query[{$vo.Field}][validator]" value="{:validator($vo);}" /></td>
+            <td><input class="input-mini" type="text" name="query[{$vo.Field}][tips]" value="{$vo.tips}" /></td>
+        </tr>
+        </volist>
+    </tbody>
+   </table>
+   <include file="./Tpl/Comm/Index/btn.html"/>
+</form>
+</div>
+<include file="./Tpl/Comm/Moudle/add.html"/>

@@ -1,0 +1,65 @@
+<div class="navbar navbar-fixed-top navbar-inverse">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<a class="btn btn-navbar" data-target="nav-collapse" data-toggle="collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			
+			<a class="brand" href="{:W('Parameter','PROJECT_URL',true)}">{:W('Parameter','PROJECT_NAME',true)}</a>
+			<div class="nav-collapse">
+				{:W('Menu',array('location'=>'top'),false)}
+				<ul class="nav pull-right">
+					<present name="Think.session.username">
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						{$Think.session.username}<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="#">Profile</a>
+							</li>
+							<li>
+								<a href="#">Other Action</a>
+							</li>
+							<li>
+								<a href="#">Something else here</a>
+							</li>
+							<li class="divider"/>
+							<li>
+								<a href="{:U('Login/logout')}">退出</a>
+							</li>
+						</ul>
+					</li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						设置<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="#">Action</a>
+							</li>
+							<li>
+								<a href="#">Other Action</a>
+							</li>
+							<li>
+								<a href="#">Something else here</a>
+							</li>
+							<li class="divider"/>
+							<li class="nav-header">导航头</li>
+							<li>
+								<a href="#">Separated link</a>
+							</li>
+						</ul>
+					</li>
+					<else /> 
+						<li><a href="{:U('Login/index')}">Login</a></li>
+						<li><a href="{:U('Login/signup')}">Signup</a></li>
+					</present>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</div>

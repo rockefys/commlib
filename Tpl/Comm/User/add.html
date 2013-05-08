@@ -1,0 +1,48 @@
+{__NOLAYOUT__}
+<div class="container-fluid">
+  <form class="form-inline" action="signup" method="post">
+    <input type="hidden" name="{$pk}" value="{$id}">
+  <legend>Legend</legend>
+      <div class="control-group">
+        <label class="control-label" for="inputEmial">Username</label>
+        <div class="controls">
+          <input  value="{$username}" name="uname" class="" type="text" id="inputEmail" placeholder="">
+          <label class="help-inline">Enter your first and last name.</label>
+        </div>
+        <div class="control-group">
+        <label class="control-label" for="inputEmail">Email address</label>
+        <div class="controls">
+          <input  value="{$email}" name="mail" class="" type="text" id="inputEmail" placeholder="">
+          <label class="help-inline">What’s your email address?</label>
+        </div>
+         </div>
+        <div class="control-group">
+        <label class="control-label" for="inputPwd">Password</label>
+        <div class="controls">
+          <input type="text" name="pwd" type="password" class="" id="inputPwd" placeholder="">
+          <label class="help-inline">6 characters or more! Be tricky.</label>
+        </div>
+         </div>
+        <div class="control-group">
+        <label class="control-label" for="inputRepwd">Confirm Password</label>
+        <div class="controls">
+          <input type="text" name="confirm" type="password" class="" id="inputRepwd" placeholder="">
+          <label class="help-inline">Confirm your password</label>
+        </div>
+      </div>
+      <div class="control-group">
+          <label class="control-label"></label>
+          <div class="controls">
+              <include file="./Tpl/Comm/Login/recaptcha.html"/>
+          </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+              <input type="checkbox"><strong>I agree to the <a target="_blank" id="TosLink" href="#">Privacy Policy</a></strong>
+          </label>
+        </div>
+      </div>
+  </form>
+</div>

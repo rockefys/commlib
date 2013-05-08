@@ -1,0 +1,187 @@
+<div class="row-fluid" id="module-content-{$type}">
+<div class="row-fluid">
+<script type="text/javascript">
+$(function(){
+    $("#id").val("{$module}");
+    $('#refer-pk').val('{$fk}');
+
+    $('#refer-module').change(function(){ 
+        var n=$(this).val();
+        $('#refer-alias').val(n);
+        $.ajax({
+            type:"POST",  
+            url:'{:U("getColumn")}',
+            data:{id:n},  
+            success:function(json){ 
+                $('#refer-fk').find('option').remove();
+                $('#refer-show').find('option').remove();
+                $.each(json, function(i, value) {
+                    $('#refer-fk').append($('<option>').text(value).attr('value', value));
+                    $('#refer-show').append($('<option>').text(value).attr('value', value));
+                }); 
+               $('#refer-show').val($("#refer-show option:eq(1)").val());         
+            },
+            error:function(x){  
+                alert("Request error");  
+            } 
+        });
+    }); 
+    $('#refer-module').val('{$refer_module}'); 
+    $('#refer-module').change();
+}); 
+</script>
+    <form class="form-horizontal">
+        <!--
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="input-prepend">
+                <span class="add-on">label</span>
+                <input type="text" class="input-small"  placeholder="">
+            </div>
+        </div>
+        <div class="span3">
+            <div class="input-prepend">
+                <span class="add-on">label</span>
+                <input type="text" class="input-small"  placeholder="">
+            </div>
+        </div>
+         <div class="span3">
+            <div class="input-prepend">
+                <span class="add-on">label</span>
+                <input type="text" class="input-small"  placeholder="">
+            </div>
+        </div>
+         <div class="span3">
+            <div class="input-prepend">
+                <span class="add-on">label</span>
+                <input type="text" class="input-small"  placeholder="">
+            </div>
+        </div>
+    </div>
+-->
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联表名</span>
+                    <input type="text" class="span8" value="{$module}" placeholder="">
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联类型</span>
+                    <select  id='refer-type' name="refer-type" class="span8">
+                        <option value ="">多对一</option>
+                        <option value ="">一对多</option>
+                        <option value ="">一对一</option>
+                        <option value ="">多对多</option>
+                    </select>
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">被关联表</span>
+                <select id="refer-module" name="refer-module" class="span8">
+                    <volist name="Modules" id="vo">
+                        <option value ="{$vo}">{$vo}</option>
+                    </volist>
+                </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">映射名称</span>
+                    <input id='refer-alias' name="refer-alias" type="text" class="span8" value="" placeholder="">
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联主键</span>
+                     <select  id='refer-pk' name="refer-pk" class="span8">
+                        <volist name="module_columns" id="vo">
+                            <option value ="{$vo}">{$vo}</option>
+                        </volist>
+                    </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条件</span>
+                    <input id='refer-condition' name="refer-condition" type="text" class="span8"  placeholder="">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联外键</span>
+                <select  id='refer-fk' name="refer-fk" class="span8">
+                </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">显示字段</span>
+                    <select  id='refer-show' name="refer-show" class="span8">
+                    </select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联顺序</span>
+                    <input id='refer-order' name="refer-order" type="text" class="span8"  placeholder="">
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条目</span>
+                    <input id='refer-limit' name="refer-limit" type="text" class="span8"  placeholder="">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联字段</span>
+                <input type="text" class="span8"  placeholder="">
+            </div>
+            <div class="span6">
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<div class="row-fluid">
+<form class="" action="{:U('save')}" method="POST">
+<div class="row-fluid">
+   
+    <input type="hidden" name="name" value="{$module}" class="span2"/>
+</div>
+    <table  class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+             <tr><th>外键</th>
+                <th>引用表名</th>
+                <th>引用字段</th>
+                <th>显示字段</th>
+                <th>fk</th>
+                <th>引用类型</th>
+                <th>字段列表</th>
+            <tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>userid</td>
+                <td>user</td>
+                <td>id</td>
+                <td>username</td>
+                <td></td>
+                <td>inner</td>
+                <td>age,sex,nick_name</td>
+            </tr>
+            <tr>
+                <td>catid</td>
+                <td>catgory</td>
+                <td>id</td>
+                <td>name</td>
+                <td></td>
+                <td>inner</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+   <include file="./Tpl/Comm/Index/btn.html"/>
+</form>
+</div>
+<include file="./Tpl/Comm/Moudle/add.html"/>
+</div>

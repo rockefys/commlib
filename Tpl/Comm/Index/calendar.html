@@ -1,0 +1,154 @@
+<div class="row-fluid">
+<div class=" span2 well well-small " id="external-events">
+	<h5>Draggable Events</h5>
+	<div class="btn-group btn-group-vertical">
+		<div class="external-event badge ">Default</div>
+		<div class="external-event badge badge-success">Completed</div>
+		<div class="external-event badge badge-warning">Warning</div>
+		<div class="external-event badge badge-important">Important</div>
+		<div class="external-event badge badge-info">Info</div>
+		<div class="external-event badge badge-inverse">Other</div>
+	</div>
+	<p>
+	<label for="drop-remove">
+		<input type="checkbox" id="drop-remove">
+		remove</label>
+	</p>
+</div>
+<div id='calendar' class="span10">
+</div>
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/include/css/fullcalendar.css' />
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/include/css/fullcalendar.print.css' media='print' />
+<script type='text/javascript' src='__PUBLIC__/include/js/jquery-ui-1.8.23.custom.min.js'></script>
+<script type='text/javascript' src='__PUBLIC__/include/js/fullcalendar.js'></script>
+<script type='text/javascript'>
+	$(document).ready(function() {
+		$('#external-events div.external-event').each(function() {
+			var eventObject = {
+				title: $.trim($(this).text())
+			};
+			$(this).data('eventObject', eventObject);
+			$(this).draggable({
+				zIndex: 999,
+				revert: true,      // will cause the event to go back to its
+				revertDuration: 0  //  original position after the drag
+			});
+			
+		});
+
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next,today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end, allDay) {
+				var title = prompt('Event Title:');
+				if (title) {
+					calendar.fullCalendar('renderEvent',
+						{
+							title: title,
+							start: start,
+							end: end,
+							allDay: allDay
+						},
+						true // make the event "stick"
+					);
+				}
+				calendar.fullCalendar('unselect');
+			},
+			editable: true,
+			droppable: true, // this allows things to be dropped onto the calendar !!!
+			drop: function(date, allDay) { 
+				var originalEventObject = $(this).data('eventObject');
+				
+				var copiedEventObject = $.extend({}, originalEventObject);
+				copiedEventObject.start = date;
+				copiedEventObject.allDay = allDay;
+				//copiedEventObject.textColor=$(this).css('color');
+				copiedEventObject.borderColor=$(this).css('border-Color');
+				
+				var className="";
+				var classArray = ($(this).attr('class')).split(" ");
+        		for(var i=0; i<classArray.length; i++){
+	              	if (String(classArray[i]).substring(0,5) == 'badge'){
+	               		className =className+' '+ classArray[i];
+	              	}
+            	}
+				copiedEventObject.className=className;
+            	
+				
+				/*
+				e.title = event.title;
+				e.url = event.url;
+				e.allDay = event.allDay;
+				e.className = event.className;
+				e.editable = event.editable;
+				e.color = event.color;
+				e.backgroudColor = event.backgroudColor;
+				e.borderColor = event.borderColor;
+				e.textColor = event.textColor;
+				*/
+				$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+				
+				if ($('#drop-remove').is(':checked')) {
+					$(this).remove();
+				}
+			},
+			events: [
+				{
+					title: 'All Day Event',
+					start: new Date(y, m, 1)
+				},
+				{
+					title: 'Long Event',
+					start: new Date(y, m, d-5),
+					end: new Date(y, m, d-2)
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d-3, 16, 0),
+					allDay: false
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d+4, 16, 0),
+					allDay: false
+				},
+				{
+					title: 'Meeting',
+					start: new Date(y, m, d, 10, 30),
+					allDay: false
+				},
+				{
+					title: 'Lunch',
+					start: new Date(y, m, d, 12, 0),
+					end: new Date(y, m, d, 14, 0),
+					allDay: false
+				},
+				{
+					title: 'Birthday Party',
+					start: new Date(y, m, d+1, 19, 0),
+					end: new Date(y, m, d+1, 22, 30),
+					allDay: false
+				},
+				{
+					title: 'Click for Google',
+					start: new Date(y, m, 28),
+					end: new Date(y, m, 29),
+					url: 'http://google.com/'
+				}
+			]
+		});
+	});
+</script>
+</div>

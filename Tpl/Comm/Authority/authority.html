@@ -1,0 +1,187 @@
+<ul id="tree" class="ztree"></ul>
+<link href="__PUBLIC__/include/zTree/css/zTreeStyle/zTreeStyle.css?v=<php>echo filemtime(__ROOT__.'Public/include/zTree/css/zTreeStyle/zTreeStyle.css');</php>" rel="stylesheet">
+<script type="text/javascript" src="__PUBLIC__/include/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#data-table input[type='checkbox']").change(function(){
+		var treeNodes;
+		var list=$("#data-table input:checked").map(function() {
+			return $(this).attr('id');
+		}).get().join(',');
+		if(!list){
+			var zTree = $.fn.zTree.getZTreeObj("tree");
+			zTree.checkAllNodes(false);
+			return;
+		}
+		loading();
+		$.ajax({
+		   	type: "POST",
+			url: "role_authority",
+		    global: false,
+		    async: true,
+		    data:{ids:list},
+		    success: function (strResult) {
+		       var treeNodes=eval(strResult);
+		       var treeObj = $.fn.zTree.getZTreeObj("tree");
+		       finish();
+		  		for (var i=0 ; i<treeNodes.length; i++) {
+		  			var node=treeObj.getNodeByTId(treeNodes[i]['id']);
+		  			treeObj.checkNode(node, true, true);
+		  		}
+		    },
+		    error: function () {
+		    	finish();
+		        alert("Ajax请求数据失败!");
+		    }
+  		});
+
+	});
+	initTree();
+});
+function initTree(){
+	$.ajax({
+	   	type: "POST",
+		url: "allnodes",
+	    global: false,
+	    async: false,
+	    success: function (strReult) {
+	       treeNodes=eval(strReult);
+	    }, 
+	    error: function () {
+	        alert("Ajax请求数据失败!");
+	    }
+	  });
+	var setting = {
+		view: {
+			selectedMulti: false,
+			showLine: false,
+			showIcon: true,
+			expandSpeed:"",
+		},
+		check: {
+			enable: true,
+			chkStyle: "checkbox",
+			autoCheckTrigger: false
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		callback: {
+			beforeCheck: beforeCheck,
+			onCheck: onCheck
+		}
+	};
+	$.fn.zTree.init($("#tree"), setting, treeNodes);
+	var treeObj = $.fn.zTree.getZTreeObj("tree");
+	treeObj.expandAll(true);
+	$("[data-target=tree].select-invert").bind("click", {type:"checkAllTrigger"}, checkNode);
+	$("[data-target=tree].select-all").bind("click", {type:"checkAllTrue"}, checkNode);
+	$("[data-target=tree].select-cancel").bind("click", {type:"checkAllFalse"}, checkNode);
+	//$("[data-target=tree].select-invert").bind("change", {}, setAutoTrigger);
+}
+var code, log, className = "dark";
+function beforeCheck(treeId, treeNode) {
+	className = (className === "dark" ? "":"dark");
+	return (treeNode.doCheck !== false);
+}
+function onCheck(e, treeId, treeNode) {
+}		
+function showLog(str) {
+	if (!log) log = $("#log");
+	log.append("<li class='"+className+"'>"+str+"</li>");
+	if(log.children("li").length > 6) {
+		log.get(0).removeChild(log.children("li")[0]);
+	}
+}
+function getTime() {
+	var now= new Date(),
+	h=now.getHours(),
+	m=now.getMinutes(),
+	s=now.getSeconds(),
+	ms=now.getMilliseconds();
+	return (h+":"+m+":"+s+ " " +ms);
+}
+
+function checkNode(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	type = e.data.type,
+	nodes = zTree.getSelectedNodes();
+	if (type.indexOf("All")<0 && nodes.length == 0) {
+		alert("请先选择一个节点");
+	}
+
+	if (type == "checkAllTrue") {
+		zTree.checkAllNodes(true);
+	} else if (type == "checkAllTrigger") {
+		checkAllTrigger();
+		//zTree.checkNode(zTree.getNodes(), null,true, callbackFlag);
+	} else if (type == "checkAllFalse") {
+		zTree.checkAllNodes(false);
+	} else {
+		var callbackFlag = $("#callbackTrigger").attr("checked");
+		for (var i=0, l=nodes.length; i<l; i++) {
+			if (type == "checkTrue") {
+				zTree.checkNode(nodes[i], true, false, callbackFlag);
+			} else if (type == "checkFalse") {
+				zTree.checkNode(nodes[i], false, false, callbackFlag);
+			} else if (type == "toggle") {
+				zTree.checkNode(nodes[i], null, false, callbackFlag);
+			}else if (type == "checkTruePS") {
+				zTree.checkNode(nodes[i], true, true, callbackFlag);
+			} else if (type == "checkFalsePS") {
+				zTree.checkNode(nodes[i], false, true, callbackFlag);
+			} else if (type == "togglePS") {
+				zTree.checkNode(nodes[i], null, true, callbackFlag);
+			}
+		}
+	}
+}
+function checkAllTrigger(){
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getNodes(true);
+	for (var i=0, l=nodes.length; i<l; i++) {
+		zTree.checkNode(nodes[i], null, true);
+	}
+}
+function getCheckedNodes() {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	nodes = zTree.getCheckedNodes();
+	for (var i=0, l=nodes.length; i<l; i++) {
+		//处理
+	}
+	checkCount = zTree.getCheckedNodes(true).length,
+	alert(checkCount);
+}
+
+function count() {
+	var zTree = $.fn.zTree.getZTreeObj("tree"),
+	checkCount = zTree.getCheckedNodes(true).length,
+	nocheckCount = zTree.getCheckedNodes(false).length,
+	changeCount = zTree.getChangeCheckedNodes().length;
+}
+function setAutoTrigger(e) {
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.setting.check.autoCheckTrigger = $("#autoCallbackTrigger").attr("checked");
+	$("#autoCheckTriggerValue").html(zTree.setting.check.autoCheckTrigger ? "true" : "false");
+}
+
+function getNodeValue(){
+	var list=getChecked();
+  	var zTree = $.fn.zTree.getZTreeObj("tree");
+ 	var nodes = zTree.getCheckedNodes();
+    var nids = new Array();  
+  	for(var i=0; i<nodes.length; i++){
+      nids[i]= nodes[i].id;
+    }
+    var nids=nids.join(',');
+    $.ajax({
+		  type: "POST",
+		  url: "update",
+		  data: { ids:nids,roles:list},
+		  success:(function(msg) {
+		  	alert(msg);
+		})});
+}
+</SCRIPT>
