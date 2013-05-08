@@ -1,0 +1,45 @@
+#请勿删除此文件
+# 通常需要git忽略的文件
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.zip
+*.vi
+*~
+*.sass-cache
+*.tmp
+*.bak
+
+# OS 或 IDE编辑器 产生的文件
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+
+# Komodo
+*.komodoproject
+.komodotools
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+.idea
+node_modules
+dist
+
+#TinkPHP编译目录
+Runtime
+#同步软件生成的副本
+*conflicted copy*.*
