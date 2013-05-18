@@ -1,0 +1,39 @@
+<table id="data-table" class="data-table table table-bordered table-striped table-condensed table-hover" style="">
+  <thead>
+    <tr class="align-center">
+      <th><label class="checkbox">
+          <input type="checkbox" class="select-all">
+        </label></th>
+      <volist name="columns" id="col" offset="abs($showpk-1)">
+              <th id="{$key}">{$col}</th>
+      </volist>
+			<th>状态</th>
+			<th class="sorter-false">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <volist name="data" id="vo" key="row">
+    <tr>
+      <volist name="columns" id="col" offset="0" length='1'>
+          <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+      </volist>
+      <volist name="columns" id="col" offset="abs($showpk-1)">
+              <td>{$vo[$key]}</td>
+      </volist>
+      <td class="text-center inline">
+        <empty name="columns.enable">
+        <div class="btn-group">
+          <a data-href="{:U('operate','id='.$vo[$pk].'&op=enable')}" class="btn btn-mini btn-enable <php>if($vo.enable!=false) echo 'btn-info disabled';</php>">启用</a>
+          <a data-href="{:U('operate','id='.$vo[$pk].'&op=disable')}" class="btn btn-mini btn-disable <php>if($vo.enable===true) echo 'btn-inverse disabled';</php>">禁用</a>
+        </div>
+        </empty>
+	    </td>
+  		<td class="text-center inline">
+   			<include file="Comm:Index:table-toolbar-tr"/>     
+  		</td>
+    </tr>
+    </volist>
+  </tbody>
+</table>
+<include file="Comm:Index:pager"/>
+</div>

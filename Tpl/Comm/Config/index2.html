@@ -1,0 +1,158 @@
+<div class="row-fluid">
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#profile">数据库</a></li>
+  <li><a href="#change_password">网站信息</a></li>
+  <li><a href="#account_setting">邮件设置</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="profile">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<div class="control-group">
+    <label class="control-label" for="DB_HOST">服务器地址</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_HOST')}" name="DB_HOST" id="DB_HOST" class="{required:true,maxlength:50,}" placeholder="" >        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="DB_NAME">数据库名</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_NAME')}" name="DB_NAME" id="DB_NAME" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="DB_USER">数据库用户名</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_USER')}" name="DB_USER" id="DB_USER" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="DB_PWD">数据库密码</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_PWD')}" name="DB_PWD" id="DB_PWD" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="DB_PORT">数据库端口</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_PORT')}" name="DB_PORT" id="DB_PORT" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="DB_PREFIX">数据库表前缀</label>
+    <div class="controls">
+        <input type="text" value="{:C('DB_PREFIX')}" name="DB_PREFIX" id="DB_PREFIX" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="weibo"></label>
+    <div class="controls">
+        <button id="btnSubmit" type="submit" class="btn btn-primary btn-large">保 存</button>        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>
+
+<div class="tab-pane" id="change_password">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+    <div class="control-group">
+        <label class="control-label" for="">网站名称</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_NAME')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">网站地址</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_URL')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">ICP备案号</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_ICP')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">管理员账号</label>
+        <div class="controls">
+            <input type="text" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">管理员密码</label>
+        <div class="controls">
+            <input type="password" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">管理员邮箱</label>
+        <div class="controls">
+            <input type="text" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="btnSubmit"></label>
+        <div class="controls">
+            <button id="btnSubmit" type="submit" class="btn btn-primary btn-large">保 存</button>        <label class="help-inline"></label>
+        </div>
+    </div>
+</form>
+</div>
+<div class="tab-pane" id="account_setting">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+    <div class="control-group">
+        <label class="control-label" for="">SMTP服务器</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_NAME')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">SMTP端口</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_URL')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">发信人地址</label>
+        <div class="controls">
+            <input type="text" value="{:C('PROJECT_ICP')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">SMTP用户身份验证</label>
+        <div class="controls">
+            <input type="text" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">验证用户名</label>
+        <div class="controls">
+            <input type="password" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="">验证密码</label>
+        <div class="controls">
+            <input type="text" value="{:C('DB_USER')}" name="" id="" class="{required:true,maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="btnSubmit"></label>
+        <div class="controls">
+            <button id="btnSubmit" type="submit" class="btn btn-primary btn-large">保 存</button>        <label class="help-inline"></label>
+        </div>
+    </div>
+</form>
+</div>
+</div>
+<script>
+  $(function () {
+	  $('#myTab a').click(function (e) {
+	  e.preventDefault();
+	  $(this).tab('show');
+	})
+    $('#myTab a:first').tab('show');
+  })
+</script>
+
+</div>

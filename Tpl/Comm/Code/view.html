@@ -1,0 +1,29 @@
+<div class="row-fluid">
+<script type="text/javascript">
+$(function(){
+    $('.selected').each(function(){
+        $(this).val($(this).data('value'));
+    });
+}); 
+</script>
+<form class="form-inline" action="{:U('view')}" method="get">
+表名 <select id="modules" name="name" class="span2 selected" data-value="{$table_name}">
+    <volist name="modules" id="vo">
+        <option value ="{$vo}">{$vo}</option>
+    </volist>
+</select>
+<button id="btn-view" class="btn"><i class="icon-zoom-in"></i></button>
+</form>
+<ul class="nav nav-tabs" id="myTab">
+  <li><a href="#model" data-toggle="tab">Model</a></li>
+  <li><a href="#action" data-toggle="tab">Action</a></li>
+  <li class="active"><a href="#add" data-toggle="tab">Add</a></li>
+  <li><a href="#edit" data-toggle="tab">Edit</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane" id="model"><pre>{$model}</pre></div>
+  <div class="tab-pane" id="action"><pre>{$action}</pre></div>
+  <div class="tab-pane active" id="add">{$add_show}<pre>{$add}</pre></div>
+  <div class="tab-pane" id="edit">{$edit_show}<pre>{$edit}</pre></div>
+</div>
+</div>
