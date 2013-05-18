@@ -1,6 +1,30 @@
 <?php
 class UserAction extends CommAction {
-   
+   public function profile(){
+      $M = M('user');
+      if($this->isPost()){
+         $M = M('User');
+         $result=$M->create();
+         if(!empty($result)){
+            $M->id=session('userid');
+            $M->username=session('username');
+            $M->save();
+            $this->msg='Success';
+         }
+         else{
+            $this->msg='Fail';
+         }
+      }
+
+      $id=session('userid');
+      $this->data=$M->find($id);
+      $pk=$M->getPk();
+      $this->pk=$pk;
+      $this->id=$M->$pk;
+      layout(!$this->isAjax());
+      $this->display('add');
+
+   }
    public function changepwd(){
    		if($this->_post('password')){
    			$old_password=$this->_post('password');

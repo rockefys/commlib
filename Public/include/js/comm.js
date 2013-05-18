@@ -68,7 +68,38 @@ $(function(){
 		$(this).parent().parent().parent().fadeOut();
 	});
 
+	$('.btn-enable').click(function(){
+		$(this).addClass('btn-info disabled');
+		$(this).siblings().removeClass('btn-inverse disabled');
+		var href=$(this).data("href");
+		$.ajax({
+			type:"get",  
+		    url:href,
+		    success:function(data,textStatus){ 
+		    	alert("Enabled.");      
+		    },
+		    error:function(x){  
+		        alert("Request error"); 
+		    } 
+	    });  
 
+	});
+	$('.btn-disable').click(function(){
+		$(this).addClass('btn-inverse disabled');
+		$(this).siblings().removeClass('btn-info disabled');
+		var href=$(this).data("href");
+		$.ajax({
+			type:"get",  
+		    url:href,
+		    success:function(data,textStatus){ 
+		    	alert("Disabled.");      
+		    },
+		    error:function(x){  
+		        alert("Request error"); 
+		    } 
+	    });  
+		
+	});
 	$('[rel=tooltip]').tooltip({container: 'body'});
 	$('[rel=datepicker]').datepicker();
 	//$('[rel=tooltip]').tooltip();
@@ -124,14 +155,25 @@ $(function(){
 		if(n!=1){
 			return false;
 		}
+
 		var n=$("#data-table input:checked").attr('id');
+		var href=$(this).data("href");
+
+	    var target=$(this).data("target");
+	    $( target +" .modal-body").load(href+'?id='+n, function() { 
+	         $(target).modal("show"); 
+	         $('.selected').each(function(){
+			    $(this).val($(this).data('value'));
+			});
+	    });
+	    return;
 		$.ajax({
 			type:"POST",  
-		    url:"getColumn",
+		    url:href,
 		    data:{id:n},  
 		    success:function(data,textStatus){ 
-		    	clear_form_data($('#table-toolbar .btn-edit').data('target'));
-	            setValue(data);
+		    	//clear_form_data($('#table-toolbar .btn-edit').data('target'));
+	            //setValue(data);
 	            $($('#table-toolbar .btn-edit').data('target')+' #title').text('Edit');
 				$($('#table-toolbar .btn-edit').data('target')).modal('show');                    
 		    },
@@ -217,7 +259,6 @@ function quote(target,data){
 function setValue(obj){ 
     for(var p in obj){  
        if(typeof(obj[p])=="function"){        
-           // obj[p]();       
         }else{      
             $("form #"+p).val(obj[p]);                 
         }        

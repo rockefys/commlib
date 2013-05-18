@@ -2,83 +2,76 @@
 <div class="row-fluid">
 <script type="text/javascript">
 $(function(){
-    $("#id").val("{$module}");
-    $('#refer-pk').val('{$fk}');
-
-    $('#refer-module').change(function(){ 
+    
+    $('#pk').val('{$fk}');
+    $('#module').change(function(){ 
         var n=$(this).val();
-        $('#refer-alias').val(n);
         $.ajax({
             type:"POST",  
             url:'{:U("getColumn")}',
             data:{id:n},  
             success:function(json){ 
-                $('#refer-fk').find('option').remove();
-                $('#refer-show').find('option').remove();
+                $('#pk').find('option').remove();
                 $.each(json, function(i, value) {
-                    $('#refer-fk').append($('<option>').text(value).attr('value', value));
-                    $('#refer-show').append($('<option>').text(value).attr('value', value));
-                }); 
-               $('#refer-show').val($("#refer-show option:eq(1)").val());         
+                    $('#pk').append($('<option>').text(value).attr('value',value));
+                });     
             },
             error:function(x){  
                 alert("Request error");  
             } 
         });
     }); 
-    $('#refer-module').val('{$refer_module}'); 
-    $('#refer-module').change();
+    $('#module_refer').change(function(){ 
+        var n=$(this).val();
+        $('#map_name').val(n);
+        $.ajax({
+            type:"POST",  
+            url:'{:U("getColumn")}',
+            data:{id:n},  
+            success:function(json){ 
+                $('#fk').find('option').remove();
+                $('#field_show').find('option').remove();
+                $.each(json, function(i, value) {
+                    $('#fk').append($('<option>').text(value).attr('value', value));
+                    $('#field_show').append($('<option>').text(value).attr('value', value));
+                }); 
+               $('#field_show').val($("#field_show option:eq(1)").val());         
+            },
+            error:function(x){  
+                alert("Request error");  
+            } 
+        });
+    }); 
+    $('#module_refer').val('{$refer_module}'); 
+    $('#module_refer').change();
+    $('#module').val('{$module}');
 }); 
 </script>
-    <form class="form-horizontal">
-        <!--
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="input-prepend">
-                <span class="add-on">label</span>
-                <input type="text" class="input-small"  placeholder="">
-            </div>
-        </div>
-        <div class="span3">
-            <div class="input-prepend">
-                <span class="add-on">label</span>
-                <input type="text" class="input-small"  placeholder="">
-            </div>
-        </div>
-         <div class="span3">
-            <div class="input-prepend">
-                <span class="add-on">label</span>
-                <input type="text" class="input-small"  placeholder="">
-            </div>
-        </div>
-         <div class="span3">
-            <div class="input-prepend">
-                <span class="add-on">label</span>
-                <input type="text" class="input-small"  placeholder="">
-            </div>
-        </div>
-    </div>
--->
+<form class="form form-horizontal" method="POST" action="{:U('Code/mapping_save')}">
     <div class="row-fluid">
         <div class="span6">
             <div class="span6">
                     <span class="">关联表名</span>
-                    <input type="text" class="span8" value="{$module}" placeholder="">
+                    <select id="module" name="module" class="span8">
+                        <volist name="Modules" id="vo">
+                            <option value ="{$vo}">{$vo}</option>
+                        </volist>
+                    </select>
             </div>
             <div class="span6">
-                    <span class="help-inline">关联类型</span>
-                    <select  id='refer-type' name="refer-type" class="span8">
-                        <option value ="">多对一</option>
-                        <option value ="">一对多</option>
-                        <option value ="">一对一</option>
-                        <option value ="">多对多</option>
-                    </select>
+                <span class="help-inline">关联类型</span>
+                <select  id='map_type' name="map_type" class="span8">
+                    <option value ="BELONGS_TO">多对一</option>
+                    <option value ="HAS_MANY">一对多</option>
+                    <option value ="HAS_ONE">一对一</option>
+                    <option value ="MANY_TO_MANY">多对多</option>
+                </select>
             </div>
          </div>
         <div class="span6">
             <div class="span6">
                 <span class="help-inline">被关联表</span>
-                <select id="refer-module" name="refer-module" class="span8">
+                <select id="module_refer" name="module_refer" class="span8">
                     <volist name="Modules" id="vo">
                         <option value ="{$vo}">{$vo}</option>
                     </volist>
@@ -86,7 +79,7 @@ $(function(){
             </div>
             <div class="span6">
                     <span class="help-inline">映射名称</span>
-                    <input id='refer-alias' name="refer-alias" type="text" class="span8" value="" placeholder="">
+                    <input id='map_name' name="map_name" type="text" class="span8" value="" placeholder="mapping_name">
             </div>
         </div>
     </div>
@@ -95,7 +88,7 @@ $(function(){
         <div class="span6">
             <div class="span6">
                     <span class="">关联主键</span>
-                     <select  id='refer-pk' name="refer-pk" class="span8">
+                     <select  id='pk' name="pk" class="span8">
                         <volist name="module_columns" id="vo">
                             <option value ="{$vo}">{$vo}</option>
                         </volist>
@@ -103,18 +96,18 @@ $(function(){
             </div>
             <div class="span6">
                     <span class="help-inline">关联条件</span>
-                    <input id='refer-condition' name="refer-condition" type="text" class="span8"  placeholder="">
+                    <input id='condition' name="condition" type="text" class="span8"  placeholder="condition">
             </div>
          </div>
         <div class="span6">
             <div class="span6">
                 <span class="help-inline">关联外键</span>
-                <select  id='refer-fk' name="refer-fk" class="span8">
+                <select  id='fk' name="fk" class="span8">
                 </select>
             </div>
             <div class="span6">
                     <span class="help-inline">显示字段</span>
-                    <select  id='refer-show' name="refer-show" class="span8">
+                    <select  id='field_show' name="field_show" class="span8">
                     </select>
             </div>
         </div>
@@ -124,64 +117,29 @@ $(function(){
         <div class="span6">
             <div class="span6">
                     <span class="">关联顺序</span>
-                    <input id='refer-order' name="refer-order" type="text" class="span8"  placeholder="">
+                    <input id='order' name="order" type="text" class="span8"  placeholder="mapping_order">
             </div>
             <div class="span6">
                     <span class="help-inline">关联条目</span>
-                    <input id='refer-limit' name="refer-limit" type="text" class="span8"  placeholder="">
+                    <input id='limit' name="limit" type="text" class="span8"  placeholder="mapping_limit">
             </div>
          </div>
         <div class="span6">
             <div class="span6">
                 <span class="help-inline">关联字段</span>
-                <input type="text" class="span8"  placeholder="">
+                <input type="text" class="span8" id="map_fields" name="map_fields" placeholder="mapping_fields">
             </div>
             <div class="span6">
+                <span class="help-inline">映射字段</span>
+                <input type="text" class="span8" id="as_fields" name="as_fields" placeholder="as_fields">
             </div>
         </div>
     </div>
+    <br>
+<div class="row-fluid">
+<include file="Comm:Index:table"/>
+</div>
+<include file="./Tpl/Comm/Index/btn.html"/>
 </form>
 </div>
-<div class="row-fluid">
-<form class="" action="{:U('save')}" method="POST">
-<div class="row-fluid">
-   
-    <input type="hidden" name="name" value="{$module}" class="span2"/>
-</div>
-    <table  class="table table-condensed table-bordered table-striped table-hover">
-        <thead>
-             <tr><th>外键</th>
-                <th>引用表名</th>
-                <th>引用字段</th>
-                <th>显示字段</th>
-                <th>fk</th>
-                <th>引用类型</th>
-                <th>字段列表</th>
-            <tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>userid</td>
-                <td>user</td>
-                <td>id</td>
-                <td>username</td>
-                <td></td>
-                <td>inner</td>
-                <td>age,sex,nick_name</td>
-            </tr>
-            <tr>
-                <td>catid</td>
-                <td>catgory</td>
-                <td>id</td>
-                <td>name</td>
-                <td></td>
-                <td>inner</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-   <include file="./Tpl/Comm/Index/btn.html"/>
-</form>
-</div>
-<include file="./Tpl/Comm/Moudle/add.html"/>
 </div>

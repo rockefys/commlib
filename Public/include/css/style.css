@@ -13,6 +13,13 @@ a,p,div,td{
 	overflow:hidden;
 	text-overflow:ellipsis;*/
 }
+.block-content textarea:last-child{
+	margin-bottom: 0px;
+}
+textarea{
+	resize: none; 
+	overflow:auto;
+}
 table label{
 	margin-bottom: 0px;
 }

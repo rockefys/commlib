@@ -8,12 +8,14 @@ class DatabaseAction extends Action {
         }
         $M= M('Backup');
         $select=$M->where($data)->join()->order();
-        R('Comm/Table/index',array($select,$type));
+        R('Comm/Comm/page',array($select));
     }
     public function table(){
-        $M= M('Database');
-        $select=$M->table('SHOW TABLE STATUS');
-        R('Comm/Table/index',array($select,$type,null,true,'Name'));
+        $module='Database';
+        $pk='Name';
+        $M= M();
+        $select=$M->query('SHOW TABLE STATUS');
+        R('Comm/Table/index',array($select,null,'index',true,$module,$pk));
     }
     public function backup(){
     	$br='\n';

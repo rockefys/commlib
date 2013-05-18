@@ -1,48 +1,65 @@
-{__NOLAYOUT__}
-<div class="container-fluid">
-  <form class="form-inline" action="signup" method="post">
-    <input type="hidden" name="{$pk}" value="{$id}">
-  <legend>Legend</legend>
-      <div class="control-group">
-        <label class="control-label" for="inputEmial">Username</label>
-        <div class="controls">
-          <input  value="{$username}" name="uname" class="" type="text" id="inputEmail" placeholder="">
-          <label class="help-inline">Enter your first and last name.</label>
-        </div>
-        <div class="control-group">
-        <label class="control-label" for="inputEmail">Email address</label>
-        <div class="controls">
-          <input  value="{$email}" name="mail" class="" type="text" id="inputEmail" placeholder="">
-          <label class="help-inline">What’s your email address?</label>
-        </div>
-         </div>
-        <div class="control-group">
-        <label class="control-label" for="inputPwd">Password</label>
-        <div class="controls">
-          <input type="text" name="pwd" type="password" class="" id="inputPwd" placeholder="">
-          <label class="help-inline">6 characters or more! Be tricky.</label>
-        </div>
-         </div>
-        <div class="control-group">
-        <label class="control-label" for="inputRepwd">Confirm Password</label>
-        <div class="controls">
-          <input type="text" name="confirm" type="password" class="" id="inputRepwd" placeholder="">
-          <label class="help-inline">Confirm your password</label>
-        </div>
-      </div>
-      <div class="control-group">
-          <label class="control-label"></label>
-          <div class="controls">
-              <include file="./Tpl/Comm/Login/recaptcha.html"/>
-          </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-          <label class="checkbox">
-              <input type="checkbox"><strong>I agree to the <a target="_blank" id="TosLink" href="#">Privacy Policy</a></strong>
-          </label>
-        </div>
-      </div>
-  </form>
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<div class="control-group hide">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+        <input type="hidden" value="{$data['id']}" name="id" id="id" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="username">用户名</label>
+    <div class="controls">
+        <input type="text" value="{$data['username']}" name="username" id="username" class="{required:true,maxlength:50,}" placeholder="" readonly>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+<label class="control-label" for="display_name">姓名</label>
+    <div class="controls">
+        <input type="text" value="{$data['display_name']}" name="display_name" id="display_name" class="{maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+     <label class="control-label" for="numb">手机号</label>
+    <div class="controls">
+        <input type="text" value="{$data['phone']}" name="phone" id="phone" class="{maxlength:50,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="sex">性别</label>
+    <div class="controls">
+        <select name="sex" class="">
+            <option value ="男">男</option>
+            <option value ="女">女</option>
+            <option value ="未知">未知</option>
+        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="card_id">身份证号</label>
+    <div class="controls">
+        <input type="text" value="{$data['card_id']}" name="card_id" id="card_id" class="{maxlength:18,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="photo">头像</label>
+    <div class="controls">
+        <input type="text" value="{$data['photo']}" name="photo" id="photo" class="{maxlength:255,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="qq">qq</label>
+    <div class="controls">
+        <input type="text" value="{$data['qq']}" name="qq" id="qq" class="{maxlength:20,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="email">email</label>
+    <div class="controls">
+        <input type="text" value="{$data['email']}" name="email" id="email" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="weibo">微博</label>
+    <div class="controls">
+        <input type="text" value="{$data['weibo']}" name="weibo" id="weibo" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="btn-submit"></label>
+    <div class="controls">
+        <button id="btnSubmit" type="submit" class="btn btn-primary btn-large">保 存</button>        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
 </div>

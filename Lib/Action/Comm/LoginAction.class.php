@@ -2,21 +2,21 @@
 class LoginAction extends Action {
     public function index(){
     	if(session('?username') && session('userid')){
-    		R('Comm/Index/index');
+    		redirect(U('Index/index'));
     		exit();
     	}
     	if($this->isGet()){	
-    		if(session('errors')>3)$this->show_recaptcha();					//如果为get请求并且错误尝试次数大于3,显示验证码
+    		if(session('errors')>2)$this->show_recaptcha();					//如果为get请求并且错误尝试次数大于3,显示验证码
     		$this->display();
     		exit();
     	}
     	else if($this->isPost()){
-	    	session('errors',session('errors')+1);
-		    if(session('errors')<4 || $this->recaptcha_valiaute()) {	//如果为post请求并且错误尝试次数小于4,则无需验证；否则需要对验证码进行验证
+    		 session('errors',0);
+		    if(session('errors')<3 || $this->recaptcha_valiaute()) {	//如果为post请求并且错误尝试次数小于4,则无需验证；否则需要对验证码进行验证
 		    	$username=htmlentities($this->_post('usernameoremail'));
 		    	$password=htmlentities($this->_post('password'));
 		    	$User = M('user');
-				$User->where("username='%s' or email='%s' ",$username,$username,$username)->find();
+				$User->where("username='%s' or email='%s' ",$username,$username)->find();
 		        if(isset($User->password) && ($User->password===md5Encrypt($password))){
 		            
 		            session('username',$username);
@@ -31,14 +31,16 @@ class LoginAction extends Action {
 					$M->add();
 
 					$this->msg='success!';
-		            R('Comm/Index/index');
+		            redirect(U('Index/index'));
+		            exit();
 		        }
 		        else{
-		        	if(session('errors')>3) {$this->recaptcha = recaptcha_get_html($this->publickey, $error);}
+		        	if(session('errors')>2) {$this->recaptcha = recaptcha_get_html($this->publickey, $error);}
 		        	$this->msg = "Wrong username or email and password combine.";
 		        }
 		    }
-
+		   
+		    session('errors',session('errors')+1);
 		    $this->errors=session('errors');
 			$this->username=$username;
         	$this->display();
@@ -101,12 +103,13 @@ class LoginAction extends Action {
     		$this->display();
     		exit();
     	}
+    	session('errors',0);
     	session('errors',session('errors')+1);
     	if(session('errors')>3 && !$this->recaptcha_valiaute()) {
 			$this->display();
 			exit();
 		}
-		$User = M("user");
+		$User = D("User");
 		$username=$this->_post('uname');
 		$email=$this->_post('mail');
 		$password=$this->_post('pwd');
@@ -141,9 +144,11 @@ class LoginAction extends Action {
 
 		$result=$User->create();
 		if($result){
-			$this->success('Success.',U('Login/index'));
+			$User->password=md5Encrypt($password);
+			$User->add();
+			$this->success('Register Success.',U('Login/index'),3);
 		} else {
-		    $this->error('Fail');
+		    $this->error('Register Fail.',U('Login/signup'));
 		}
 		
 		$this->display();

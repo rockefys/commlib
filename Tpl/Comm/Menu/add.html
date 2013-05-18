@@ -3,47 +3,45 @@
 <div class="control-group hide">
     <label class="control-label" for="id"></label>
     <div class="controls">
-        <input type="hidden" value="" name="id" id="id" placeholder="">        <label class="help-inline"></label>
+        <input type="hidden" value="{$data.id}" name="id" id="id" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="name">名称</label>
     <div class="controls">
-        <input type="text" value="" name="name" id="name" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
+        <input type="text" value="{$data.name}" name="name" id="name" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="title">标题</label>
     <div class="controls">
-        <input type="text" value="" name="title" id="title" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
+        <input type="text" value="{$data.title}" name="title" id="title" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="link">链接</label>
     <div class="controls">
-        <input type="text" value="" name="link" id="link" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
+        <input type="text" value="{$data.link}" name="link" id="link" class="{maxlength:100,}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="pid">父级</label>
     <div class="controls">
-        <input type="text" value="0" name="pid" id="pid" class="{digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+        <input type="text" value="{$data.pid}" name="pid" id="pid" class="{digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="level">层级</label>
     <div class="controls">
-                
-            <input type="text" class="{digits:true,range:[0,65535]}" value="0" name="level" id="level" placeholder="">
+            <input type="text" class="{digits:true,range:[0,65535]}" value="{$data.level}" name="level" id="level" placeholder="">
                 <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="order">顺序</label>
     <div class="controls">
                 
-            <input type="text" class="{digits:true,range:[0,65535]}" value="0" name="order" id="order" placeholder="">
+            <input type="text" class="{digits:true,range:[0,65535]}" value="{$data.order}" name="order" id="order" placeholder="">
                 <label class="help-inline"></label>
     </div>
 </div><div class="control-group">
     <label class="control-label" for="location">位置</label>
     <div class="controls">
-        <select name="location" class="">
-                
+        <select name="location" class="selected" data-value="{$data.location}">
             <option value ="top">top</option>
             <option value ="left">left</option>
             <option value ="right">right</option>
@@ -53,8 +51,7 @@
 </div><div class="control-group">
     <label class="control-label" for="target">目标</label>
     <div class="controls">
-        <select name="target" class="">
-                
+        <select name="target" class="selected" data-value="{$data.target}">
             <option value ="self">self</option>
             <option value ="blank">blank</option>
             <option value ="parent">parent</option>

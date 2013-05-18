@@ -4,37 +4,20 @@
       <th><label class="checkbox">
           <input type="checkbox" class="select-all">
         </label></th>
-      <volist name="columns" id="col" offset="1">
+      <volist name="columns" id="col" offset="abs($showpk-1)">
               <th id="{$key}">{$col}</th>
       </volist>
-			<th>状态</th>
-			<th class="sorter-false">操作</th>
     </tr>
   </thead>
   <tbody>
     <volist name="data" id="vo" key="row">
     <tr>
       <volist name="columns" id="col" offset="0" length='1'>
-          <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+          <td><label class="checkbox">{$row}</label></td>
       </volist>
-      
-      <volist name="columns" id="col" offset="1">
+      <volist name="columns" id="col" offset="abs($showpk-1)">
               <td>{$vo[$key]}</td>
       </volist>
-      <td class="text-center inline">
-		   <span class="label label-important">Success</span>
-	    </td>
-  		<td class="text-center inline">
-        <neq name="type" value="refer">
-        <div class="btn-group btn-group-operate">
-  				<a href='{:U(MODULE_NAME."/view?id=".$vo[$pk])}' class="btn btn-small " title="View" data-original-title="View" re="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
-  				<a href='{:U(MODULE_NAME."/edit?id=".$vo[$pk])}' class="btn btn-small " title="Edit" data-original-title="Edit" re="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
-  				<a href='{:U(MODULE_NAME."/delete?id=".$vo[$pk])}' class="btn btn-small " title="Delete" data-original-title="Delete" re="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-remove"></i> </a>
-        </div>
-        <else/>
-          <a href='javascript:quote("{$refer}",{:json_encode($vo)})' class="bt btn-smal"><i class="icon-ok"></i> </a>
-        </neq>
-  		</td>
     </tr>
     </volist>
   </tbody>

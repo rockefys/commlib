@@ -1,53 +1,48 @@
 <div class="row-fluid">
-<form class="form-inline form-horizontal" action="" method="post" id='form'>
+<form class="form-inline form-horizontal" action="<literal>{:U('save')}</literal>" method="post" id='form'>
 <volist name="data" id="vo">
-
 <div class="control-group">
-    <label class="control-label" for="{$vo.Field}">{$vo.Comment}</label>
+    <label class="control-label" for="{$vo.field}">{$vo.title}</label>
     <div class="controls">
-        <php>$tp=substr($vo['Type'],0,4);</php>
-<switch name="tp">
-    <case value="varc|char|int(">
-    <input type="text" value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}" placeholder="">
+<switch name="vo.control_type">
+    <case value="hidden">
+        <input type="hidden" value="" name="{$vo.field}" id="{$vo.field}" class="{$vo.validate}" placeholder="">
     </case>
-    <case value="text">
-        <textarea rows="3" class="{:validator($vo);}" ></textarea>
+    <case value="text | digit">
+        <input type="text" value="{$vo.default}" name="{$vo.field}" id="{$vo.field}" class="{$vo.validate}" placeholder="">
     </case>
-    <case value="enum">
-        <select name="{$vo.Field}" class="">
-        <php>$ops = explode(',',substr($vo['Type'],5,-1));</php>
+    <case value="area">
+        <textarea rows="3" class="" ></textarea>
+    </case>
+    <case value="select">
+        <select id="{$vo.field}" name="{$vo.field}" class="selected" data-value="{$vo.default}">
+        <php>$ops = explode(',',substr($vo['type'],5,-1));</php>
         <volist name="ops" id="op">
             <php>$op = substr($op,1,-1);</php>
-
             <option value ="{$op}">{$op}</option>
         </volist>
-
         </select>
     </case>
-    <case value="date|time">
-
-        <input type="text" class="{:validator($vo);}" name="{$vo.Field}" id="{$vo.Field}"  rel="datepicker" data-date="2012-12-12" data-date-format="yyyy-mm-dd" value='2012-12-12'>
+    <case value="datetime">
+        <input type="text" class="{$vo.validate}" name="{$vo.field}" id="{$vo.field}"  rel="datepicker" data-date="{$data.default}" data-date-format="yyyy-mm-dd hh:mm:ss">
     </case>
-    <case value="bit(">
-
-        <input name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}" type="checkbox" checked>
+    <case value="date">
+        <input type="text" class="{$vo.validate}" name="{$vo.field}" id="{$vo.field}"  rel="datepicker" data-date="{$data.default}" data-date-format="yyyy-mm-dd">
+    </case>
+    <case value="time">
+        <input type="text" class="{$vo.validate}" name="{$vo.field}" id="{$vo.field}"  rel="datepicker" data-date="{$data.default}" data-date-format="hh:mm:ss">
+    </case>
+    <case value="checkbox">
+        <php>$checked=array('0'=>'','1'=>'checked');</php>
+        <input name="{$vo.field}" id="{$vo.field}" class="{$vo.validate}" type="checkbox" {$checked[$vo['field']]}>
     </case>
     <default />
-        <if condition="(strpos($vo['Type'],'text')!==false) OR (strpos($vo['Type'],'bolb')!==false)">
-
-            <textarea rows="3" name="{$vo.Field}" id="{$vo.Field}" class="{:validator($vo);}"></textarea>
-        <elseif condition="strpos($vo['Type'],'int')!==false"/>
-
-            <input type="text" class="{:validator($vo);}" value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" placeholder="">
-        <else />
-
-            <input type="text" class="{:validator($vo);}"  value="{$vo.Default}" name="{$vo.Field}" id="{$vo.Field}" placeholder="">
-    </if>
+        <input type="text" class="{$vo.validate}"  value="{$vo.default}" name="{$vo.field}" id="{$vo.field}" placeholder="">
 </switch>
-        <label class="help-inline"></label>
+        <label class="help-inline">{$vo.tips}</label>
     </div>
 </div>
-
 </volist>
+
 </form>
 </div>

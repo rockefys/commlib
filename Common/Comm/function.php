@@ -166,6 +166,24 @@
         $str.='}';
         return $str;
     }
+    function control_type($vo){
+        if($vo['Key']==='PRI')$type='hidden';
+        else if(strpos($vo['Type'],'char')!==false)$type='text';
+        else if(strpos($vo['Type'],'text')!==false)$type='area';
+        else if(strpos($vo['Type'],'enum')!==false)$type='select';
+        else if(strpos($vo['Type'],'datetime')!==false)$type='date';
+        else if(strpos($vo['Type'],'bit')!==false)$type='checkbox';
+        //else if(strpos($vo['type'],'set')!==false)$type='checkboxs';
+        else if(
+                strpos($vo['Type'],'int')!==false 
+            ||  strpos($vo['Type'],'decimail')!==false 
+            ||  strpos($vo['Type'],'float')!==false 
+            ||  strpos($vo['Type'],'double')!==false
+            )
+            $type='digit';
+
+        return $type;
+    }
 
     function getNumb(){
         return array(

@@ -4,7 +4,7 @@
 <volist name="data" id="vo" empty="" >
 <eq name="pid" value="$vo.pid">
 			<li>
-				<a href="{:U($vo['link'])}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
+				<a href="{:U($vo['link'])}" target="_{$vo['target']}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
 			</li>
 <else/>
 <neq name="i" value="1">
@@ -15,7 +15,7 @@
 	  <ul class='nav nav-tabs nav-stacked'>
 			
 			<li>
-				<a href="{:U($vo['link'])}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
+				<a href="{:U($vo['link'])}" target="_{$vo['target']}"><i class="icon-chevron-right"></i>{$vo['title']}</a>
 			</li>
 </eq>
 	<assign name="pid" value="$vo.pid" />
