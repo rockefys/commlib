@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/docs.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-146052-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+    <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./index.html">Bootstrap</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="./index.html">主页</a>
+              </li>
+              <li class="">
+                <a href="./getting-started.html">开始</a>
+              </li>
+              <li class="">
+                <a href="./auto-code.html">代码生成</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Subhead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Auto Code</h1>
+    <p class="lead">How to develope your app with this project.</p>
+  </div>
+</header>
+
+  <div class="container-fluid">
+
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+          <li><a href="#db"><i class="icon-chevron-right"></i> 数据库设计</a></li>
+          <li><a href="#module"><i class="icon-chevron-right"></i> 模块设计</a></li>
+          <li><a href="#code"><i class="icon-chevron-right"></i> 生成代码</a></li>
+          <li><a href="#dbac"><i class="icon-chevron-right"></i> RBAC节点生成</a></li>
+          <li><a href="#menu"><i class="icon-chevron-right"></i> 菜单设计</a></li>
+        </ul>
+      </div>
+      <div class="span9">
+
+
+
+        <!-- Global Bootstrap settings
+        ================================================== -->
+        <section id="db">
+          <div class="page-header">
+            <h1>数据库设计</h1>
+          </div>
+
+          <h3>设计表及字段</h3>
+          <p>通过代码生成，我们希望的是不用写一行代码就能让设计器本身提供基本的操作数据功能和界面，为了达到这个目的，你需要在设计数据库时提供尽可能详尽的信息：<strong>字段说明以及表关系</strong>。</p>
+          <p>在列表界面中，字段说明用于填充表格的列标头th中的内容(用户名、姓名、邮箱)；添加界面中的字段说明也是一样。</p>
+          <h4>建立数据表</h4>
+          <pre  class="prettyprint linenums">
+CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL COMMENT '用户名',
+  `email` varchar(100) DEFAULT NULL COMMENT 'email',
+  `display_name` varchar(50) DEFAULT NULL COMMENT '姓名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8$$
+          </pre>
+          <h3>最终生成的界面和效果</h3>
+          <h4>列表界面</h4>
+          <div class="bs-docs-example">
+            <div class="row-fluid">
+  <form class="form-inline" id="table-toolbar">
+    <div class="btn-group ">
+      <a data-href="{:U('add')}" data-url="{:U('save')}" data-target="#add-modal" data-toggle="modal" role="button"  data-original-title="Add" rel="tooltip" data-placement="bottom" class="btn btn-add btn-large btn-tool"><i class="icon-plus"></i></a>
+      <a data-href="{:U('edit')}" data-target="#add-modal" role="button" data-original-title="Edit" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-edit"></i></a>
+      <a data-href="{:U('delete')}" data-original-title="Delete" rel="tooltip" data-placement="bottom" class="btn btn-large btn-delete btn-tool"><i class="icon-trash"></i></a>
+    </div>
+
+    <div class="btn-group">
+      <a href="{:U('folder')}" data-target="#modal" data-toggle="modal" data-original-title="Folder" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-folder-close"></i></a>
+      <a href="{:U('flag')}" data-target="#modal" data-toggle="modal" data-original-title="Flag" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-flag"></i></a>
+      <a href="{:U('tag')}" data-target="#modal" data-toggle="modal" data-original-title="Tags" rel="tooltip" data-placement="bottom" class="btn btn-large btn-tool"><i class="icon-tags"></i></a>
+    </div>
+
+    <div class="btn-group">
+      <a href="{:U('Index/uploads')}" data-target="#modal" data-toggle="modal" data-original-title="Import" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-circle-arrow-up"></i>
+      </a>
+      <a href="{:U('export')}" data-target="#modal" data-original-title="Export" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-download-alt"></i>
+      </a>
+      <a href="{:U('print')}" data-target="#modal" data-original-title="Print" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-print"></i>
+        <a href="{:U('setting')}" data-target="#modal" data-original-title="Setting" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-th-list"></i>
+      </a>
+    </div>
+
+    <div class="btn-group">
+      <a href="#" data-toggle="dropdown"  data-original-title="Filter" rel="tooltip" data-placement="bottom" class="btn btn-large "><i class="icon-filter"></i></a>
+      <ul class="dropdown-menu">
+          <li><input type="search" class="light-table-filter input-medium" data-table="data-table" placeholder="Filtrer" autofocus /></li>
+      </ul>
+        <a href="{:U('Refresh')}" style="margin-left: -1px;" data-target="#modal" data-original-title="Refresh" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-refresh"></i></a>
+    </div>
+    
+    <div class="btn-group pull-right">
+      <a id="pre-page" data-original-data="Newer" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$prePage}><i class="icon-chevron-left"></i></a>
+      <a id="next-page" data-original-data="Older" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$nextPage}><i class="icon-chevron-right"></i></a>
+    </div>
+  </form>
+</div>
+<div class="row-fluid">
+            <table class="table data-table table-bordered table-striped table-condensed table-hover">
+              <caption></caption>
+              <thead>
+                <tr>
+                  <th><label class="checkbox"><input type="checkbox"></label></th>
+                  <th>用户名</th>
+                  <th>姓名</th>
+                  <th>email</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label class="checkbox"><input type="checkbox" id="1">1</label></td>
+                  <td>admin</td>
+                  <td>管理员</td>
+                  <td>admin@admin.com</td>
+                  <td class="text-center inline">
+                    <div class="btn-group">
+                      <a data-href="" class="btn btn-mini btn-enable btn-info disabled">启用</a>
+                      <a data-href="" class="btn btn-mini btn-disable ">禁用</a>
+                    </div>      
+                  </td>
+                  <td class="text-center inline">
+                    <div class="btn-group btn-group-operate">
+                    <a href="" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Delete" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-trash"></i> </a>
+                    </div>     
+                  </td>
+                </tr>
+                <tr>
+                  <td><label class="checkbox"><input type="checkbox" id="2">2</label></td>
+                  <td>user</td>
+                  <td>用户</td>
+                  <td>user@user.com</td>
+                  <td class="text-center inline">
+                    <div class="btn-group">
+                      <a data-href="" class="btn btn-mini btn-enable">启用</a>
+                      <a data-href="" class="btn btn-mini btn-disable btn-inverse disabled ">禁用</a>
+                    </div>      
+                  </td>
+                  <td class="text-center inline">
+                    <div class="btn-group btn-group-operate">
+                    <a href="" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Delete" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-trash"></i> </a>
+                    </div>     
+                  </td>
+                </tr>
+                <tr>
+                  <td><label class="checkbox"><input type="checkbox" id="3">3</label></td>
+                  <td>...</td>
+                  <td>...</td>
+                  <td>...</td>
+                  <td class="text-center inline">
+                    <div class="btn-group">
+                      <a data-href="" class="btn btn-mini btn-enable btn-info disabled">启用</a>
+                      <a data-href="" class="btn btn-mini btn-disable ">禁用</a>
+                    </div>      
+                  </td>
+                  <td class="text-center inline">
+                    <div class="btn-group btn-group-operate">
+                    <a href="" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Delete" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-trash"></i> </a>
+                    </div>     
+                  </td>
+                </tr>
+                <tr>
+                  <td><label class="checkbox"><input type="checkbox" id="4">4</label></td>
+                  <td>...</td>
+                  <td>...</td>
+                  <td>...</td>
+                  <td class="text-center inline">
+                    <div class="btn-group">
+                      <a data-href="" class="btn btn-mini btn-enable btn-info disabled">启用</a>
+                      <a data-href="" class="btn btn-mini btn-disable ">禁用</a>
+                    </div>      
+                  </td>
+                  <td class="text-center inline">
+                    <div class="btn-group btn-group-operate">
+                    <a href="" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
+                    <a href="" class="btn btn-small " data-original-title="Delete" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-trash"></i> </a>
+                    </div>     
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>  
+            <br>
+            <div class="row-fluid">
+            <form class="form-inline" action="" mothed="requst">
+  <div class="pagination pagination-centered pagination-large inline">
+      <ul id="page">
+        <li><a href="/Department/index/p/1.htm">首页</a></li> <li><a href="/Department/index/p/3.htm">上一页</a></li> <li><a href="/Department/index/p/2.htm">2</a></li><li><a href="/Department/index/p/3.htm">3</a></li><li><a class="cur">4</a></li><li><a href="/Department/index/p/5.htm">5</a></li><li><a href="/Department/index/p/6.htm">6</a></li> <li><a href="/Department/index/p/5.htm">下一页</a></li> <li><a href="/Department/index/p/17.htm">尾页</a></li>              <li class="jump-to">
+            <a>4/10 转到<input name="p" type="text" class="input-page">页 <input type="submit" class="btn btn-small" value="确定"></a>
+        </li>
+    </ul></div>  
+    </div>
+</form>
+          </div>
+          <h4>添加界面</h4>
+<div class="bs-docs-example">
+  <form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'>
+    <caption></caption>
+   <div class="control-group">
+        <label class="control-label" for="id"></label>
+        <div class="controls">
+          <input type="hidden" value="" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+        </div>
+    </div><div class="control-group">
+        <label class="control-label" for="username">用户名</label>
+        <div class="controls">
+            <input type="text" class="{required:true,maxlength:50,}"  value="" name="username" id="username" placeholder="">        <label class="help-inline">提示信息1</label>
+        </div>
+    </div><div class="control-group">
+        <label class="control-label" for="email">email</label>
+        <div class="controls">
+            <input type="text" class="{maxlength:100,}"  value="" name="email" id="email" placeholder="">        <label class="help-inline">提示信息2</label>
+        </div>
+    </div><div class="control-group">
+        <label class="control-label" for="display_name">姓名</label>
+        <div class="controls">
+            <input type="text" class="{maxlength:50,}"  value="" name="display_name" id="display_name" placeholder="">        <label class="help-inline">提示信息3</label>
+        </div>
+    </div>
+    <div class="well well-small">
+      <div class="row-fluid">
+      <div class="span6 text-right">
+            <button id="btn-submit" type="submit" class="btn btn-primary btn-large">&nbsp;保 存&nbsp;</button>
+        </div>
+        <div class="span6 text-left">
+            <a href="/Code/index.htm" class="btn btn-large">&nbsp;返 回&nbsp;</a>
+        </div>
+        </div>
+    </div>
+  </form>
+</div>
+<p><span class="label label-info">Heads up!</span> 在建立表结构时，请为字段提供 <code>COMMENT</code> 字段说明，用于生成代码时填充列表界面的标头和添加界面中的字段说明。</p>
+<pre class="prettyprint linenums">
+&lt;div class="control-group"&gt;<br>  &lt;label class="control-label" for="字段ID"&gt;字段说明&lt;/label&gt;<br>  &lt;div class="controls"&gt;<br>    &lt;input type="text" value="字段默认值" name="字段ID" id="字段ID" class="{验证类型}" placeholder=""&gt;<br>    &lt;label class="help-inline"&gt;提示文字&lt;/label&gt;<br>  &lt;/div&gt;<br>&lt;/div&gt;
+</pre>
+
+<h3>数据库表字段类型与表单类型</h3>
+<p>生成时能够根据字段类型自动生成对应的表单元素，对应关系如下</p>
+<table class="table data-table table-bordered table-striped table-condensed table-hover">
+  <thead>
+    <th>数据表字段</th>
+    <th>表单元素</th>
+    <th>前台验证</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>主键PRI</td><td>hidden</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>char,varchar</td><td>text</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>text,blob</td><td>area</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>enum</td><td>select</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>bit</td><td>checkbox</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>int,decimal,float,double</td><td>text</td><td>{number:true,range:[下限,上限]'}</td>
+    </tr>
+    <tr>
+      <td>data,datetime</td><td>date</td><td>dateISO:true</td>
+    </tr>
+    <tr>
+      <td>NOT NULL</td><td>&nbsp;</td><td>{required:true}</td>
+    </tr>
+    <tr>
+      <td>其它</td><td>等待您的扩展</td><td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+
+
+
+        <!-- Grid system
+        ================================================== -->
+        <section id="module">
+          <div class="page-header">
+            <h1>模块设计</h1>
+          </div>
+
+          <h2>模块列表</h2>
+          <p>模块列表显示了当前数据库中的所有表，选择修改进入表单设计器，可以修改数据表对应的模块名、所属分组以及显示字段等。</p>
+          <div class="bs-docs-example">
+            <div class="row-fluid" id="table-content-index">
+  <table id="data-table" class="data-table table table-bordered table-striped table-condensed table-hover">
+  <thead>
+    <tr class="align-center tablesorter-headerRow">
+      <th data-column="0" class="tablesorter-header sorter-false"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner"><label class="checkbox">
+          <input type="checkbox" class="select-all">
+        </label> <i class=""></i></div></div></th>
+      <th id="name" data-column="1" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">名称 <i class="tablesorter-icon d"></i></div></div></th><th id="title" data-column="2" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">标题 <i class="tablesorter-icon d"></i></div></div></th><th id="module" data-column="3" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">模块 <i class="tablesorter-icon d"></i></div></div></th><th id="group" data-column="4" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">分组 <i class="tablesorter-icon d"></i></div></div></th><th id="rows" data-column="5" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">记录 <i class="tablesorter-icon d"></i></div></div></th><th id="data_length" data-column="6" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">数据长度 <i class="tablesorter-icon d"></i></div></div></th><th id="index_length" data-column="7" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">索引大小 <i class="tablesorter-icon d"></i></div></div></th><th id="engine" data-column="8" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">引擎 <i class="tablesorter-icon d"></i></div></div></th><th id="collation" data-column="9" class="tablesorter-header"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">字符集 <i class="tablesorter-icon d"></i></div></div></th>
+      <th class="sorter-false tablesorter-header" data-column="11"><div class="tablesorter-wrapper" style="position:relative;height:100%;width:100%"><div class="tablesorter-header-inner">操作 <i class=""></i></div></div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd">
+      <td><label class="checkbox"><input type="checkbox" id="user">1</label></td>      <td>user</td><td></td><td>User</td><td>Admin</td><td>0</td><td>16384</td><td>0</td><td>InnoDB</td><td>utf8_general_ci</td> 
+      <td class="text-center inline">
+        <div class="btn-group btn-group-operate">
+<a href="/Code/view/name/account.htm" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a><a href="/Code/edit/name/account.htm" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a></div>     
+      </td>
+    </tr><tr class="even">
+      <td><label class="checkbox"><input type="checkbox" id="actions">2</label></td>      <td>...</td><td></td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td>      
+      <td class="text-center inline">
+        <div class="btn-group btn-group-operate">
+<a href="/Code/view/name/actions.htm" class="btn btn-small " data-original-title="View" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a><a href="/Code/edit/name/actions.htm" class="btn btn-small " data-original-title="Edit" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a></div>     
+      </td>
+    </tr>  </tbody>
+</table>
+</div>
+          </div>
+<h3>表单设计器</h3>
+<p>用于后台生成tpl模板和Model，主要设计以下功能：</p>
+<ul>
+  <li>列表界面显示字段，查询字段、显示顺序，是否允许插入及更新</li>
+  <li>添加界面中的显示字段，顺序，字段对应的表单元素，前台验证规则，提示信息，后台自动验证和自动生成规则</li>
+  <li>表间关系引用</li>
+</ul>
+<p>插入列和更新列对应Model中的 <code>$insertFields</code> 和 <code>$updateFields</code> </p>
+<p>验证规则 和 自动生成 对应Model中的 <code>$_validate</code> 、 <code>$_auto</code> </p> 
+
+<p>具体文档详见ThinkPHP官方文档 <a href="http://doc.thinkphp.cn/manual/input_filter.html" target="_blank">插入及更新过滤</a>  <a href="http://doc.thinkphp.cn/manual/auto_validate.html" target="_blank">自动验证</a>  <a href="http://doc.thinkphp.cn/manual/auto_operate.html" target="_blank">自动完成</a> </p>
+          <div class="bs-docs-example">
+
+<div class="row-fluid" id="module-content--">
+<div class="row-fluid">
+<form class="form-inline">
+    表名 <select id="modules" name="modules" class="span2 selected" data-value="user">
+        <option value="article">article</option><option value="user" selected>user</option>
+      </select>
+    <a data-href="/Code/edit.htm" id="-btn-query" class="btn"><i class="icon-search"></i></a>
+    <a data-href="/Code/view.htm" id="btn-view" class="btn"><i class="icon-zoom-in"></i></a>
+    <a data-href="/Code/index.htm" id="btn-refresh" class="btn"><i class="icon-refresh"></i></a>
+</form>
+</div>
+<div class="row-fluid">
+<form class="" action="/Code/save.htm" method="POST">
+<div class="row-fluid">
+    分组 <select id="groups" name="group" class="span2  selected" data-value="Admin">
+    <option value="Admin">Admin</option><option value="Comm">Comm</option>    </select>
+    模块 <input type="text" name="module" value="User" class="span2">
+    <input type="hidden" name="table_name" value="user" class="span2">
+</div>
+<div class="row-fluid">
+<table class="table table-condensed table-bordered table-striped table-hover" id="data-table">
+    <thead>
+        <tr>
+            <th colspan="7">字段</th>
+            <th colspan="3">列表</th>
+            <th colspan="5">添加</th>
+        </tr>
+        <tr>
+            <th>引用</th>
+            <th>名称</th>
+            <th>标题</th>
+            <th>类型</th>
+            <th>插入</th>
+            <th>更新</th>
+            <th>只读</th>
+            <th>顺序</th>
+            <th>显示</th>
+            <th>查询</th>
+            <th>表单类型</th>
+            <th>显示</th>
+            <th>顺序</th>
+            <th>前台验证</th>
+            <th>提示</th>
+        </tr><tr>
+    </tr></thead>
+    <tbody>
+                <tr><td><a href="/Code/refer/module/User/pk/name/fk/id.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>id                <input class="input-mini" type="hidden" name="query[0][id]" value="user.id">
+                <input class="input-mini" type="hidden" name="query[0][field]" value="id">
+                <input class="input-mini" type="hidden" name="query[0][type]" value="int(11) unsigned">
+                <input class="input-mini" type="hidden" name="query[0][pk]" value="PRI">
+                <input class="input-mini" type="hidden" name="query[0][default]" value="">
+                <input class="input-mini" type="hidden" name="query[0][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[0][title]" value=""></td>
+            <td>int(11) unsigned<input class="input-mini" type="hidden" name="query[0][type]" value="int(11) unsigned"></td>
+            <td><input name="query[0][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[0][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[0][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[0][list_order]" value="0"></td>
+            <td><input name="query[0][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[0][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[0][control_type]" class="span12 selected" data-value="hidden">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[0][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[0][add_order]" value="0"></td>
+            <td><input class="input-mini" type="text" name="query[0][validate]" value="{required:true,digits:true,range:[0,4294967295]}"></td>
+            <td><input class="input-min" type="text" name="query[0][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/username.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>username                <input class="input-mini" type="hidden" name="query[1][id]" value="user.username">
+                <input class="input-mini" type="hidden" name="query[1][field]" value="username">
+                <input class="input-mini" type="hidden" name="query[1][type]" value="varchar(50)">
+                <input class="input-mini" type="hidden" name="query[1][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[1][default]" value="">
+                <input class="input-mini" type="hidden" name="query[1][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[1][title]" value="用户名"></td>
+            <td>varchar(50)<input class="input-mini" type="hidden" name="query[1][type]" value="varchar(50)"></td>
+            <td><input name="query[1][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[1][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[1][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[1][list_order]" value="1"></td>
+            <td><input name="query[1][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[1][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[1][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[1][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[1][add_order]" value="1"></td>
+            <td><input class="input-mini" type="text" name="query[1][validate]" value="{required:true,maxlength:50,}"></td>
+            <td><input class="input-min" type="text" name="query[1][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/email.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>email                <input class="input-mini" type="hidden" name="query[2][id]" value="user.email">
+                <input class="input-mini" type="hidden" name="query[2][field]" value="email">
+                <input class="input-mini" type="hidden" name="query[2][type]" value="varchar(100)">
+                <input class="input-mini" type="hidden" name="query[2][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[2][default]" value="">
+                <input class="input-mini" type="hidden" name="query[2][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[2][title]" value="email"></td>
+            <td>varchar(100)<input class="input-mini" type="hidden" name="query[2][type]" value="varchar(100)"></td>
+            <td><input name="query[2][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[2][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[2][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[2][list_order]" value="2"></td>
+            <td><input name="query[2][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[2][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[2][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[2][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[2][add_order]" value="2"></td>
+            <td><input class="input-mini" type="text" name="query[2][validate]" value="{maxlength:100,}"></td>
+            <td><input class="input-min" type="text" name="query[2][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/password.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>password                <input class="input-mini" type="hidden" name="query[3][id]" value="user.password">
+                <input class="input-mini" type="hidden" name="query[3][field]" value="password">
+                <input class="input-mini" type="hidden" name="query[3][type]" value="varchar(45)">
+                <input class="input-mini" type="hidden" name="query[3][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[3][default]" value="">
+                <input class="input-mini" type="hidden" name="query[3][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[3][title]" value="密码"></td>
+            <td>varchar(45)<input class="input-mini" type="hidden" name="query[3][type]" value="varchar(45)"></td>
+            <td><input name="query[3][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[3][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[3][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[3][list_order]" value="3"></td>
+            <td><input name="query[3][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[3][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[3][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[3][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[3][add_order]" value="3"></td>
+            <td><input class="input-mini" type="text" name="query[3][validate]" value="{maxlength:45,}"></td>
+            <td><input class="input-min" type="text" name="query[3][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/display_name.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>display_name                <input class="input-mini" type="hidden" name="query[4][id]" value="user.display_name">
+                <input class="input-mini" type="hidden" name="query[4][field]" value="display_name">
+                <input class="input-mini" type="hidden" name="query[4][type]" value="varchar(50)">
+                <input class="input-mini" type="hidden" name="query[4][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[4][default]" value="">
+                <input class="input-mini" type="hidden" name="query[4][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[4][title]" value="姓名"></td>
+            <td>varchar(50)<input class="input-mini" type="hidden" name="query[4][type]" value="varchar(50)"></td>
+            <td><input name="query[4][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[4][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[4][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[4][list_order]" value="4"></td>
+            <td><input name="query[4][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[4][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[4][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[4][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[4][add_order]" value="4"></td>
+            <td><input class="input-mini" type="text" name="query[4][validate]" value="{maxlength:50,}"></td>
+            <td><input class="input-min" type="text" name="query[4][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/sex.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>sex                <input class="input-mini" type="hidden" name="query[5][id]" value="user.sex">
+                <input class="input-mini" type="hidden" name="query[5][field]" value="sex">
+                <input class="input-mini" type="hidden" name="query[5][type]" value="enum('男','女','未知')">
+                <input class="input-mini" type="hidden" name="query[5][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[5][default]" value="未知">
+                <input class="input-mini" type="hidden" name="query[5][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[5][title]" value="性别"></td>
+            <td>enum('男','女','未知')<input class="input-mini" type="hidden" name="query[5][type]" value="enum('男','女','未知')"></td>
+            <td><input name="query[5][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[5][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[5][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[5][list_order]" value="5"></td>
+            <td><input name="query[5][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[5][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[5][control_type]" class="span12 selected" data-value="select">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[5][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[5][add_order]" value="5"></td>
+            <td><input class="input-mini" type="text" name="query[5][validate]" value="{}"></td>
+            <td><input class="input-min" type="text" name="query[5][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/phone.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>phone                <input class="input-mini" type="hidden" name="query[6][id]" value="user.phone">
+                <input class="input-mini" type="hidden" name="query[6][field]" value="phone">
+                <input class="input-mini" type="hidden" name="query[6][type]" value="varchar(50)">
+                <input class="input-mini" type="hidden" name="query[6][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[6][default]" value="">
+                <input class="input-mini" type="hidden" name="query[6][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[6][title]" value="手机"></td>
+            <td>varchar(50)<input class="input-mini" type="hidden" name="query[6][type]" value="varchar(50)"></td>
+            <td><input name="query[6][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[6][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[6][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[6][list_order]" value="6"></td>
+            <td><input name="query[6][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[6][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[6][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[6][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[6][add_order]" value="6"></td>
+            <td><input class="input-mini" type="text" name="query[6][validate]" value="{maxlength:50,}"></td>
+            <td><input class="input-min" type="text" name="query[6][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/card_id.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>card_id                <input class="input-mini" type="hidden" name="query[7][id]" value="user.card_id">
+                <input class="input-mini" type="hidden" name="query[7][field]" value="card_id">
+                <input class="input-mini" type="hidden" name="query[7][type]" value="varchar(18)">
+                <input class="input-mini" type="hidden" name="query[7][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[7][default]" value="">
+                <input class="input-mini" type="hidden" name="query[7][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[7][title]" value="身份证号"></td>
+            <td>varchar(18)<input class="input-mini" type="hidden" name="query[7][type]" value="varchar(18)"></td>
+            <td><input name="query[7][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[7][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[7][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[7][list_order]" value="7"></td>
+            <td><input name="query[7][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[7][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[7][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[7][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[7][add_order]" value="7"></td>
+            <td><input class="input-mini" type="text" name="query[7][validate]" value="{maxlength:18,}"></td>
+            <td><input class="input-min" type="text" name="query[7][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/photo.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>photo                <input class="input-mini" type="hidden" name="query[8][id]" value="user.photo">
+                <input class="input-mini" type="hidden" name="query[8][field]" value="photo">
+                <input class="input-mini" type="hidden" name="query[8][type]" value="varchar(255)">
+                <input class="input-mini" type="hidden" name="query[8][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[8][default]" value="">
+                <input class="input-mini" type="hidden" name="query[8][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[8][title]" value="头像"></td>
+            <td>varchar(255)<input class="input-mini" type="hidden" name="query[8][type]" value="varchar(255)"></td>
+            <td><input name="query[8][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[8][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[8][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[8][list_order]" value="8"></td>
+            <td><input name="query[8][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[8][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[8][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[8][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[8][add_order]" value="8"></td>
+            <td><input class="input-mini" type="text" name="query[8][validate]" value="{maxlength:255,}"></td>
+            <td><input class="input-min" type="text" name="query[8][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/qq.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>qq                <input class="input-mini" type="hidden" name="query[9][id]" value="user.qq">
+                <input class="input-mini" type="hidden" name="query[9][field]" value="qq">
+                <input class="input-mini" type="hidden" name="query[9][type]" value="varchar(20)">
+                <input class="input-mini" type="hidden" name="query[9][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[9][default]" value="">
+                <input class="input-mini" type="hidden" name="query[9][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[9][title]" value="qq"></td>
+            <td>varchar(20)<input class="input-mini" type="hidden" name="query[9][type]" value="varchar(20)"></td>
+            <td><input name="query[9][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[9][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[9][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[9][list_order]" value="9"></td>
+            <td><input name="query[9][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[9][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[9][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[9][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[9][add_order]" value="9"></td>
+            <td><input class="input-mini" type="text" name="query[9][validate]" value="{maxlength:20,}"></td>
+            <td><input class="input-min" type="text" name="query[9][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/weibo.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>weibo                <input class="input-mini" type="hidden" name="query[10][id]" value="user.weibo">
+                <input class="input-mini" type="hidden" name="query[10][field]" value="weibo">
+                <input class="input-mini" type="hidden" name="query[10][type]" value="varchar(100)">
+                <input class="input-mini" type="hidden" name="query[10][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[10][default]" value="">
+                <input class="input-mini" type="hidden" name="query[10][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[10][title]" value="微博"></td>
+            <td>varchar(100)<input class="input-mini" type="hidden" name="query[10][type]" value="varchar(100)"></td>
+            <td><input name="query[10][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[10][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[10][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[10][list_order]" value="10"></td>
+            <td><input name="query[10][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[10][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[10][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[10][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[10][add_order]" value="10"></td>
+            <td><input class="input-mini" type="text" name="query[10][validate]" value="{maxlength:100,}"></td>
+            <td><input class="input-min" type="text" name="query[10][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/register_time.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>register_time                <input class="input-mini" type="hidden" name="query[11][id]" value="user.register_time">
+                <input class="input-mini" type="hidden" name="query[11][field]" value="register_time">
+                <input class="input-mini" type="hidden" name="query[11][type]" value="datetime">
+                <input class="input-mini" type="hidden" name="query[11][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[11][default]" value="">
+                <input class="input-mini" type="hidden" name="query[11][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[11][title]" value="注册时间"></td>
+            <td>datetime<input class="input-mini" type="hidden" name="query[11][type]" value="datetime"></td>
+            <td><input name="query[11][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[11][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[11][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[11][list_order]" value="11"></td>
+            <td><input name="query[11][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[11][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[11][control_type]" class="span12 selected" data-value="date">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[11][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[11][add_order]" value="11"></td>
+            <td><input class="input-mini" type="text" name="query[11][validate]" value="{dateISO:true,date:true,}"></td>
+            <td><input class="input-min" type="text" name="query[11][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/last_login_time.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>last_login_time                <input class="input-mini" type="hidden" name="query[12][id]" value="user.last_login_time">
+                <input class="input-mini" type="hidden" name="query[12][field]" value="last_login_time">
+                <input class="input-mini" type="hidden" name="query[12][type]" value="datetime">
+                <input class="input-mini" type="hidden" name="query[12][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[12][default]" value="">
+                <input class="input-mini" type="hidden" name="query[12][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[12][title]" value="上次登录"></td>
+            <td>datetime<input class="input-mini" type="hidden" name="query[12][type]" value="datetime"></td>
+            <td><input name="query[12][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[12][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[12][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[12][list_order]" value="12"></td>
+            <td><input name="query[12][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[12][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[12][control_type]" class="span12 selected" data-value="date">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[12][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[12][add_order]" value="12"></td>
+            <td><input class="input-mini" type="text" name="query[12][validate]" value="{dateISO:true,date:true,}"></td>
+            <td><input class="input-min" type="text" name="query[12][tips]" value=""></td>
+        </tr><tr><td><a href="/Code/refer/module/User/pk/name/fk/status.htm" data-target="#add-modal" role="button" data-toggle="modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class=""><i class="icon-random"></i></a></td>
+            <td>status                <input class="input-mini" type="hidden" name="query[13][id]" value="user.status">
+                <input class="input-mini" type="hidden" name="query[13][field]" value="status">
+                <input class="input-mini" type="hidden" name="query[13][type]" value="varchar(255)">
+                <input class="input-mini" type="hidden" name="query[13][pk]" value="">
+                <input class="input-mini" type="hidden" name="query[13][default]" value="">
+                <input class="input-mini" type="hidden" name="query[13][empty]" value="1">
+            </td>
+            <td><input class="input-mini" type="text" name="query[13][title]" value="状态"></td>
+            <td>varchar(255)<input class="input-mini" type="hidden" name="query[13][type]" value="varchar(255)"></td>
+            <td><input name="query[13][insert_able]" type="checkbox" checked=""></td>
+            <td><input name="query[13][update_able]" type="checkbox" checked=""></td>
+            <td><input name="query[13][readonly]" type="checkbox"></td>
+            <td><input class="input-min input-mini" type="text" name="query[13][list_order]" value="13"></td>
+            <td><input name="query[13][list_show]" type="checkbox" checked=""></td>
+            <td><input name="query[13][query_able]" type="checkbox" checked=""></td>
+            <td>
+                <select name="query[13][control_type]" class="span12 selected" data-value="text">
+                    <option value="text">文本框</option>
+                    <option value="area">多行文本框</option>
+                    <option value="select">列表框</option>
+                    <option value="date">日期控件</option>
+                    <option value="checkbox">复选框</option>
+                    <option value="digit">数字输入框</option>
+                    <option value="hidden">隐藏控件</option>
+                </select>
+            </td>
+            <td><input name="query[13][add_show]" type="checkbox" checked=""></td>
+            <td><input class="input-min input-mini" type="text" name="query[13][add_order]" value="13"></td>
+            <td><input class="input-mini" type="text" name="query[13][validate]" value="{maxlength:255,}"></td>
+            <td><input class="input-min" type="text" name="query[13][tips]" value=""></td>
+        </tr>    </tbody>
+</table>
+</div>
+<div class="row-fluid">
+    <div class="block span6">
+        <div class="block-title">
+            <i class="icon-th-list"></i><b class="break"></b><a>验证规则</a>
+            <div class="more-icons pull-right hide">
+                <a class="btn-setting"><i class="icon-wrench"></i></a>
+                <a class="btn-minimize"><i class="icon-chevron-up"></i></a>
+                <a class="btn-close"><i class="icon-remove"></i></a>
+            </div>
+        </div>
+        <div class="block-content">
+            <textarea rows="5" class="span12" name="validate"></textarea>
+        </div>
+    </div>
+    <div class="block span6">
+        <div class="block-title">
+            <i class="icon-th-list"></i><b class="break"></b><a>自动生成</a>
+            <div class="more-icons pull-right  hide">
+                <a class="btn-setting"><i class="icon-wrench"></i></a>
+                <a class="btn-minimize"><i class="icon-chevron-up"></i></a>
+                <a class="btn-close"><i class="icon-remove"></i></a>
+            </div>
+        </div>
+        <div class="block-content">
+            <textarea rows="5" class="span12" name="auto"></textarea>
+        </div>
+    </div>
+</div>
+   <div class="well well-small">
+  <div class="row-fluid">
+  <div class="span6 text-right">
+        <button id="btn-submit" type="submit" class="btn btn-primary btn-large">&nbsp;保 存&nbsp;</button>
+    </div>
+    <div class="span6 text-left">
+        <a href="/Code/index.htm" class="btn btn-large">&nbsp;返 回&nbsp;</a>
+    </div>
+    </div>
+</div>
+</form>
+</div>
+
+</div>
+</div>
+<h3>表间关系</h3>
+<p>
+在建立表结构时，如果同时建立了表间的关联，则系统在生成模板时能够自动生成表关系。否则，需要在这里进行表间关系设计。</p>
+<p>比如，在文章表article与用户表user关联,每个文章都属于一个用户，一个用户有多篇文章，
+用sql关系表达就是 <code>article.user_id=user.id</code> </p>
+
+<p>ThinkPHP官方文档  <a href="http://doc.thinkphp.cn/manual/relation_model.html" target="_blank">关联模型</a>
+<p>以下这个表间关系设计界面是把关联模型和表间关系设计界面合并了，如果无需用到关联模型，仅仅只用引用某个表用于添加和列表中显示，那么按照下面这样操作即可</p>
+<p><label class="label label-info">Heads up!</label> 关联条件留空即表示 关联主键=关联外键，比如这里 <code>article.user_id=user.id</code></p>
+<p> 显示字段表示，通过查找带回时显示的字段</p>
+<div class="bs-docs-example">
+  <div class="row-fluid" id="module-content-">
+<div class="row-fluid">
+<form class="form form-horizontal" method="POST" action="/Code/mapping_save.htm">
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联表名</span>
+                    <select id="module" name="module" class="span8">
+                        <option value="article" selected>article</option>
+                        <option value="user">user</option>
+                    </select>
+            </div>
+            <div class="span6">
+                <span class="help-inline">关联类型</span>
+                <select id="map_type" name="map_type" class="span8">
+                    <option value="BELONGS_TO">多对一</option>
+                    <option value="HAS_MANY">一对多</option>
+                    <option value="HAS_ONE">一对一</option>
+                    <option value="MANY_TO_MANY">多对多</option>
+                </select>
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">被关联表</span>
+                <select id="module_refer" name="module_refer" class="span8">
+                  <option value="user" selected>user</option>
+                    <option value="article">article</option>
+                  </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">映射名称</span>
+                    <input id="map_name" name="map_name" type="text" class="span8" value="" placeholder="mapping_name">
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联主键</span>
+                     <select id="pk" name="pk" class="span8">
+                                
+                                            <option value="id">id</option><option value="title">title</option><option value="excerpt">excerpt</option><option value="content">content</option><option value="user_id" selected>user_id</option><option value="catgory">catgory</option><option value="post_date">post_date</option><option value="name">name</option><option value="tags">tags</option><option value="reference">reference</option><option value="password">password</option><option value="type">type</option><option value="status">status</option><option value="thumbnails">thumbnails</option><option value="attament">attament</option><option value="comment_status">comment_status</option><option value="update_time">update_time</option></select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条件</span>
+                    <input id="condition" name="condition" type="text" class="span8" placeholder="condition">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联外键</span>
+                <select id="fk" name="fk" class="span8">
+                <option value="id" selected>id</option><option value="username">username</option><option value="email">email</option><option value="password">password</option><option value="display_name">display_name</option><option value="sex">sex</option><option value="phone">phone</option><option value="card_id">card_id</option><option value="photo">photo</option><option value="qq">qq</option><option value="weibo">weibo</option><option value="register_time">register_time</option><option value="last_login_time">last_login_time</option><option value="status">status</option></select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">显示字段</span>
+                    <select id="field_show" name="field_show" class="span8">
+                    <option value="id">id</option><option value="username" selected>username</option><option value="email">email</option><option value="password">password</option><option value="display_name">display_name</option><option value="sex">sex</option><option value="phone">phone</option><option value="card_id">card_id</option><option value="photo">photo</option><option value="qq">qq</option><option value="weibo">weibo</option><option value="register_time">register_time</option><option value="last_login_time">last_login_time</option><option value="status">status</option></select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联顺序</span>
+                    <input id="order" name="order" type="text" class="span8" placeholder="mapping_order">
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条目</span>
+                    <input id="limit" name="limit" type="text" class="span8" placeholder="mapping_limit">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联字段</span>
+                <input type="text" class="span8" id="map_fields" name="map_fields" placeholder="mapping_fields">
+            </div>
+            <div class="span6">
+                <span class="help-inline">映射字段</span>
+                <input type="text" class="span8" id="as_fields" name="as_fields" placeholder="as_fields">
+            </div>
+        </div>
+    </div>
+    <br>
+<div class="row-fluid">
+<table id="data-table" class="data-table table table-bordered table-striped table-condensed table-hover" style="">
+  <thead>
+    <tr class="align-center">
+      <th><label class="checkbox">
+          <input type="checkbox" class="select-all">
+        </label></th>
+      <th id="pk">关联键1</th><th id="map_type">关联类型</th><th id="fk">关联键2</th><th id="condition">关联条件</th><th id="field_show">显示字段  </th><th id="map_fields">关联字段</th><th id="map_name">映射名称</th><th id="as_fields">映射字段</th><th id="limit">关联条目</th><th id="order">关联顺序 </th>    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><label class="checkbox">1</label></td>      <td>article.user_id</td><td>BELONGS_TO</td><td>user.id</td><td></td><td>username</td><td></td><td>user</td><td></td><td></td><td></td>    </tr></tbody>
+</table>
+</div>
+</form></div>
+<div class="well well-small">
+  <div class="row-fluid">
+  <div class="span6 text-right">
+        <button id="btn-submit" type="submit" class="btn btn-primary btn-large">&nbsp;保 存&nbsp;</button>
+    </div>
+    <div class="span6 text-left">
+        <a href="/Code/index.htm" class="btn btn-large">&nbsp;返 回&nbsp;</a>
+    </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+<h3>表间关系生成效果</h3>
+<p>在article的添加界面中，user_id就应该作为引用字段，单击后面的查找按钮时，弹出User模块的引用，文本框内的内容为“显示字段”，在这里是username</p>
+<div class="bs-docs-example">
+<form class="form-inline form-horizontal">
+<div class="control-group">
+  <label class="control-label" for="user_id">作者</label>
+  <div class="controls">
+    <div class="input-append" id="article_refer_user_1">
+        <input type="hidden" value="" name="user_id" id="user_id" data-target="user_id" class="{digits:true,range:[-2147483648,2147483647]}" placeholder="">
+        <input type="text" value="" name="username" id="user_name" data-target="user_name" class="{digits:true,required}" placeholder="" readonly="">
+        <a data-target="#modal-refer" href="/User/refer/article_refer_user_1.htm" data-toggle="modal"><span class="add-on"><i class="icon-search"></i></span></a>
+    </div>
+  <label class="help-inline"></label>
+  </div>
+</div>
+</form>
+</div>
+<pre class="prettyprint linenums">
+&lt;div class=&quot;control-group&quot;&gt;
+  &lt;label class=&quot;control-label&quot; for=&quot;user_id&quot;&gt;作者&lt;/label&gt;
+  &lt;div class=&quot;controls&quot;&gt;
+    &lt;div class=&quot;input-append&quot; id=&quot;broadband_refer_user_1&quot;&gt;
+        &lt;input type=&quot;hidden&quot; value=&quot;&quot; name=&quot;id&quot; id=&quot;id&quot; data-target=&quot;user_id&quot; class=&quot;{digits:true,range:[-2147483648,2147483647]}&quot; placeholder=&quot;&quot;&gt;
+        &lt;input type=&quot;text&quot; value=&quot;&quot; name=&quot;username&quot; id=&quot;user_name&quot; data-target=&quot;user_name&quot; class=&quot;{digits:true,required}&quot; placeholder=&quot;&quot; readonly=&quot;&quot;&gt;
+        &lt;a data-target=&quot;#modal-refer&quot; href=&quot;/User/refer/article_refer_user_1.htm&quot; data-toggle=&quot;modal&quot;&gt;&lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-search&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;label class=&quot;help-inline&quot;&gt;&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+</section>
+
+
+<section id="code">
+          <div class="page-header">
+            <h1>代码生成</h1>
+          </div>
+
+<h3>默认代码模板</h3>
+<p>系统会生成4个文件到对应的文件夹下，暂不支持独立分组
+<ul>
+<li>./Lib/Model/分组/XxxModel.class.php</li>
+<li>./Lib/Action/分组/XxxAction.class.php</li>
+<li>./Lib/Tpl/分组/Xxx/add.html</li>
+<li>./Lib/Tpl/分组/Xxx/edit.html</li>
+</ul>
+</p>
+<p>
+生成的Action类继承CommAction，提供了以下方法，配合生成的模板，能够完整的完成所提供的功能：
+<br>默认 index
+<br>引用 refer
+<br>日志 log
+<br>添加 add
+<br>查看 view
+<br>编辑 edit
+<br>保存 save
+<br>删除 delete
+<br>导入 import
+<br>导出 export
+<br>上传 upload
+<br>扩展 operate
+</p>
+<p>系统生成类位于Lib/Comm/CodeAction.class.php，你可以通过扩展加入你想要的通用功能。</p>
+<p>如果你不想要某些只具有CommAction功能的Action类实体文件，可以通过在在配置文件中设置 <a href="http://doc.thinkphp.cn/manual/empty_module.html" target="_blank">空模块</a> <a href="http://doc.thinkphp.cn/manual/empty_action.html" target="_blank">空操作</a> 来将这些模块定向到EmptyAction(位于CodeAction同目录下)</p>
+<div class="bs-docs-example">
+  <div class="row-fluid">
+<form class="form-inline" action="/Code/view.htm" method="get">
+表名 <select id="modules" name="name" class="span2 selected" data-value="">
+    <option value="article">article</option>
+    <option value="user">user</option>
+  </select>
+<button id="btn-view" class="btn"><i class="icon-zoom-in"></i></button>
+</form>
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#model" data-toggle="tab">Model</a></li>
+  <li class=""><a href="#action" data-toggle="tab">Action</a></li>
+  <li class=""><a href="#add" data-toggle="tab">Add</a></li>
+  <li class=""><a href="#edit" data-toggle="tab">Edit</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="model"><pre  class="prettyprint linenums">class UserModel extends AdvModel {
+    protected $fields =  array (
+        //0 =&gt; 'id', 
+        //1 =&gt; 'name', 
+        //'_autoinc' =&gt; true, 
+        //'_pk' =&gt; 'id', 
+        //'_type' =&gt; array ( 
+        //    'id' =&gt; 'int(11) unsigned', 
+        //    'name' =&gt; 'varchar(50)', 
+        //),
+        $data.fields}
+    );
+
+    protected $insertFields = array();
+    protected $updateFields = array();
+    protected $readonlyField = array();
+
+    public $viewFields = array(
+        //'Category'=&gt;array('title'=&gt;'category_name', '_on'=&gt;'Blog.category_id=Category.id','_type'=&gt;'INNER'),
+            );
+
+    protected $_filter = array(
+        //'过滤的字段'=&gt;array('写入过滤规则','读取过滤规则',是否传入整个数据对象),
+            )
+
+    protected $_validate = array(
+        //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
+            )
+
+    protected $_auto = array ( 
+        //array(填充字段,填充内容,[填充条件,附加规则])
+            }
+
+    protected $_map = array(
+        //'txt_user' =&gt;'username', //把表单中的text_user字段映射到数据表的username字段
+            )
+
+    protected $_scope = array(
+        'default'=&gt;array(
+            //'table'-&gt;array(''=&gt;''),
+            //'field'-&gt;array(''=&gt;''),
+            //'where'=&gt;array(''=&gt;''),
+            //'order'=&gt;array(''=&gt;''),
+            //'limit'-&gt;array(''=&gt;''),
+        ),
+    )
+}</pre></div>
+  <div class="tab-pane" id="action"><pre  class="prettyprint linenums">Class UserModel extends CommAction{
+
+}</pre></div>
+  <div class="tab-pane" id="add"><div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id="form" novalidate="novalidate">
+<div class="control-group">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+<input type="hidden" value="" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="username">用户名</label>
+    <div class="controls">
+        <input type="text" class="{required:true,maxlength:50,}" value="" name="username" id="username" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="email">email</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}" value="" name="email" id="email" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="password">密码</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:45,}" value="" name="password" id="password" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="display_name">姓名</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:50,}" value="" name="display_name" id="display_name" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="sex">性别</label>
+    <div class="controls">
+<select id="sex" name="sex" class="selected" data-value="未知">
+                            <option value="男">男</option>            <option value="女">女</option>            <option value="未知">未知</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="phone">手机</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:50,}" value="" name="phone" id="phone" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="card_id">身份证号</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:18,}" value="" name="card_id" id="card_id" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="photo">头像</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:255,}" value="" name="photo" id="photo" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="qq">qq</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:20,}" value="" name="qq" id="qq" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="weibo">微博</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}" value="" name="weibo" id="weibo" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="register_time">注册时间</label>
+    <div class="controls">
+<input type="text" class="{dateISO:true,date:true,}" name="register_time" id="register_time" rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="last_login_time">上次登录</label>
+    <div class="controls">
+<input type="text" class="{dateISO:true,date:true,}" name="last_login_time" id="last_login_time" rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="status">状态</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:255,}" value="" name="status" id="status" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div><pre  class="prettyprint linenums">&lt;div class="row-fluid"&gt;
+&lt;form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'&gt;
+&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="id"&gt;&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="hidden" value="" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="username"&gt;用户名&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{required:true,maxlength:50,}"  value="" name="username" id="username" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="email"&gt;email&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:100,}"  value="" name="email" id="email" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="password"&gt;密码&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:45,}"  value="" name="password" id="password" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="display_name"&gt;姓名&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:50,}"  value="" name="display_name" id="display_name" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="sex"&gt;性别&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;select id="sex" name="sex" class="selected" data-value="未知"&gt;
+                            &lt;option value ="男"&gt;男&lt;/option&gt;            &lt;option value ="女"&gt;女&lt;/option&gt;            &lt;option value ="未知"&gt;未知&lt;/option&gt;        &lt;/select&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="phone"&gt;手机&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:50,}"  value="" name="phone" id="phone" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="card_id"&gt;身份证号&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:18,}"  value="" name="card_id" id="card_id" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="photo"&gt;头像&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:255,}"  value="" name="photo" id="photo" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="qq"&gt;qq&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:20,}"  value="" name="qq" id="qq" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="weibo"&gt;微博&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:100,}"  value="" name="weibo" id="weibo" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="register_time"&gt;注册时间&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="text" class="{dateISO:true,date:true,}" name="register_time" id="register_time"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd"&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="last_login_time"&gt;上次登录&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="text" class="{dateISO:true,date:true,}" name="last_login_time" id="last_login_time"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd"&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="status"&gt;状态&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:255,}"  value="" name="status" id="status" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;</pre></div>
+  <div class="tab-pane" id="edit"><div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id="form" novalidate="novalidate">
+<div class="control-group">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+<input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="username">用户名</label>
+    <div class="controls">
+        <input type="text" class="{required:true,maxlength:50,}" value="{$data.username}" name="username" id="username" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="email">email</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}" value="{$data.email}" name="email" id="email" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="password">密码</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:45,}" value="{$data.password}" name="password" id="password" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="display_name">姓名</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:50,}" value="{$data.display_name}" name="display_name" id="display_name" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="sex">性别</label>
+    <div class="controls">
+<select id="sex" name="sex" class="selected" data-value="{$data.sex}">
+                            <option value="男">男</option>            <option value="女">女</option>            <option value="未知">未知</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="phone">手机</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:50,}" value="{$data.phone}" name="phone" id="phone" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="card_id">身份证号</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:18,}" value="{$data.card_id}" name="card_id" id="card_id" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="photo">头像</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:255,}" value="{$data.photo}" name="photo" id="photo" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="qq">qq</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:20,}" value="{$data.qq}" name="qq" id="qq" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="weibo">微博</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}" value="{$data.weibo}" name="weibo" id="weibo" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="register_time">注册时间</label>
+    <div class="controls">
+<input type="text" value="{$data.register_time}" class="{dateISO:true,date:true,}" name="register_time" id="register_time" rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="last_login_time">上次登录</label>
+    <div class="controls">
+<input type="text" value="{$data.last_login_time}" class="{dateISO:true,date:true,}" name="last_login_time" id="last_login_time" rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="status">状态</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:255,}" value="{$data.status}" name="status" id="status" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div><pre class="prettyprint linenums">&lt;div class="row-fluid"&gt;
+&lt;form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'&gt;
+&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="id"&gt;&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="username"&gt;用户名&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{required:true,maxlength:50,}"  value="{$data.username}" name="username" id="username" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="email"&gt;email&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:100,}"  value="{$data.email}" name="email" id="email" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="password"&gt;密码&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:45,}"  value="{$data.password}" name="password" id="password" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="display_name"&gt;姓名&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:50,}"  value="{$data.display_name}" name="display_name" id="display_name" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="sex"&gt;性别&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;select id="sex" name="sex" class="selected" data-value="{$data.sex}"&gt;
+                            &lt;option value ="男"&gt;男&lt;/option&gt;            &lt;option value ="女"&gt;女&lt;/option&gt;            &lt;option value ="未知"&gt;未知&lt;/option&gt;        &lt;/select&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="phone"&gt;手机&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:50,}"  value="{$data.phone}" name="phone" id="phone" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="card_id"&gt;身份证号&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:18,}"  value="{$data.card_id}" name="card_id" id="card_id" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="photo"&gt;头像&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:255,}"  value="{$data.photo}" name="photo" id="photo" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="qq"&gt;qq&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:20,}"  value="{$data.qq}" name="qq" id="qq" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="weibo"&gt;微博&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:100,}"  value="{$data.weibo}" name="weibo" id="weibo" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="register_time"&gt;注册时间&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="text" value="{$data.register_time}" class="{dateISO:true,date:true,}" name="register_time" id="register_time"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd"&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="last_login_time"&gt;上次登录&lt;/label&gt;
+    &lt;div class="controls"&gt;
+&lt;input type="text" value="{$data.last_login_time}" class="{dateISO:true,date:true,}" name="last_login_time" id="last_login_time"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd"&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;div class="control-group"&gt;
+    &lt;label class="control-label" for="status"&gt;状态&lt;/label&gt;
+    &lt;div class="controls"&gt;
+        &lt;input type="text" class="{maxlength:255,}"  value="{$data.status}" name="status" id="status" placeholder=""&gt;        &lt;label class="help-inline"&gt;&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;</pre></div>
+</div>
+</div>
+</div>
+         
+
+        <!-- Layouts (Default and fluid)
+        ================================================== -->
+        <section id="rbac">
+          <div class="page-header">
+            <h1>RBAC节点生成</h1>
+          </div>
+          <h2>自定义开发</h2>
+          <p>系统生成代码后，你需要根据自己的业务对代码进行二次开发和扩展，完成自定义开发后，你可能需要将整个系统的模块和操作生成RBAC的节点数据，以便进行权限或菜单管理。</p>
+          <p>在模块管理界面中，选择模块后单击生成节点即可。</p>
+          <h2>原理</h2>
+          <p>通过读取APP_GROUP_LIST，获取所有分组，然后遍历各个分组下以*Action.class.php的文件，建立该Action对象，获取该对象的所有方法，过滤掉ThinkPHP本身提供的底层方法，获取到的便是用户的操作方法列表，插入到数据库中即可。</p>
+<pre class="prettyprint linenums">
+public function getFunction($module){
+    if(empty($module))return null;
+    $action=A($module);
+    $functions=get_class_methods($action);
+    //ThinkPHP的Action底层方法
+    $inherents_functions = array(
+      '_initialize','__construct','getActionName','isAjax','display','show','fetch',
+      'buildHtml','assign','__set','get','__get','__isset',
+      '__call','error','success','ajaxReturn','redirect','__destruct'
+    );
+
+    foreach ($functions as $func){
+      if(!in_array($func, $inherents_functions)){
+        $customer_functions[]=$func;
+      }
+    }
+    return $customer_functions;
+  }
+</pre>
+
+<section id="menu">
+          <div class="page-header">
+            <h1>菜单设计</h1>
+          </div>
+
+          <h2>三级菜单</h2>
+          <p>Bootstrap的经典样式，最顶部是一级菜单，左侧是二级菜单，三级是页面内的Tab。</p>
+          <p>菜单基础数据来源于Module，即对Module的结构和层级关系进行重新组织
+对于菜单来说，模块命对应左侧的菜单(2级),方法对应三级菜单
+而一级菜单需要自定义，分组名作为顶部的1级菜单不合适</p>
+          <div class="bs-docs-example">
+            <div class="navbar navbar-inverse">
+              <div class="navbar-inner">
+                <a class="brand" href="#">Title</a>
+                <ul class="nav">
+                  <li class="active"><a href="#">一级菜单1</a></li>
+                  <li><a href="#">一级菜单2</a></li>
+                  <li><a href="#">一级菜单3</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="span3 sidebar-nav">
+              <ul class="nav nav-tabs nav-stacked  ">
+                <li><a href="#global"><i class="icon-chevron-right"></i> 二级菜单1</a></li>
+                <li><a href="#gridSystem"><i class="icon-chevron-right"></i> 二级菜单2</a></li>
+                <li><a href="#gridSystem"><i class="icon-chevron-right"></i> 二级菜单3</a></li>
+              </ul>
+            </div>
+
+          <ul class="nav nav-tabs" id="myTab">
+          <li class="active"><a href="#home">三级菜单1</a></li>
+          <li><a href="#profile">三级菜单2</a></li>
+          <li><a href="#messages">三级菜单3</a></li>
+        </ul>
+        </div>
+          <h2>无限级菜单</h2>
+          <P>功能倒是已经实现了，就是还没想好怎么通过参数设置，实现无限级菜单模式和三级菜单模式共存。放在1.2版本中解决。</P>
+        </section>
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p>This theme is use bootstrap's .</p>
+        <p>Designed and built with all the love in the world by <a href="" target="_blank">rockefys</a> .</p>
+        <p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com/rockefys/commlib/issues?state=open">Issues</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com//rockefys/commlib/blob/master/CHANGELOG.md">Changelog</a></li>
+        </ul>
+      </div>
+    </footer>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/holder/holder.js"></script>
+    <script src="assets/js/google-code-prettify/prettify.js"></script>
+
+    <script src="assets/js/application.js"></script>
+    <script src="assets/js/comm.js"></script>
+
+    
+    <!-- Analytics
+    ================================================== -->
+    <script>
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4f0dc9fef5a1f55508000013');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+    
+
+  </body>
+</html>

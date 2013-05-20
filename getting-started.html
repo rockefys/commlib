@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/docs.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-146052-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+    <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./index.html">Bootstrap</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="./index.html">主页</a>
+              </li>
+              <li class="">
+                <a href="./getting-started.html">开始</a>
+              </li>
+              <li class="">
+                <a href="./auto-code.html">代码生成</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Subhead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Getting started</h1>
+    <p class="lead">Overview of the project, its contents, and how to get started with a simple template.</p>
+  </div>
+</header>
+
+
+  <div class="container">
+
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+          <li><a href="#summary"><i class="icon-chevron-right"></i> 简介</a></li>
+          <li><a href="#contents"><i class="icon-chevron-right"></i> 功能与组件</a></li>
+          <li><a href="#download-bootstrap"><i class="icon-chevron-right"></i> 下载</a></li>
+          <li><a href="#file-structure"><i class="icon-chevron-right"></i> 文件结构</a></li>
+          <li><a href="#plan"><i class="icon-chevron-right"></i> 开发计划</a></li>
+          <li><a href="#xietong"><i class="icon-chevron-right"></i> 功能认领</a></li>
+          <li><a href="#what-next"><i class="icon-chevron-right"></i> 下一步?</a></li>
+        </ul>
+      </div>
+      <div class="span9">
+
+
+<section id="summary">
+          <div class="page-header">
+            <h1>简介</h1>
+          </div>
+          <h2>介绍</h2>
+          <p>Commlib是一个基于ThinkPHP和Bootstrap的后台代码生成框架，帮助开发者更好、更快的进行web开发。</p>
+          <h3>作者前言</h3>
+          <p>必须承认，CommLib 1.0很粗糙，不论从功能还是代码上，它还刚起步，需要你的支持与鞭策。欢迎提交bug与代码。</p><p>CommLib的理念很简单，<code>Code code</code> .</p>
+          <p>无论是ThinkPHP还是Bootstrap，这两个框架给开发者带来了极大的便利，但是我想，还可以更加便利，所以我就开发了CommLib，希望能让开发者从重复的的劳动中解脱出来。</p>
+
+          <h3>应用场景</h3>
+          <ul>
+            <li>中小型项目尤其是中小型企业快速开发</li>
+            <li></li>
+            
+          </ul>
+          <h3>应用局限</h3>
+          <ul>
+            <li>bootstrap本身的局限：如不支持IE6、IE7</li>
+            <li>作者写的少量的js代码可能会存在浏览器兼容性，暂未发现</li>
+          </ul>
+        </section>
+
+
+
+        <!-- Contents
+        ================================================== -->
+        <section id="contents">
+          <div class="page-header">
+            <h1>功能与组件</h1>
+          </div>
+          <h2>CommLib功能模块</h2>
+          <ul>
+            <li>ThinkPHP代码生成</li>
+            <li>RBAC节点生成</li>
+            <li>数据库备份</li>
+          </ul>
+          <h2>所使用的组件列表</h2>
+          <ul>
+            <li>ThinkPHP</li>
+            <li>Bootstrap</li>
+            <li>jquery</li>
+            <li>zTree</li>
+            <li>ckEditor</li>
+            <li>ckplayer</li>
+            <li>code-prettify</li>
+            <li>highcharts</li>
+            <li>juqery-validation</li>
+            <li>tablesorter</li>
+          </ul>
+          <p>In future guides, we may walk through these components individually in more detail. Until then, look for each of these in the documentation for information on how to utilize and customize them.</p>
+        </section>
+
+
+
+ <!-- Download
+        ================================================== -->
+        <section id="download-bootstrap">
+          <div class="page-header">
+            <h1>下载</h1>
+          </div>
+          <p class="lead">在下载之前，请确认你有一个代码编辑器(我推荐 <a href="http://sublimetext.com/2">Sublime Text 2</a>)与<a href="http://doc.thinkphp.cn/manual/" target="_blank">ThinkPHP</a>和<a href="http://twitter.github.io/bootstrap/index.html" target="_blank">Bootstrap</a>(<a href="http://www.bootcss.com/">中文</a>)文档.你是否已经掌握了足够的ThinkPHP，HTML和CSS知识以开展工作。这里我们不详述源码文件，但是它们可以随时被下载。在这里我们只着重介绍功能进行入门讲解。</p>
+
+          <div class="row-fluid">
+            <div class="span6">
+              <h2>Download source</h2>
+              <p>从GitHub直接下载到的最新版的源码包括PHP、HTML、CSS、JavaScript的源文件，不包含文档。</p>
+              <p><a class="btn btn-large" href="https://github.com/rockefys/commlib/zipball/master" >Download file</a></p>
+            </div>
+          </div>
+        </section>
+
+
+
+        <!-- File structure
+        ================================================== -->
+        <section id="file-structure">
+          <div class="page-header">
+            <h1>文件目录结构</h1>
+          </div>
+          <p class="lead">在下载的压缩包中你可以看到如下的文件结构和内容。所有文件按逻辑进行分类存储。</p>
+          <p>将下载的文件解压缩之后就可以看到如下的文件结构：</p>
+<pre class="prettyprint">
+  commlib/
+  ├── Common/
+  ├── Conf/
+  ├── Data/
+  ├── Lang/
+  ├── Lib/
+  │   ├── Action
+  │   ├── Behavior
+  │   ├── Model
+  │   ├── Widget
+  ├── Data/
+  ├── Public/
+  └── Tpl/
+</pre>
+          
+        </section>
+
+
+
+        <section id="plan">
+          <div class="page-header">
+            <h1>开发计划</h1>
+          </div>
+          <h4>version 1.2 （预计发布时间2013-06-01）</h4>
+          <ul>
+            <li>完善菜单功能</li>
+            <li>扩展及完善ThinkPHP的RBAC模块，tp官方的RBAC模块不能细化到针对单个用户的权限控制</li>
+            <li>完善参数设置，将tp的参数设置可视化操作</li>
+            <li>强化表单生成器</li>
+            <li>缓存策略</li>
+            <li>千万级分页优化</li>
+            
+          </ul>
+
+         </section> 
+
+         <section id="xietong">
+          <div class="page-header">
+            <h1>协同开发</h1>
+          </div>
+          <h3>开发任务认领</h3>
+          <p>如果你对这个项目很感兴趣，我非常欢迎你加入CommLib中的开发中来，由于自身学习和开发任务比较重，我会定期将一些想要开发和优化的功能列出，欢迎在github上认领。</p>
+
+         </section> 
+
+       
+        <!-- Next
+        ================================================== -->
+        <section id="what-next">
+          <div class="page-header">
+            <h1>下一步?</h1>
+          </div>
+          <a class="btn btn-large btn-primary" href="./auto-code.html" >查看文档</a>
+        </section>
+
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p>This theme is use bootstrap's .</p>
+        <p>Designed and built with all the love in the world by <a href="" target="_blank">rockefys</a> .</p>
+        <p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com/rockefys/commlib/issues?state=open">Issues</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com//rockefys/commlib/blob/master/CHANGELOG.md">Changelog</a></li>
+        </ul>
+      </div>
+    </footer>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/holder/holder.js"></script>
+    <script src="assets/js/google-code-prettify/prettify.js"></script>
+
+    <script src="assets/js/application.js"></script>
+    <script src="assets/js/comm.js"></script>
+
+    
+    <!-- Analytics
+    ================================================== -->
+    <script>
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4f0dc9fef5a1f55508000013');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+    
+
+  </body>
+</html>
