@@ -1,0 +1,60 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal {$readonly}" action="{:U('save')}" method="post" id='form'>
+<div class="control-group hidden">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+<input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="title">标题</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}"  value="{$data.title}" name="title" id="title" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="link">链接</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}"  value="{$data.link}" name="link" id="link" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="pid">父级</label>
+    <div class="controls">
+        {~$menus=R(MODULE_NAME.'/get_level_nodes')}
+        <select id="pid" name="pid" class="selected" data-value="{$data.pid}">
+            <volist name="menus" id="vo">
+            <option value="{$key}">{$vo}</option>
+            </volist>
+         </select>         <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">
+    <label class="control-label" for="order">顺序</label>
+    <div class="controls">
+        <input type="text" class="{digits:true,range:[0,65535]}"  value="{$data.order}" name="order" id="order" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group"><!--
+    <label class="control-label" for="location">位置</label>
+    <div class="controls">
+        <select id="location" name="location" class="selected" data-value="{$data.location}">
+            <option value ="left">left</option> 
+            <option value ="top">top</option>            
+            <option value ="right">right</option>            
+            <option value ="bottom">bottom</option>        
+        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group">-->
+    <label class="control-label" for="target">打开方式</label>
+    <div class="controls">
+    <select id="target" name="target" class="selected" data-value="{$data.target}">
+        <option value ="_self">_self</option>            
+        <option value ="_blank">_blank</option>            
+        <option value ="_parent">_parent</option>            
+        <option value ="_top">_top</option>        
+    </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="memo">备注</label>
+    <div class="controls">
+        <textarea cols="3"  class="{maxlength:100,}"  name="memo" id="memo" placeholder="">{$data.memo}</textarea>       <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>

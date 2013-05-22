@@ -65,7 +65,7 @@ class '.$module.'Action extends CommAction {
 				$M->addAll($data);
 		}
 		$this->showpk=1;
-    	R('Comm/Comm/page',array($M));
+    	R('Comm/Comm/page',array($M,null,'module'));
 	}
 
 	public function edit($refresh=false)
@@ -235,8 +235,8 @@ class '.$module.'Action extends CommAction {
      	layout(!$this->isAjax()); 
      	$data=$this->_param();
      	unset($data['_URL_']);
-     	$data['pk'] =$this->_param('module').'.'.$this->_param('pk');
-     	$data['fk'] =$this->_param('module_refer').'.'.$this->_param('fk');
+     	//$data['pk'] =$this->_param('module').'.'.$this->_param('pk');
+     	//$data['fk'] =$this->_param('module_refer').'.'.$this->_param('fk');
 
         $M = M('module_refer');
         if(!$M->create()){
@@ -246,7 +246,7 @@ class '.$module.'Action extends CommAction {
 
         $pk = $M->getPk();
         if(empty($M->$pk)){
-        	$data[$pk]=$this->_param('module').'.'.$this->_param('module_refer').'.'.$this->_param('map_type').'.'.$this->_param('pk').'.'.$this->_param('fk');
+        	$data[$pk]=$this->_param('module').'.'.$this->_param('pk').'-'.$this->_param('module_refer').'.'.$this->_param('fk');
             $result = $M->add($data,$options=array(),$replace=true);
         }
         else{
@@ -254,6 +254,34 @@ class '.$module.'Action extends CommAction {
         }
         $this->redirect('Code/refer',array('module' => $this->_param('module')));        
     }
+
+	public function view($name=null){
+		$this->modules = R('Comm/Database/gettables');
+		$M=M('module_table');
+		$module = ucwords($name);
+		$result=$M->getByModule($module);
+		
+		if(!empty($result)){
+			$M=M('module_column');
+			$this->module=$module;
+			$this->data = $M->where("module='%s'",$module)->order('add_order')->select();
+			
+			$M=M('module_refer');
+			$this->refers=$M->where("module='%s'",$module)->getField('pk,fk,id,module,module_refer,field_show',true);
+
+			//dump($refers);exit();	
+			layout(false);
+			$this->add_show= $this->fetch('add');
+			$this->edit_show=$this->fetch('edit');
+			$this->add= htmlentities($this->add_show);
+			$this->edit=htmlentities($this->edit_show);
+			$this->action=htmlentities($this->fetch('action'));
+			$this->model=htmlentities($this->fetch('model'));
+		}
+		layout(!$this->isAjax());
+		$this->display();
+	}
+
 	//生成模块结构和信息 分组/模块/方法
 	public function build_module(){
 		$M = M('Module');
@@ -280,25 +308,12 @@ class '.$module.'Action extends CommAction {
 		$this->success('success');
 	}
 
-	public function view($name=null){
-		$this->modules = R('Comm/Database/gettables');
+	public function build(){
 		$M=M('module_table');
-		$module = ucwords($name);
-		$result=$M->getByModule($module);
-		if(!empty($result)){
-			$M=M('module_column');
-			$this->module=$module;
-			$this->data = $M->where("module='%s'",$module)->order('add_order')->select();
-			layout(false);
-			$this->add_show= $this->fetch('add');
-			$this->edit_show=$this->fetch('edit');
-			$this->add= htmlentities($this->add_show);
-			$this->edit=htmlentities($this->edit_show);
-			$this->action=htmlentities($this->fetch('action'));
-			$this->model=htmlentities($this->fetch('model'));
-		}
-		layout(!$this->isAjax());
-		$this->display();
+		$pk=$M->getPk();
+		$module=$this->_param($pk);
+		$data=$M->find($module);
+		$this->build_code($data['group'],$data['module']);
 	}
 
 	//根据分组和模块生成代码文件Action和tpl，参数都为空则生成全部
@@ -308,17 +323,19 @@ class '.$module.'Action extends CommAction {
 			$M=M('module_table');
 			$modules=$M->field('name')->select();
 		}
-		else
+		else{
 			$modules[] = $module;
+		}
 
-		if(empty($group))$group = 'Admin';
+		//if(empty($group))
+			$group = 'Admin';
 
 		foreach ($modules as $module) {
 			$M=M('module_column');
 			$this->data = $M->where("module='%s'",$module)->select();
 			$module = ucwords($module);
 			$this->build_tpl($group ,$module);
-			$this->build_module($group ,$module);
+			$this->build_model($group ,$module);
 			$this->build_action($group ,$module);
 		}
 		layout(!$this->isAjax());
@@ -340,15 +357,16 @@ class '.$module.'Action extends CommAction {
 			$this->data = $M->query("SHOW FULL COLUMNS FROM {$module}");
 			$module = ucwords($module);
 			$this->build_tpl($group ,$module);
-			$this->build_module($group ,$module);
+			$this->build_model($group ,$module);
 			$this->build_action($group ,$module);
 		}
 		layout(!$this->isAjax());
 		$this->success("Success");
 
 	}
+
 	public function build_tpl($group,$module){
-		$path = "./Tpl/$group/$module/";
+		$path = TMPL_PATH."$group/$module/";
 		if(!file_exists($path)){
     	    mkdirs($path);
     	}
@@ -361,7 +379,7 @@ class '.$module.'Action extends CommAction {
 		file_put_contents($path.$file, $content);
 	}
 	public function build_model($group,$module){
-		$path="./Lib/Model/$group/";
+		$path=LIB_PATH."Model/$group/";
 		if(!file_exists($path)){
     	    mkdirs($path);
     	}
@@ -372,7 +390,7 @@ class '.$module.'Action extends CommAction {
 	}
 
 	public function build_action($group,$module){
-		$path="./Lib/Action/$group/";
+		$path=LIB_PATH."Action/$group/";
 		if(!file_exists($path)){
     	    mkdirs($path);
     	}

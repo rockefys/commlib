@@ -13,10 +13,9 @@ class CommAction extends Action {
         if(!empty($condition)){
             $condition = queryFilter($condition);
         }
-
         $M =  M(MODULE_NAME);
-        $select = $M->where($data)->join()->order();
-  
+        $condition['is_deleted']='0';
+        $select = $M->where()->join()->order();
         $this->page($select,$condition); 
     }
  
@@ -37,6 +36,7 @@ class CommAction extends Action {
     } 
     
     public function refer(){
+        $this->refer=$this->_param('refer');
         $this->index();
     }
 
@@ -45,8 +45,8 @@ class CommAction extends Action {
         $this->display();
     } 
  
-    public function view($id = null){
-		$this->edit(id);
+    public function view($id=null){
+		$this->edit($id);
 	} 
 
     public function edit($id = null){ 
@@ -60,23 +60,25 @@ class CommAction extends Action {
 		}
 				
 		$M  =  M(MODULE_NAME);
-        $this->data = $M->find($id);
-        if(empty($this->data)) {
-        	$this->error('Sorry for we can not deal your handle.'); 
-			exit();
+        $condition=array('is_deleted'=>'0');
+        $data = $M->where($condition)->find($id);
+        if(!empty($data)) {
+        	$this->data=$data;
+        }
+        else{
+            $this->error('Sorry for we can not deal your handle.'); 
+            exit();
         }
 
         $this->log(MODULE_NAME.'/'.ACTION_NAME,$this->data);
         $pk = $M->getPk();
         $this->pk = $pk;
         $this->id = $M->$pk;
-
-		//if($this->isAjax())
-		//	$this->ajaxReturn($this->data);
-		//else
-        
-			$this->display('add');
+        if(ACTION_NAME=="view")
+            $this->readonly="readonly";
+		$this->display('edit');
     }
+
     public function operate($id = null,$op=null){ 
          layout(!$this->isAjax());
         if(empty($id)){
@@ -91,10 +93,10 @@ class CommAction extends Action {
         $M  =  M(MODULE_NAME);
         switch ($op) {
             case 'enable':
-                $data = array( 'enable'=> 1);
+                $data = array( 'status'=> '1');
                 break;
             case 'disable':
-                $data = array( 'enable'=> 0);
+                $data = array( 'status'=> '0');
                 break;
             default:
                 break;
@@ -134,25 +136,28 @@ class CommAction extends Action {
             $this->log(MODULE_NAME.'/'.ACTION_NAME,$data,$result);
         }
         
-        if($result){
-             $this->ajaxReturn(1,"success",1);
-        }
-        else{
-             $this->ajaxReturn(0,'fail',0);
-        }            
+        if($this->isAjax())
+            $this->ajaxReturn($result?'Success':'Fail');
+        else if($result){ 
+                $this->success('Success');
+            }
+            else{
+                $this->error('Fail');
+            }                    
     }
    
     public function delete(){
     	layout(!$this->isAjax()); 
 
-        $ids    = $this->_post('ids');
+        $ids    = $this->_param('id');
         $M      =  M(MODULE_NAME);
         $id     = $M->getPk();
-        $result = $M->where($id.' in('.$ids.')')->delete();
+        $data=array('is_deleted'=>1);
+        $result = $M->where($id.' in('.$ids.')')->save($data);
 
         $this->log(MODULE_NAME.'/'.ACTION_NAME,$ids,$result);
         if($this->isAjax())
-  				$this->ajaxReturn($result?'Success':'Fail');
+  			$this->ajaxReturn($result?'Success':'Fail');
         else if($result){ 
          		$this->success('Success');
  			}
@@ -190,7 +195,7 @@ class CommAction extends Action {
         $this->cond     = $con['cond'];
         if(isset($select)){
             if(!$result)
-              $this->data = $select->page($p.','.$page_size)->select();
+              $this->data = $select->page($p.','.$page_size)->where($condition)->select();
             else{
                 $M = M();
                 $this->data = $M->query($select->options['table']);
@@ -208,17 +213,26 @@ class CommAction extends Action {
             'pagesId'   => 'page'
         );
         $toolbar_tr =  array(
+            'menu' =>array(
+                'view',
+                'add',
+                'edit',
+                'delete'
+          ),
     	   'index' =>array(
     	  		'view',
     	  		'edit',
     	  		'delete'
     	  ),
+           'module'=>array(
+            'view',
+            'edit'
+        ),
     	  'refer' =>array(
-    	  		'check',
-    	  		'view'  		
+    	  		'refer'	
 			),
 			'view'  =>array(
-					'view'
+				'view'
 			)
      	); 
      		
@@ -233,15 +247,12 @@ class CommAction extends Action {
         $this->prePage  = $Page->prePage;
         $this->nextPage = $Page->nextPage;
         $this->pageinfo = $Page->nowPage.'/'.$Page->totalPages;
+
         layout(!$this->isAjax());
-        
-        if($this->isAjax()){
-            $this->display('Comm:Index:table');
-        }
-        else{
+        if(!$this->isAjax())
             $this->display('Comm:Index:table-admin');
-        }
-        
+        else
+            $this->display('Comm:Index:table-operate');
     }
 
     public function export(){

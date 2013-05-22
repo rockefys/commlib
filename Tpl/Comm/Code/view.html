@@ -1,11 +1,4 @@
 <div class="row-fluid">
-<script type="text/javascript">
-$(function(){
-    $('.selected').each(function(){
-        $(this).val($(this).data('value'));
-    });
-}); 
-</script>
 <form class="form-inline" action="{:U('view')}" method="get">
 表名 <select id="modules" name="name" class="span2 selected" data-value="{$table_name}">
     <volist name="modules" id="vo">

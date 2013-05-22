@@ -16,6 +16,9 @@ a,p,div,td{
 .block-content textarea:last-child{
 	margin-bottom: 0px;
 }
+.modal form{
+	padding-top:20px;
+}
 textarea{
 	resize: none; 
 	overflow:auto;
