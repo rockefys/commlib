@@ -12,7 +12,8 @@ Two quick start options are available:
 * Clone the repo, `git clone git://github.com/rockefys/commlib.git`.
 
 ## Document
-	[Document](http://rockefys.github.io/commlib/)
+[Document](http://rockefys.github.io/commlib/)
+
 
 ## Bug tracker
 
