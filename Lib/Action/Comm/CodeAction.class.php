@@ -391,10 +391,10 @@ class CodeAction extends Action {
 			}
 		}
 		$M->addAll($data);
-		$this->success('success');
+		$this->success('所有分组/模块/方法已成功读取到module表中.');
 	}
 	public function build_all(){
-		$M=M('module_tables');
+		$M=M('module_table');
 		$modules=$M->where("type='custom'")->getField('name,group');
 		foreach ($modules as $module => $group) {
 			$this->build_column($module);
