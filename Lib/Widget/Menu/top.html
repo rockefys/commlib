@@ -2,7 +2,11 @@
 <ul class="nav">
 	<volist name="data" id="vo" empty="" >
 	<li>
-		<a href="#tab_{$vo.id}" data-toggle="tab">{$vo['title']}</a>
+		<empty name="vo['link']">
+			<a href="#tab_{$vo.id}" data-toggle="tab">{$vo['title']}</a>
+		<else/>
+			<a href="{:strpos($vo['link'], 'http')===false?U($vo['link']):$vo['link']}" target="{$vo['target']}">{$vo['title']}</a>
+		</empty>
 	</li>
 	</volist>
 	<!--

@@ -8,7 +8,7 @@ return array(
 'DB_HOST'   		=> 	'localhost',// 服务器地址
 'DB_NAME'   		=> 	'commlib', 	// 数据库名
 'DB_USER'   		=> 	'root', 	// 用户名
-'DB_PWD'    		=> 	'', 	// 密码
+'DB_PWD'    		=> 	'sanyue%', 	// 密码
 'DB_PORT'   		=> 	3306, 		// 端口
 'DB_PREFIX' 		=> 	'', 		// 数据库表前缀
 'DB_DEPLOY_TYPE'	=>	0,			// 数据库部署方式 0 集中式 1 分布式	0
@@ -20,7 +20,7 @@ return array(
 'DB_SQL_BUILD_LENGTH'=>	20,			// SQL缓存的队列长度	20
 'DB_SQL_LOG'		=>	FALSE,		// 是否开启SQL日志记录（3.1新增）	FALSE
 
-'PAGE_SIZE'			=>	10,
+'PAGE_SIZE'			=>	15,
 'MAX_UPLOAD_FILE_SIZE'	=>	10485760,	//允许最大上传文件大小 1048576 1M
 
 'LIMIT_PROXY_VISIT'=>true,			//禁止代理访问
@@ -36,7 +36,7 @@ return array(
 'DEFAULT_GROUP'  	=> 	'Comm',	// 默认分组
 'DEFAULT_THEME' 	=> 	'',
 
-'EMPTY_MODULE'		=>	'',
+'EMPTY_MODULE'		=>	'Department,Role',
 'EMPTY_ACTION'		=>	'',
 
 'LazyInc'			=>	'6',
@@ -73,10 +73,10 @@ return array(
 //'VAR_SESSION_ID'	=>	,			// sessionID的提交变量	session_id
 
 //COOKIE
-'COOKIE_EXPIRE'		=>	3600,		// Coodie有效期(秒)
-'COOKIE_DOMAIN'		=>	'ideat.org',// Cookie有效域名	 
+//'COOKIE_EXPIRE'		=>	3600,		// Coodie有效期(秒)
+//'COOKIE_DOMAIN'		=>	'ideat.org',// Cookie有效域名	 
 //'COOKIE_PATH'		=>				// Cookie路径	
-'COOKIE_PREFIX'		=>	'ideat_',	// Cookie前缀 避免冲突
+//'COOKIE_PREFIX'		=>	'ideat_',	// Cookie前缀 避免冲突
 /*
 //TOKEN
 'TOKEN_ON'			=>	true,  	// 是否开启令牌验证
@@ -87,39 +87,39 @@ return array(
 //URL设置
 'URL_CASE_INSENSITIVE'	=>FALSE,	// URL是否不区分大小写	false
 'URL_MODEL'			=>2,			// URL访问模式支持 0 (普通模式); 1 (PATHINFO 模式); 2 (REWRITE  模式);3 (兼容模式)	
-'URL_PATHINFO_DEPR'	=> 	'/',		// PATHINFO模式下的参数分割符	/
+//'URL_PATHINFO_DEPR'	=> 	'/',		// PATHINFO模式下的参数分割符	/
 //'URL_PATHINFO_FETCH'=>,			// 用于兼容判断PATH_INFO 参数的SERVER替代变量列表 ORIG_PATH_INFO;REDIRECT_PATH_INFO;REDIRECT_URL
-'URL_HTML_SUFFIX'	=>'htm',				// URL伪静态后缀设置	 
+//'URL_HTML_SUFFIX'	=>'htm',				// URL伪静态后缀设置	 
 //'URL_404_REDIRECT'	=>,				// 404跳转页面 部署模式有效（3.1新增）	 
 //'URL_PARAMS_BIND'	=>,				// URL变量绑定到Action方法参数（3.1新增）	true
 
 //数据缓存设置
-'DATA_CACHE_TIME'	=>	0,			// 数据缓存有效期 0表示永久缓存
-'DATA_CACHE_COMPRESS'=>	FALSE,		// 数据缓存是否压缩缓存	
-'DATA_CACHE_CHECK'	=>	FALSE,		// 数据缓存是否校验缓存	FALSE
-'DATA_CACHE_TYPE'	=>	'File',		// 数据缓存类型	File
-'DATA_CACHE_PATH'	=>	'TEMP_PATH',// 缓存路径设置 (仅对File方式缓存有效)	
-'DATA_CACHE_SUBDIR'	=>	FALSE,		// 使用子目录缓存(仅对File方式缓存有效)	FALSE
-'DATA_PATH_LEVEL'	=>	1,			// 子目录缓存级别(仅对File方式缓存有效)	1
+//'DATA_CACHE_TIME'	=>	0,			// 数据缓存有效期 0表示永久缓存
+//'DATA_CACHE_COMPRESS'=>	FALSE,		// 数据缓存是否压缩缓存	
+//'DATA_CACHE_CHECK'	=>	FALSE,		// 数据缓存是否校验缓存	FALSE
+//'DATA_CACHE_TYPE'	=>	'File',		// 数据缓存类型	File
+//'DATA_CACHE_PATH'	=>	'TEMP_PATH',// 缓存路径设置 (仅对File方式缓存有效)	
+//'DATA_CACHE_SUBDIR'	=>	FALSE,		// 使用子目录缓存(仅对File方式缓存有效)	FALSE
+//'DATA_PATH_LEVEL'	=>	1,			// 子目录缓存级别(仅对File方式缓存有效)	1
 
 //ParseTemplate行为配置
-'TMPL_CONTENT_TYPE'	=>	'text/html',// 默认模板输出类型	
+//'TMPL_CONTENT_TYPE'	=>	'text/html',// 默认模板输出类型	
 //'TMPL_ACTION_ERROR'	=>	,		// 默认错误跳转对应的模板文件	系统模板目录下的dispatch_jump.tpl
 //'TMPL_ACTION_SUCCESS'	=>	,		// 默认成功跳转对应的模板文件	同上
 //'TMPL_EXCEPTION_FILE'	=>	,		// 异常页面的模板文件	系统模板目录下的think_exception.tpl
-'TMPL_DETECT_THEME'		=>	FALSE,	// 自动侦测模板主题	FALSE
-'TMPL_TEMPLATE_SUFFIX'	=>	'.html',// 默认模板文件后缀	
+//'TMPL_DETECT_THEME'		=>	FALSE,	// 自动侦测模板主题	FALSE
+//'TMPL_TEMPLATE_SUFFIX'	=>	'.html',// 默认模板文件后缀	
 //'TMPL_FILE_DEPR'		=>	,		// 模板文件模块与操作之间的分割符，只对项目分组部署有效	/
 
 //Error显示设置
 //'ERROR_MESSAGE'	=>	,			// 错误显示信息，部署模式有效	 
 //'ERROR_PAGE'		=>	,			// 错误定向页面，部署模式有效	 
-'SHOW_ERROR_MSG'	=>	FALSE,		// 是否显示错误信息	FALSE
+//'SHOW_ERROR_MSG'	=>	FALSE,		// 是否显示错误信息	FALSE
 
 //ReadHtmlCache
-'HTML_CACHE_ON'		=>	FALSE,		// 是否开启静态缓存
+//'HTML_CACHE_ON'		=>	FALSE,		// 是否开启静态缓存
 //'HTML_CACHE_RULES'	=>	,		// 静态缓存规则	array()
-'HTML_CACHE_TIME'	=>	60,			// 静态缓存有效期（秒）
+//'HTML_CACHE_TIME'	=>	60,			// 静态缓存有效期（秒）
 'HTML_FILE_SUFFIX'	=>	'html',		// 静态缓存后缀
 
 //LOG

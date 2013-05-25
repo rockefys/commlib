@@ -89,23 +89,23 @@ class AuthorityAction extends Action {
         if(!$this->isAjax())return;
             $M =M("role_authority");
             
-            $roleslist=$this->_post('roles');
-            if(empty($roleslist)){
+            $rids=$this->_post('rids');
+            if(empty($rids)){
                 $this->ajaxReturn('error');
             }
-            $aids=$this->_post('ids');
-            $M->where('rid in'."($roleslist)")->delete();
+            $aids=$this->_post('aids');
+            $M->where('rid in'."($rids)")->delete();
             if(empty($aids))
                  $this->ajaxReturn('Success');
             $aids=explode(',',$aids);
-            $roles=explode(',',$roleslist);
+            $roles=explode(',',$rids);
             
             $n=0;
             foreach ($roles as $rid) {
                 foreach ($aids as $aid) {
                         $data[$n]['rid']=$rid;
                         $data[$n]['aid']=$aid;
-                        $n=$n+1;
+                        ++$n;
                 }
             }
             

@@ -1,3 +1,4 @@
 <?php
-class Broadband_catAction extends CommAction {
+Class Broadband_catAction extends CommAction{
+
 }

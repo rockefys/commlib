@@ -13,7 +13,6 @@ $(function(){
 			zTree.checkAllNodes(false);
 			return;
 		}
-		loading();
 		$.ajax({
 		   	type: "POST",
 			url: "role_authority",
@@ -22,15 +21,14 @@ $(function(){
 		    data:{ids:list},
 		    success: function (strResult) {
 		       var treeNodes=eval(strResult);
+		       if(!treeNodes)return;
 		       var treeObj = $.fn.zTree.getZTreeObj("tree");
-		       finish();
 		  		for (var i=0 ; i<treeNodes.length; i++) {
 		  			var node=treeObj.getNodeByTId(treeNodes[i]['id']);
 		  			treeObj.checkNode(node, true, true);
 		  		}
 		    },
 		    error: function () {
-		    	finish();
 		        alert("Ajax请求数据失败!");
 		    }
   		});
@@ -179,7 +177,7 @@ function getNodeValue(){
     $.ajax({
 		  type: "POST",
 		  url: "update",
-		  data: { ids:nids,roles:list},
+		  data: { aids:nids,rids:list},
 		  success:(function(msg) {
 		  	alert(msg);
 		})});

@@ -13,6 +13,12 @@ a,p,div,td{
 	overflow:hidden;
 	text-overflow:ellipsis;*/
 }
+.content form{
+	margin:0 0 10px;
+}
+.content .nav{
+	margin-bottom: 10px;
+}
 .block-content textarea:last-child{
 	margin-bottom: 0px;
 }

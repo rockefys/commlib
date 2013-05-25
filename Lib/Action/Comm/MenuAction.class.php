@@ -41,12 +41,12 @@ class MenuAction extends CommAction {
         if(empty($M->$id)){
             $result = $M->data($data)->add();
             $data = $M->find($id);
-            $this->log(MODULE_NAME.'/add',$data,$result);
+            log($data,$result);
         }
         else{
             $result = $M->save($data);
             $data = $M->find($M->$id);
-            $this->log(MODULE_NAME.'/'.ACTION_NAME,$data,$result);
+            log($data,$result);
         }
         if($this->isAjax())
             $this->ajaxReturn($result?'Success':'Fail');

@@ -1,23 +1,25 @@
-<notempty name="cond">
+<notempty name="query">
 <div class="row-fluid">
-<form class="form-inline" action="{:U('query')}" method="POST" id="table-searchbar">
-<volist name="cond" id="con">
-  <switch name="con">
-    <case value="">
-    &nbsp;&nbsp;{$cname[$key]} <input type="txt" name="query[{$Key}]" class="input-medium span2">
+<form class="form-inline well well-small" action="{:U('query')}" method="POST" id="table-searchbar">
+<volist name="query" id="col">
+  <switch name="col['value']">
+    <case value="null|%like%|%like|like%|">
+    &nbsp;&nbsp;{$col['title']} <input type="txt" name="query[{$key}]" class="input-small">
     </case>
-    <case value="false">
-    &nbsp;&nbsp;<label class="checkbox"><input type="checkbox" id="query[{$Key}]" />{$cname[$key]} </label>&nbsp;&nbsp;
+    <case value="false|true|0|1" >
+    &nbsp;&nbsp;<label class="checkbox"><input type="checkbox" id="query[{$key}]" />{$col['title']} </label>&nbsp;&nbsp;
     </case>
     <default />
-    {~$datas=$con()}{$cname[$key]} <select name="query[{$key}]" class="span2">
-        <volist name="datas" id="op">
+    {~$items=explode(',',$col['value'])}{$col['title']} 
+    <lt name="items" value="2">{~$items=$col['value']();}</lt>
+    <select name="query[{$key}]" class="span2">
+        <volist name="items" id="op">
             <option value ="{$key}">{$op}</option>
         </volist>
     </select>
 </switch>
 </volist>
-   <button type="button" data-href="{$queryUrl}" onclick="table_search()" id="btnQuery" class="btn btn-tool"><i class="icon-search"></i></button>
+   <button type="button" data-href="{$query_url}" onclick="table_search()" id="btnQuery" class="btn btn-tool"><i class="icon-search"></i></button>
 	</form>
 </div>
 </notempty>

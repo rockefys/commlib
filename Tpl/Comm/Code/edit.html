@@ -1,9 +1,17 @@
 <div class="row-fluid">
 <form class="form-inline form-horizontal" action="<literal>{:U('save')}</literal>" method="post" id='form'>
 <volist name="data" id="vo">
+<if condition="($vo.add_show eq 1) OR ($vo.control_type eq hidden) ">
 <div class="control-group <eq name='vo.control_type' value='hidden'>hidden</eq>">
     <label class="control-label" for="{$vo.field}">{$vo.title}</label>
     <div class="controls">
+    <notempty name="refers[$vo['field']]">
+    <div class="input-append" id="{$refers[$vo['field']]['id']}">
+        <input type="hidden" value="" name="{$vo.field}" id="{$vo.field}" data-target="{$refers[$vo['field']]['fk']}" class="{$vo.validate}" placeholder="">
+        <input type="text" value="<literal>{$data.</literal>{$refers[$vo['field']]['field_show']}}" data-target="{$refers[$vo['field']]['field_show']}" class="{required}" placeholder="" readonly="">
+        <a href="{:U(ucwords($refers[$vo['field']]['module_refer']).'/refer','refer='.$refers[$vo['field']]['id'])}"data-target="#modal-refer"  data-toggle="modal"><span class="add-on"><i class="icon-search"></i></span></a>
+    </div>
+    <else />
 <switch name="vo.control_type">
     <case value="hidden">
         <input type="hidden" value="<literal>{$data.</literal>{$vo.field}}" name="{$vo.field}" id="{$vo.field}" class="{$vo.validate}" placeholder="">
@@ -39,9 +47,11 @@
     <default />
         <input type="text" class="{$vo.validate}"  value="<literal>{$data.</literal>{$vo.field}}" name="{$vo.field}" id="{$vo.field}" placeholder="">
 </switch>
+</notempty>
         <label class="help-inline">{$vo.tips}</label>
     </div>
 </div>
+</if>
 </volist>
 
 </form>

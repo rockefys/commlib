@@ -10,6 +10,17 @@
     function getTime(){
         return date('Y-m-d H:i:s',time());
     }
+    
+    function logs($data,$result = false){
+        $M = M('log');
+        $M->update_user = session('userid');
+        $M->update_time = NOW_TIME;
+        $M->operate     = __SELF__;
+        $M->content     = json_encode($data);
+        $M->result      = $result;
+        $M->ip          =  get_client_ip();
+        $M->add();
+    }
 
     function byteFormat($bytes) {
         $sizetext = array(" B", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
@@ -57,48 +68,6 @@
     }
     function LazyInc($M,$column,$n=1){
         $M->switchModel("Adv")->setLazyInc($column,$n,6);
-    }
-	function ajaxSave($M){
-        $id=$M->getPk();
-        if(empty($M->$id)){
-            $result=$M->add();
-        }
-        else{
-            $result=$M->save();
-        }
-        if($result){
-             $this->ajaxReturn(1,"success",1);
-        }
-        else{
-             $this->ajaxReturn(0,'fail',0);
-        }
-    }
-
-    function ajaxDelete($M,$ids){
-        $id=$M->getPk();
-        $result=$M->where($id.' in('.$ids.')')->delete();
-        if($result){
-             $this->ajaxReturn(1,"success",1);
-        }
-        else{
-             $this->ajaxReturn(0,'fail',0);
-        }
-    }
-	function save($M){
-        $id=$M->getPk();
-        if(empty($M->$id)){
-            $result=$M->add();
-        }
-        else{
-            $result=$M->save();
-        }
-        return $result;
-    }
-
-    function delete($M,$ids){
-        $id=$M->getPk();
-        $result=$M->where($id.' in('.$ids.')')->delete();
-        return $result;
     }
 
     //POST数据处理
@@ -171,7 +140,9 @@
         else if(strpos($vo['Type'],'char')!==false)$type='text';
         else if(strpos($vo['Type'],'text')!==false)$type='area';
         else if(strpos($vo['Type'],'enum')!==false)$type='select';
-        else if(strpos($vo['Type'],'datetime')!==false)$type='date';
+        else if(strpos($vo['Type'],'datetime')!==false)$type='datetime';
+        else if(strpos($vo['Type'],'date')!==false)$type='date';
+        else if(strpos($vo['Type'],'time')!==false)$type='time';
         else if(strpos($vo['Type'],'bit')!==false)$type='checkbox';
         //else if(strpos($vo['type'],'set')!==false)$type='checkboxs';
         else if(
@@ -197,7 +168,7 @@
         return array(
             'a' => 'a', 
             'b' => 'b', 
-            'c' =>'c', 
+            'c' => 'c', 
             'd' => 'd', 
             );
     }

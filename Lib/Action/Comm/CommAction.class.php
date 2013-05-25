@@ -13,28 +13,12 @@ class CommAction extends Action {
         if(!empty($condition)){
             $condition = queryFilter($condition);
         }
-        $M =  M(MODULE_NAME);
+        $M =  D(MODULE_NAME);
         $condition['is_deleted']='0';
-        $select = $M->where()->join()->order();
+        $select = $M->scope('default')->join()->where()->order();
         $this->page($select,$condition); 
     }
- 
-    
-    public function lists(){
-        $table = 'Article';
-        $M =  M($table);
- 
-        $select  =  $M->table($table.' a')->field("a.*,t.*")->join("topic t on a.id = t.id")->order('a.id desc');
-        $page_size = C('PAGE_SIZE');
-        if(array_key_exists( 'p',$_GET)) {
-            $p = $_GET['p'];
-        }
-        else{
-            $p = 1;
-        }
-        pager($select,$p,'Comm:Index:list');
-    } 
-    
+
     public function refer(){
         $this->refer=$this->_param('refer');
         $this->index();
@@ -42,7 +26,7 @@ class CommAction extends Action {
 
     public function add(){
         layout(!$this->isAjax());
-        $this->display();
+        $this->display('add');
     } 
  
     public function view($id=null){
@@ -59,7 +43,7 @@ class CommAction extends Action {
 			exit();	
 		}
 				
-		$M  =  M(MODULE_NAME);
+		$M  =  D(MODULE_NAME);
         $condition=array('is_deleted'=>'0');
         $data = $M->where($condition)->find($id);
         if(!empty($data)) {
@@ -70,27 +54,21 @@ class CommAction extends Action {
             exit();
         }
 
-        $this->log(MODULE_NAME.'/'.ACTION_NAME,$this->data);
+        logs($this->data);
         $pk = $M->getPk();
         $this->pk = $pk;
         $this->id = $M->$pk;
-        if(ACTION_NAME=="view")
+        if(ACTION_NAME==="view")
             $this->readonly="readonly";
 		$this->display('edit');
     }
 
-    public function operate($id = null,$op=null){ 
-         layout(!$this->isAjax());
-        if(empty($id)){
-            $id = $this->_param('id');
-            $op = $this->_param('op');
-        }
-        if(empty($id)){
-            $this->error('Please supply an id of the record for handle.'); 
-            exit(); 
-        }
-                
-        $M  =  M(MODULE_NAME);
+    public function operate(){ 
+        layout(!$this->isAjax());
+        $op = $this->_param('op');
+        $id = $this->_param('id');
+        $mod = $this->_param('mod');
+
         switch ($op) {
             case 'enable':
                 $data = array( 'status'=> '1');
@@ -98,9 +76,35 @@ class CommAction extends Action {
             case 'disable':
                 $data = array( 'status'=> '0');
                 break;
+            case 'add':
+            case 'edit':
+            case 'save':
+            case 'delete':
+            case 'view':
+            case 'index':
+                $this->type='index';
+            case 'refer':
+            case 'export':
+            case 'improt':
+            case 'upload':
+                if(empty($mod))$mod=MODULE_NAME;
+                $mod=ucwords($mod);
+                $this->operate=ACTION_NAME.'?mod='.$mod.'&op=';
+                R($mod.'/'.$op);
+                exit();
+                break;
             default:
+                $this->error('Unknow handle.'); 
+                exit();
                 break;
         }
+        if(empty($id)){
+            $this->error('Please supply an id of the record for handle.'); 
+            exit(); 
+        }
+                
+        $M  =  D(MODULE_NAME);
+        
         if(isset($data)){
             $result = $M->where($M->getPk().'='.$id)->setField($data);
             if(empty($result)) {
@@ -109,7 +113,7 @@ class CommAction extends Action {
             }
         }
 
-       $this->log(MODULE_NAME.'/'.ACTION_NAME,$result);
+       logs($this->param(),$result);
         if($this->isAjax())
             $this->ajaxReturn('Success');
         else
@@ -120,20 +124,21 @@ class CommAction extends Action {
     public function save(){ 
      	layout(!$this->isAjax()); 
      		
-        $M  = M(MODULE_NAME);
+        $M  = D(MODULE_NAME);
         if(!$M->create()){
             $this->error($M->getError());
+            exit();
         }
         $id = $M->getPk();
         if(empty($M->$id)){
             $result = $M->add();
             $data = $M->find($id);
-            $this->log(MODULE_NAME.'/add',$data,$result);
+            //logs($data,$result);
         }
         else{
             $result = $M->save();
             $data = $M->find($M->$id);
-            $this->log(MODULE_NAME.'/'.ACTION_NAME,$data,$result);
+            //logs($data,$result);
         }
         
         if($this->isAjax())
@@ -148,14 +153,13 @@ class CommAction extends Action {
    
     public function delete(){
     	layout(!$this->isAjax()); 
-
         $ids    = $this->_param('id');
-        $M      =  M(MODULE_NAME);
+        $M      =  D(MODULE_NAME);
         $id     = $M->getPk();
         $data=array('is_deleted'=>1);
-        $result = $M->where($id.' in('.$ids.')')->save($data);
-
-        $this->log(MODULE_NAME.'/'.ACTION_NAME,$ids,$result);
+        $result = $M->where($id.' in('.$ids.')')->save($data);//逻辑删除
+        //$result = $M->where($id.' in('.$ids.')')->delete();
+        logs($ids,$result);
         if($this->isAjax())
   			$this->ajaxReturn($result?'Success':'Fail');
         else if($result){ 
@@ -164,35 +168,24 @@ class CommAction extends Action {
 			else{
 				$this->error('Fail');
 			}              
- 		}
+ 	}
 
-    public function log($module,$data,$result = false){
-        $M = M('log');
-        $M->update_user = session('userid');
-        $M->update_time = date('Y-m-d H:i:s',time());
-        $M->operate     = $module;
-        $M->content     = json_encode($data);
-        $M->result      = $result;
-        $M->ip          =  get_client_ip();
-        $M->status      = '0';
-        $M->add();
-    }
-    public function page($select = null,$condition = null,$type=null){
+    public function page($select = null,$condition = null,$type=null,$custom=false){
         $p              = $this->_param("p");
         if(empty($p))$p = 1;
         $this->pk       = $select->getPk();
         $module         = $select->getModelName();
-        $con            = C("query.".$module);
         $page_size      = C('PAGE_SIZE');
-        if(isset($type))
-            $this->type = $type;
-        else
-            $this->type = ACTION_NAME;
+        if(empty($this->type)){
+            if(isset($type))
+                $this->type = $type;
+            else
+                $this->type = ACTION_NAME;
+        }
         $this->module   = $module;
-        $this->queryUrl = U($module.'/index');
         $this->columns  = C("columns.".$module);
-        $this->cname    = $con['cname'];
-        $this->cond     = $con['cond'];
+        $this->query    = C("query.".$module);
+
         if(isset($select)){
             if(!$result)
               $this->data = $select->page($p.','.$page_size)->where($condition)->select();
@@ -249,10 +242,15 @@ class CommAction extends Action {
         $this->pageinfo = $Page->nowPage.'/'.$Page->totalPages;
 
         layout(!$this->isAjax());
-        if(!$this->isAjax())
-            $this->display('Comm:Index:table-admin');
-        else
-            $this->display('Comm:Index:table-operate');
+        if(!$custom){
+             if(!$this->isAjax())
+                $this->display('Comm:Index:table-admin');
+            else
+                $this->display('Comm:Index:table-operate');
+        }
+        else{
+            $this->display();
+        }
     }
 
     public function export(){
@@ -280,7 +278,7 @@ class CommAction extends Action {
             $Sheet->setCellValue($ary[$i/27].$ary[$i%27].'1', $value);
             ++$i;
         }
-        $M  =  M(MODULE_NAME);
+        $M  =  D(MODULE_NAME);
         $result = $M->select();
         for($j  = 0;$j<count($result) ; ++$j){
             $i  = 1;

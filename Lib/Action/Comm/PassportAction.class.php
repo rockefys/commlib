@@ -1,3 +1,4 @@
 <?php
-class PassportAction extends CommAction {
+Class PassportAction extends CommAction{
+
 }
