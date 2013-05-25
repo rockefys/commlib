@@ -11,10 +11,12 @@ Two quick start options are available:
 * [download the latest release](https://github.com/rockefys/commlib/zipball/master),
 * Clone the repo, `git clone git://github.com/rockefys/commlib.git`.
 
+## Document
+	[Document](http://rockefys.github.io/commlib/)
+
 ## Bug tracker
 
 Have a bug or a feature request? [Please open a new issue](https://github.com/twitter/bootstrap/issues). Before opening any issue, please search for existing issues and read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
-
 
 
 ## Contributing
