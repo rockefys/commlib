@@ -1,0 +1,27 @@
+<div class="span6">
+    <form class="form-inline" id="table-toolbar">
+        <div class="btn-group ">
+            <a data-href="{:U('edit')}" data-target="#add-modal" role="button" data-original-title="Edit" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-edit"></i></a>
+            <a href="{:U('refer')}" style="margin-left: -1px;" data-target="#modal" data-original-title="Refer" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-random"></i></a>
+
+            <a data-href="{:U('view')}" data-target="#add-modal" role="button" data-original-title="Review" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-zoom-in"></i></a>
+            <a data-href="{:U('build')}" data-target="#add-modal" role="button" data-original-title="Build Selected" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-arrow-down"></i></a>
+            <a data-href="{:U('view')}" data-target="#add-modal" role="button" data-original-title="Build All" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-download-alt"></i></a>
+        </div>
+        
+        <div class="btn-group">
+             <a href="#" data-toggle="dropdown"  data-original-title="Filter" rel="tooltip" data-placement="bottom" class="btn btn-large "><i class="icon-filter"></i></a>
+            <ul class="dropdown-menu">
+                <li><input type="search" class="light-table-filter input-medium" data-table="data-table" placeholder="Filtrer" autofocus /></li>
+            </ul>
+            <script type="text/javascript">
+            $(function(){
+                $('.dropdown-menu input, .dropdown-menu label').click(function(e) {
+                    e.stopPropagation();
+                });
+            });
+            </script>
+             <a href="{:U('refresh')}" style="margin-left: -1px;" data-target="#modal" data-original-title="Refresh" rel="tooltip" data-placement="bottom" class="btn btn-large"><i class="icon-refresh"></i></a>
+        </div>
+    </form>
+</div>

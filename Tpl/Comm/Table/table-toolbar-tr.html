@@ -1,0 +1,18 @@
+<notempty name="toolbar_tr">
+<div class="btn-group" id="table-toolbar-operate">
+<volist name="toolbar_tr" id="tool">
+	<switch name="tool" >
+	<case value="view" break="1"><a data-href="{:U(MODULE_NAME.'/'.$tool.'?'.$pk.'='.$vo[$pk])}" data-target="#add-modal" data-toggle="modal"  class="btn btn-small btn-view" title="{:ucwords($tool)}" data-original-title="{:ucwords($tool)}" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-zoom-in"></i> </a>
+	</case> 
+	<case value="add" break="1"><a data-href="{:U(MODULE_NAME.'/'.$tool.'?'.$pk.'='.$vo[$pk])}" data-target="#add-modal" data-toggle="modal"  class="btn btn-small btn-add" title="{:ucwords($tool)}" data-original-title="{:ucwords($tool)}" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-plus"></i> </a></case> 
+	<case value="edit" break="1"><a data-href="{:U(MODULE_NAME.'/'.$tool.'?'.$pk.'='.$vo[$pk])}" data-target="#add-modal" data-toggle="modal"  class="btn btn-small btn-edit" title="{:ucwords($tool)}" data-original-title="{:ucwords($tool)}" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-edit"></i> </a>
+	</case> 
+	<case value="delete" break="1"><a data-href="{:U(MODULE_NAME.'/'.$tool.'?'.$pk.'='.$vo[$pk])}" class="btn btn-small btn-delete" title="{:ucwords($tool)}" data-original-title="{:ucwords($tool)}" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-trash"></i> </a>
+	</case> 
+	<case value="refer" break="1"><a href='javascript:refer_quote("{$refer}",{:json_encode($values)})' class="btn-refer" title="{:ucwords($tool)}" data-original-title="{:ucwords($tool)}" rel="tooltip" data-toggle="tooltip" data-trigger="hover" data-placement="bottom"><i class="icon-ok"></i> </a></case> 
+	<default />
+	</switch>				
+</volist>
+</div>
+
+</notempty>

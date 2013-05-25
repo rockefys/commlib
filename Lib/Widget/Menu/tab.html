@@ -1,0 +1,8 @@
+{__NOLAYOUT__}
+<ul class="nav nav-tabs" id="nav-tab">
+ <volist name="data" id="vo" empty="" >
+	<li>
+		<a href="{:U($vo['link'])}" target="{$vo['target']}">{$vo['title']}</a>
+	</li>
+	</volist>
+</ul>

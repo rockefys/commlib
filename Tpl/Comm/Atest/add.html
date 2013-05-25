@@ -1,0 +1,60 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'>
+<div class="control-group hidden">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+
+    <input type="hidden" value="" name="id" id="id" class="{required:true,digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="textbox">文本框</label>
+    <div class="controls">
+
+            <input type="text" class="{maxlength:45,}"  value="" name="textbox" id="textbox" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="select">列表框</label>
+    <div class="controls">
+
+    <select id="select" name="select" class="selected" data-value="">
+                            <option value ="a">a</option>            <option value ="b">b</option>            <option value ="c">c</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="textarea">多行文本框</label>
+    <div class="controls">
+
+    <textarea rows="3" class="" ></textarea>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="datetime">日期时间</label>
+    <div class="controls">
+
+            <input type="text" class="{dateISO:true,date:true,}"  value="" name="datetime" id="datetime" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="checkbox">复选框</label>
+    <div class="controls">
+
+            <input name="checkbox" id="checkbox" class="{}" type="checkbox" >        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="decimal">小数框</label>
+    <div class="controls">
+
+            <input type="text" class="{number:true,}"  value="" name="decimal" id="decimal" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="smallint">整数框</label>
+    <div class="controls">
+
+            <input type="text" class="{digits:true,range:[-32768,32767]}"  value="" name="smallint" id="smallint" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="tinytext">多行文本</label>
+    <div class="controls">
+
+    <textarea rows="3" class="" ></textarea>        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>

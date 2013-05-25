@@ -1,0 +1,28 @@
+{__NOLAYOUT__}
+<div class="row-fluid" id="table-content">
+<table id="data-table" class="table table-condensed table-bordered table-striped table-hover">
+      <!--<caption><h3>{$projectName}</h3></caption>-->
+      <thead>
+        <tr class="align-center">
+            <th></th>
+            <volist name="columns" id="col" offset="1">
+                    <th>{$col} <i class="icon-chevron-down"></i></th>
+            </volist>
+        </tr>
+      </thead>
+    <tbody>
+        <volist name="data" id="vo" key="row">
+        <tr>
+            <volist name="columns" id="col" offset="0" length='1'>
+                <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+            </volist>
+            
+            <volist name="columns" id="col" offset="1">
+                    <td>{$vo[$key]}</td>
+            </volist>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+<include file="./Tpl/Comm/Index/pager.html"/>
+</div>

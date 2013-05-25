@@ -1,0 +1,146 @@
+<div class="row-fluid" id="module-content-{$type}">
+<div class="row-fluid">
+<script type="text/javascript">
+$(function(){
+    
+    $('#pk').val('{$fk}');
+    $('#module').change(function(){ 
+        var n=$(this).val();
+        $.ajax({
+            type:"POST",  
+            url:'{:U("getColumn")}',
+            data:{id:n},  
+            success:function(json){ 
+                $('#fk').find('option').remove();
+                $.each(json, function(i, value) {
+                    $('#fk').append($('<option>').text(value).attr('value',value));
+                });     
+            },
+            error:function(x){  
+                alert("Request error");  
+            } 
+        });
+    }); 
+    $('#module_refer').change(function(){ 
+        var n=$(this).val();
+        $('#map_name').val(n);
+        $.ajax({
+            type:"POST",  
+            url:'{:U("getColumn")}',
+            data:{id:n},  
+            success:function(json){ 
+                $('#pk').find('option').remove();
+                $('#field_show').find('option').remove();
+                $.each(json, function(i, value) {
+                    $('#pk').append($('<option>').text(value).attr('value', value));
+                    $('#field_show').append($('<option>').text(value).attr('value', value));
+                }); 
+               $('#field_show').val($("#field_show option:eq(1)").val());         
+            },
+            error:function(x){  
+                alert("Request error");  
+            } 
+        });
+    }); 
+    $('#module_refer').val('{$refer_module}'); 
+    $('#module_refer').change();
+    $('#module').val('{$module}');
+}); 
+</script>
+<form class="form form-horizontal" method="POST" action="{:U('Code/mapping_save')}">
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联表名</span>
+                    <select id="module" name="module" class="span8">
+                        <volist name="Modules" id="vo">
+                            <option value ="{$vo}">{$vo}</option>
+                        </volist>
+                    </select>
+            </div>
+            <div class="span6">
+                <span class="help-inline">关联类型</span>
+                <select  id='map_type' name="map_type" class="span8">
+                    <option value ="BELONGS_TO">多对一</option>
+                    <option value ="HAS_MANY">一对多</option>
+                    <option value ="HAS_ONE">一对一</option>
+                    <option value ="MANY_TO_MANY">多对多</option>
+                </select>
+                <input type="hidden" value="relation" />
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">被关联表</span>
+                <select id="module_refer" name="module_refer" class="span8">
+                    <volist name="Modules" id="vo">
+                        <option value ="{$vo}">{$vo}</option>
+                    </volist>
+                </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">映射名称</span>
+                    <input id='map_name' name="map_name" type="text" class="span8" value="" placeholder="mapping_name">
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联外键</span>
+                     <select  id='fk' name="fk" class="span8">
+                        <volist name="module_columns" id="vo">
+                            <option value ="{$vo}">{$vo}</option>
+                        </volist>
+                    </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条件</span>
+                    <input id='condition' name="condition" type="text" class="span8"  placeholder="condition">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联主键</span>
+                <select  id='pk' name="pk" class="span8">
+                </select>
+            </div>
+            <div class="span6">
+                    <span class="help-inline">显示字段</span>
+                    <select  id='field_show' name="field_show" class="span8">
+                    </select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="span6">
+                    <span class="">关联顺序</span>
+                    <input id='order' name="order" type="text" class="span8"  placeholder="mapping_order">
+            </div>
+            <div class="span6">
+                    <span class="help-inline">关联条目</span>
+                    <input id='limit' name="limit" type="text" class="span8"  placeholder="mapping_limit">
+            </div>
+         </div>
+        <div class="span6">
+            <div class="span6">
+                <span class="help-inline">关联字段</span>
+                <input type="text" class="span8" id="map_fields" name="map_fields" placeholder="mapping_fields">
+            </div>
+            <div class="span6">
+                <span class="help-inline">映射字段</span>
+                <input type="text" class="span8" id="as_fields" name="as_fields" placeholder="as_fields">
+            </div>
+        </div>
+    </div>
+    <br>
+<div class="row-fluid">
+<include file="Comm:Index:table"/>
+</div>
+<include file="./Tpl/Comm/Index/btn.html"/>
+</form>
+</div>
+</div>

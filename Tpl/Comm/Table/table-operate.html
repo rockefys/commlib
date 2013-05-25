@@ -1,0 +1,93 @@
+<table id="data-table" class="data-table table table-bordered table-striped table-condensed table-hover" style="">
+  <thead>
+    <tr class="align-center">
+      <th><label class="checkbox">
+          <input type="checkbox" class="select-all">
+        </label></th>
+      <volist name="columns" id="col" offset="abs($showpk-1)">
+              <th id="{$key}">{$col}</th>
+      </volist>
+			<th>状态</th>
+			<th class="sorter-false">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <volist name="data" id="vo" key="row">
+    <tr>
+      <volist name="columns" id="col" offset="0" length='1'>
+          <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+          {~$values[$key]=$vo[$key]}
+      </volist>
+      <volist name="columns" id="col" offset="abs($showpk-1)">
+              <td>{$vo[$key]}</td>
+              {~$values[$key]=$vo[$key]}
+      </volist>
+      <td class="text-center inline">
+        <empty name="columns.enable">
+        <div class="btn-group btn-ables">
+          <a data-href="{:U('operate','id='.$vo[$pk].'&op=enable')}" class="btn btn-mini btn-enable <php>if($vo['status']=='1') echo 'btn-info disabled';</php>">启用</a>
+          <a data-href="{:U('operate','id='.$vo[$pk].'&op=disable')}" class="btn btn-mini btn-disable <php>if($vo['status']=='0') echo 'btn-inverse disabled';</php>">禁用</a>
+        </div>
+        </empty>
+	    </td>
+  		<td class="text-center inline">
+   			<include file="Comm:Index:table-toolbar-tr"/>     
+  		</td>
+    </tr>
+    </volist>
+  </tbody>
+</table>
+<include file="Comm:Index:pager"/>
+</div>
+<script>
+
+$(function(){
+$('.selected').val($(this).data('value'));
+$.extend($.tablesorter.themes.bootstrap, {
+    // these classes are added to the table. To see other table classes available,
+    // look here: http://twitter.github.com/bootstrap/base-css.html#tables
+    table      : 'table',
+    header     : '', // give the header a gradient background
+    footerRow  : '',
+    footerCells: '',
+    icons      : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+    sortNone   : 'd',
+    sortAsc    : 'icon-chevron-up',
+    sortDesc   : 'icon-chevron-down',
+    active     : '', // applied when column is sorted
+    hover      : '', // use custom css here - bootstrap class may not override it
+    filterRow  : '', // filter row class
+    even       : '', // odd row zebra striping
+    odd        : ''  // even row zebra striping
+  });
+
+  // call the tablesorter plugin and apply the uitheme widget
+  $("table").tablesorter({
+    theme : "bootstrap",
+    headers: {
+        0: {sorter: false},
+    },
+    widthFixed: true,
+    headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+
+    // widget code contained in the jquery.tablesorter.widgets.js file
+    // use the zebra stripe widget if you plan on hiding any rows (filter widget)
+    widgets : [ "uitheme",  "zebra" ],//"filter",
+
+    widgetOptions : {
+      // using the default zebra striping class name, so it actually isn't included in the theme variable above
+      // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
+      zebra : ["even", "odd"],
+
+      // reset filters button
+      filter_reset : ".reset"
+
+      // set the uitheme widget to use the bootstrap theme class names
+      // this is no longer required, if theme is set
+      // ,uitheme : "bootstrap"
+
+    }
+  })
+});
+
+</script>

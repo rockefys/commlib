@@ -1,0 +1,15 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'>
+<div class="control-group hidden">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+<input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="name">宽带类别</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:255,}"  value="{$data.name}" name="name" id="name" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>

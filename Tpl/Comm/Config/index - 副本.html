@@ -1,0 +1,1228 @@
+<literal>
+<script type="text/javascript">
+$(function () {
+	var a = $('#config_list').find('a');
+	//表单提交快捷键：ctrl+Enter,隐藏/显示帮助:Ctrl+方向键
+	$('body').on('keydown',function(e){
+		 if(e.ctrlKey) {
+			switch (e.keyCode) {
+				case 37:
+				case 38:
+				case 39:
+				case 40:
+					$('#tips').find('button').trigger('click');
+					break;
+				case 13:
+					$('#setconfig').find('input:submit').trigger('click');
+			}
+		}
+	});
+	//锚点链接之间平滑滚动
+	window.scrollAnchors = function (name) {
+		var offsetY = document.anchors.namedItem(name).offsetTop;
+		var start = document.body.scrollTop;
+		var duration = 500;
+		var z=this;
+		z.clear = function () {
+			window.clearInterval(z.timer);
+			z.timer = null
+		};
+		z.t = (new Date).getTime();
+		z.step = function () {
+			var t = (new Date).getTime();
+			var p = (t - z.t) / duration;
+			if (t >= duration + z.t) {
+				z.clear();
+				window.setTimeout(function () {
+					z.scroll(offsetY-65, 0)
+				}, 13);
+			} else {
+				var st = ((-Math.cos(p * Math.PI) / 2) + 0.5) * (offsetY - start) + start;
+				z.scroll(st-65, 0);
+			}
+		};
+		z.scroll = function (t, l) {
+			window.scrollTo(l, t)
+		};
+		z.timer = window.setInterval(function () {
+			z.step();
+		}, 13);
+	};
+	//为当前配置文件对应的菜单加高亮
+	$.each(a, function (v, k) {
+		if (app_path==dir+$(this).text()) {
+			$(this).find('i').addClass('icon-black').css('opacity', 0.5);
+			$(this).parent().addClass('active');
+		}
+	})
+	//在change和blur事件发生时，更新key/value域的id值
+	window.updateid = function (obj) {
+		var id = obj.name.replace(/\[.*\]/, "_" + obj.value.replace(/[!-/:-@[-^`{-~]*/g, ''));
+		if ($("#" + id).length > 0 && $(obj).next().get(0).id != id) {
+			$(obj).removeClass('check_pass');
+			$(obj).addClass('check_fail');
+			mysubmit();
+			return
+		} else {
+			$(obj).removeClass('check_fail');
+			$(obj).addClass('check_pass');
+		}
+		if (obj.value != "") {
+			obj.id = obj.name.replace(/\[|\]/g, '_');
+			$(obj).next().get(0).id = id;
+			$(obj).next().trigger("blur");
+		}
+	};
+	//新增一行
+	window.addRow = function (obj) {
+		var row = $(obj).nextAll('div').last().html();
+		row = row.replace(/(check_fail|check_pass|conf|value="[^"]*"|id="[^"]*"|disabled="[^"]*")*/g, '');//新增一行时移除复制源上的动态class和vaule
+		var n = parseInt(/\d+/.exec(row).toString());
+		row = "<div class=' key_value_div'>" + row.replace(/\d+/g, 1 + n) + "</div>";
+		$(obj).closest('fieldset').append(row);
+	};
+	//向后台请求项目的配置文件
+	window.getConfig = function (requestfile) {
+		$.post("__ROOT__/index.php/Config/sendConfig", {file:requestfile}, function (data, status) {
+			if (status == 'success') {
+				var query = '';
+				var conflist = $("#conf"), custom = $("#custom_conf");
+				//响应数据判断
+				if (version == 3.0) {
+					data=$.parseJSON(data).data;
+				}
+				if (data == '') {
+					conflist.append("您的应用全部采用默认配置");
+					return
+				}
+				else if ($.type(data).toLowerCase() == "string") {
+					updateAlert("ajax请求目标:"+requestfile+"不存在");
+					return
+				}
+				else if (data.error) {
+					updateAlert(data.error);
+					$("#setconfig>input:submit").remove()
+					return
+				}
+				$.each(data, function (k, val) {
+					var input = $("#" + k);
+					var label = $("." + k);
+					var br = $("#" + k + "+br");
+					val = true === val ? 'true' : (false === val ? 'false' : val);//把布尔值转换为字符串
+					//input.get(0)存在表示选择器从页面中能找到表单字段
+					if (input.get(0)) {
+						if (custom.has("#" + k).length === 0) {
+							if (input.get(0).nodeName.toLowerCase() == "fieldset") {
+								//如果节点名为fieldset表示这可能是数组配置
+								query = query + ',' + k;
+								if (/SESSION_OPTIONS|otherPatern/.test(k)) {
+									//类似SESSION_OPTIONS的配置，可以用|添加到上面的正则多选条件中
+									$.each(val, function (kk, vv) {
+										$("input[name='" + RegExp.lastMatch + "[" + kk + "]']").addClass('conf').val(vv);
+									});
+								} else {
+									var i = 1
+									$.each(val, function (kk, vv) {
+										if ($("input[name='" + k + "[k" + i + "]']").length == 0) {
+											$("input:button." + k).trigger('click');
+										}
+										$("input[name='" + k + "[k" + i + "]']").val(kk);
+										//$("input[name='"+k+"[k" + i + "]']") 不能与上面的合并到一个变量，因为之前可能是undefind,后来增加一行后不再是undefind
+										$("input[name='" + k + "[v" + i + "]']").val(vv);
+										i++;
+									});
+									input.find('div>input').addClass('conf');
+								}
+							} else {
+								input.val(val);
+								input.addClass('conf');
+								label.addClass('conf');
+								br.addClass('conf');
+							}
+						}
+						//input.get(0)等于null表示选择器从页面中找不到表单字段，即配置项为自定义配置，需为其生成表单字段
+					} else if (input.get(0) == null) {
+						if ($.type(val).toLowerCase() == "string") {
+							custom.children("fieldset").first().append("<label for=\"" + k + "\" class=\"conf " + k + "\">" + k + "</label>\n<input type='text' class='conf' name='" + k + "' id='" + k + "' value='" + val + "' onblur='check(this)'><br />");
+						} else {
+							query = query + ',' + k;
+							custom.append(makerow(val, k, k))
+						}
+						custom.css("display", "block");
+						if (custom.children("fieldset").first().length > 0) {
+							custom.children("fieldset").first().css("display", "block");
+						}
+					}
+				});
+				$('#CONSOLE_ON').tooltip({placement:'top',title:'开启关闭Console工具，填写true或false'});
+				$('#CONSOLE_LABEL_ON').tooltip({placement:'top',title:'开启关闭Console默认的组标记，填写true或false'});
+				$(".conf").tooltip({title:'这是读取到的配置', placement:'right'})
+			} else {
+				alert(status);
+				$("input:submit").attr('disabled', 'on');
+			}
+			//为form的action加上filter参数，处理自定义二维数组配置
+			var configform = $("#setconfig");
+			var actionurl = configform.attr("action");
+			configform.attr("action", encodeURI(actionurl + "?filter=" + query));
+		});
+	};
+	//为读取的二维数组创建表单行
+	window.makerow = function (val, k, text) {
+		var i = 1, rows = '';
+		var head = "<fieldset id='" + k + "'><legend>" + text + "</legend><span class='key_value_div'>KEY   </span><span class='key_value_div'>VALUE</span><input type='button' value='新增' class='btn btn-small btn-primary " + k + "' onclick='addRow(this)'><br />";
+		$.each(val, function (key, v) {
+			var row = "<div class='" + k + " key_value_div'>\n<input type='text' name='" + k + "[k" + i + "]' class='conf " + k + "' onblur='updateid(this);check(this)' onkeyup='updateid(this)' value='" + key + "'>\n<input type='text' name='" + k + "[v" + i + "]' class='conf " + k + "' onblur='check(this)' value='" + v + "'><br /></div>";
+			rows = rows + row;
+			i++;
+		});
+		var foot = "</fieldset>";
+		return head + rows + foot;
+	};
+	if (app_path != 'noapp') {
+		getConfig(app_path);
+	}
+	//读取配置帮助文件config.xml
+	window.getXML = function (num, file) {
+		num = num || 0;
+		file = file || "data/config.xml";
+		$.post("__ROOT__/index.php/Config/sendConfig", {file:file, accept:'xml'}, function (data, status) {
+			tips = $("#tips");
+			if (status == 'success') {
+				try {
+					xmldoc[num] = $.parseXML(data);
+				} catch (e) {
+					xmldoc[num] = null;
+				}
+			} else {
+				xmldoc[num] = null;
+			}
+			checkdoc();
+		});
+	};
+	var xmldoc = [
+		[],
+		[]
+	];
+	getXML();//读取TPbuilder的xml文件
+	if (dir != '') {
+		getXML(1, dir + 'Conf/config_info.xml');//读取项目自定义的xml配置文件
+	}
+	//检测ajax请求的数据是否载入完成
+	var checkdoc = function () {
+		//ajax是异步执行....  应先判断数据是否解析完成
+		if (xmldoc[0] !== [] && xmldoc[1] !== []) {
+			xmldoc[0] = xmldoc[0] ? xmldoc[0] : null;
+			xmldoc[1] = xmldoc[1] ? xmldoc[1] : null;
+		} else {
+			setTimeout(function () {
+				checkdoc();
+			}, 50);
+		}
+	};
+	window.showtip = function (obj) {
+		var info = $('#tip_info');
+		var tip_examples = $("#tip_examples");
+		//清空原有内容
+		info.text('');
+		tip_examples.text('');
+		if (xmldoc[0] == null && xmldoc[1] == null) {
+			return
+		}
+		//从xmldoc中查找对应id的元素
+		var tip = $(xmldoc).find("#" + obj.id);
+		if (tip.length == 0) {
+			return
+		}
+		$("#tips").css("display", "block");
+		$("#tip_id").text(obj.id);
+		info.text(tip.find('infomation').text());
+		if (tip.find('document').length > 0) {
+			info.prepend('<span class="label label-warning"><a class="" href="' + tip.find('document').text() + '" target="_blank" >官方文档</a></span>');
+		}
+		info.prepend('<span class="label label-info">简介</span>')
+		var examples = tip.find("example"), list = document.createElement('div');
+		if (examples.length != 0) {
+			$.each(examples, function (k, v) {
+				var div = document.createElement('div');
+				$(div).addClass('well well-small').prepend('<span class="label label-success">' + $(v).attr('comment') + '</span>');
+				$(div).append($(v.childNodes).clone());
+				$(list).append($(div));
+			});
+			tip_examples.html($(list).html().replace(/<br><\/br>/g, '<br/>'));
+		}
+	};
+	//t获得焦点时，切换配置帮助内容
+	$.each($("fieldset>input"), function () {
+		$(this).on('focus', function () {
+			showtip(this);
+		})
+	})
+	$.each($('fieldset>select'), function () {
+		$(this).on('focus', function () {
+			showtip(this);
+		})
+	})
+	$.each($('fieldset'), function () {
+		if (this.id != false) {
+			var that = this;
+			$(this).find('input,select').on('focus', function () {
+				showtip(that);
+			})
+		}
+	})
+	//为配置帮助的折叠按钮绑定事件
+	$('#tips').find('button').on('click', function () {
+		$('#up-down').animate({height:['toggle', 'swing']}, 200);
+		if ($(this).find('i').hasClass('icon-chevron-up')) {
+			$(this).find('i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+		} else {
+			$(this).find('i').addClass('icon-chevron-up').removeClass('icon-chevron-down');
+		}
+	})
+});
+</script>
+</literal>
+<style type="text/css">
+	body {
+		font-family:'微软雅黑',"Helvetica Neue", Helvetica, Arial, sans-serif;
+	}
+
+	#setconfig>fieldset, #conf>fieldset {
+		padding: 14px 10px;
+		margin: 10px 0;
+		border-radius: 8px;
+		background: #fdfdfd;
+	}
+
+	#setconfig input[type='button'] {
+		width: 80px;
+	}
+
+	#setconfig>fieldset>legend, #conf>fieldset>legend {
+		font-size: 21px;
+		font-weight: bold;
+		color: #5D5D5D;
+		width: auto;
+		padding: 0 12px;
+		border-bottom: 0;
+		margin-bottom: 0;
+
+	}
+
+	#setconfig>fieldset>label, #conf>fieldset>label {
+		min-width: 160px;
+		display: inline-block;
+		/*text-align: right;*/
+		margin: 0 18px;
+		font-size: 14px;
+	}
+
+	#setconfig>fieldset>fieldset, #conf>fieldset>fieldset {
+		margin: 0 auto;
+		/*border: 1px dashed #D7DCEB;*/
+		padding: 12px;
+		width: 76%;
+		/*border-radius: 8px;*/
+	}
+
+	#setconfig>fieldset>fieldset>legend, #conf>fieldset>fieldset>legend {
+		border-radius: 4px;
+		font-weight: bold;
+		/*font-style: italic;*/
+		background: #f7f7f7;
+		color: #818181;
+		width: 100%;
+		font-size: 16px;
+		border: 0;
+		border-left: 10px solid #dfdfdf;
+		margin-left: -26px;
+		line-height: 24px;
+		padding: 4px;
+
+	}
+
+	#setconfig>fieldset>fieldset label, #conf>fieldset>fieldset label {
+		font-size: 14px;
+		min-width: 138px;
+		display: inline-block;
+		margin: 8px 18px 0 8px;
+	}
+
+	span.key_value_div {
+		width: 176px;
+		display: inline-block;
+		font-size: 12px;
+		font-style: italic;
+	}
+
+	.key_value_div >input {
+		width: 156px;
+		margin-bottom: 4px;
+	}
+
+	select {
+		width: 253px;
+		border: 1px solid #dddddd;
+	}
+
+	input {
+		width: 239px;
+		padding: 2px 0;
+		border: 1px solid #dddddd;
+
+	}
+
+	input.conf, select.conf {
+		/*border-color: #60c6ff;*/
+		background-color: #fffeed;
+		color: #5B8509;
+	}
+
+	.bs-docs-sidenav.affix {
+		top: 40px;
+	}
+
+	.bs-docs-sidenav {
+		width: 300px;
+	}
+
+	.bs-docs-sidenav {
+		background-color: #FFFFFF;
+		border-radius: 4px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.bs-docs-sidenav > li > a {
+	}
+
+	.bs-docs-sidenav > li > a {
+		display: block;
+		margin: 0 0 -1px;
+		padding: 8px 14px;
+	}
+
+	.bs-docs-sidenav .icon-chevron-right {
+		float: right;
+		margin-right: -6px;
+		margin-top: 2px;
+		opacity: 0.25;
+	}
+
+	div.btn-group {
+		display: block;
+	}
+
+	.tags {
+		margin-top: 8px;
+		width: 300px;
+	}
+
+	.tags>.btn {
+		margin-bottom: 4px;
+	}
+
+	.tags .btn {
+		background-image: none;
+	}
+	#config_list .nav-header{
+		padding: 0;
+		font-size: 14px;
+		margin: 0;
+	}
+	#config_list .nav-header a:hover{
+		background-color: royalBlue;
+		color:#fff;
+	}
+	#config_list .active>a{
+		color:#6A7591;
+		background-color: whiteSmoke;
+		text-shadow: none;
+	}
+</style>
+
+<div class="container content">
+<div class="row body-content">
+<div class="span4">
+	<div class="affix">
+		<notempty name="config_list">
+			<ul id="config_list" class="nav nav-list bs-docs-sidenav">
+				<li class="nav-header"><a href="#">配置文件<i class="icon-circle-arrow-up icon-white" style="float: right;"></i></a></li>
+				<foreach name="config_list" item="file">
+					<li>
+						<a href="__APP__/Config/index?config_path=<{$dir}><{$file}>"><i class="icon-chevron-right"></i><{$file}></a>
+					</li>
+				</foreach>
+			</ul>
+		</notempty>
+		<div class="tags">
+			<button class="btn" onclick="scrollAnchors('trace')" >Trace</button>
+			<button class="btn" onclick="scrollAnchors('url')">URL</button>
+			<button class="btn" onclick="scrollAnchors('db')">DB</button>
+			<button class="btn" onclick="scrollAnchors('group')">group</button>
+			<button class="btn" onclick="scrollAnchors('think')">think</button>
+			<button class="btn" onclick="scrollAnchors('cache')">cache</button>
+			<button class="btn" onclick="scrollAnchors('error_log')">error_log</button>
+			<button class="btn" onclick="scrollAnchors('session')">session</button>
+			<button class="btn" onclick="scrollAnchors('rest')">REST</button>
+			<button class="btn" onclick="scrollAnchors('cookie')">Cookie</button>
+			<button class="btn" onclick="scrollAnchors('htmlcache')">htmlcache</button>
+			<button class="btn" onclick="scrollAnchors('token')">Token</button>
+			<button class="btn" onclick="scrollAnchors('other')">other</button>
+		</div>
+	</div>
+	<div id="tips" class="affix">
+		<button class="close" style="margin: 4px 6px 0 0;"><i class="icon-chevron-up icon-white"></i></button>
+		<div id="tip_id">配置帮助</div>
+		<div id="up-down" style="display: none;">
+			<div id="tip_info">点击右侧表单域即可出现帮助信息</div>
+			<div id="tip_examples">
+
+				<div class="well well-small">
+					表单提交快捷键：<code style="display: inline;">Ctrl+Enter</code><br/>
+					隐藏/显示帮助 : <code style="display: inline;">Ctrl+方向键</code>
+				</div>
+
+				<div class="well well-small">
+					表单中直接填写配置的值即可,有多个值的配置项用逗号分割
+				</div>
+
+				<div class="well well-small">
+					数组配置项目的左边表单不可省略,填写元素的字符串key(例如URL_ROUTE_RULES)或整数index(例如LOAD_EXT_CONFIG),右边表单填写元素的value部分,点击按钮可增加一个元素.
+				</div>
+				<div class="well well-small">
+					留空表单或选下拉选项的择第一个选项,即表示不在配置文件中写入该项(也即使用ThinkPHP默认配置)
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="span8">
+<!--ID定义规范，input，select的ID和name应与配置项目相同，label的class应与配置项相同
+二维配置使用fieldset进行包围，input不设id,fieldset的id与配置项相同，input的class设为与配置项相同，填充的input用div包围，div的class与配置项相同
+-->
+
+<form id="setconfig" action="__URL__/build" METHOD="POST" ENCTYPE="application/x-www-form-urlencoded">
+<fieldset id="custom_conf" style="display: none;">
+	<legend>自定义配置</legend>
+	<fieldset style="display: none;">
+
+	</fieldset>
+	<!--此div是自定义配置容器，不要删除-->
+</fieldset>
+<!--trace配置-->
+<fieldset>
+	<legend>
+		<a name="trace">Trace配置</a>
+	</legend>
+	<fieldset>
+		<label for="SHOW_PAGE_TRACE" class="SHOW_PAGE_TRACE">是否显示trace信息</label>
+		<select name="query[SHOW_PAGE_TRACE]" id="SHOW_PAGE_TRACE">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="TMPL_TRACE_FILE" class="TMPL_TRACE_FILE">Trace信息模板</label>
+		<input type="text" name="query[TMPL_TRACE_FILE]" id="TMPL_TRACE_FILE" onblur="check(this)"><br />
+		<label for="SHOW_RUN_TIME" class="SHOW_RUN_TIME">显示运行时间</label>
+		<select name="query[SHOW_RUN_TIME]" id="SHOW_RUN_TIME">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_ADV_TIME" class="SHOW_ADV_TIME">显示详细的运行时间</label>
+		<select name="query[SHOW_ADV_TIME]" id="SHOW_ADV_TIME">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_DB_TIMES" class="SHOW_DB_TIMES">显示数据库读写次数</label>
+		<select name="query[SHOW_DB_TIMES]" id="SHOW_DB_TIMES">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_CACHE_TIMES" class="SHOW_CACHE_TIMES">显示缓存操作次数</label>
+		<select name="query[SHOW_CACHE_TIMES]" id="SHOW_CACHE_TIMES">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_USE_MEM" class="SHOW_USE_MEM">显示内存开销</label>
+		<select name="query[SHOW_USE_MEM]" id="SHOW_USE_MEM">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_LOAD_FILE" class="SHOW_LOAD_FILE">显示文件加载数量</label>
+		<select name="query[SHOW_LOAD_FILE]" id="SHOW_LOAD_FILE">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="SHOW_FUN_TIMES" class="SHOW_FUN_TIMES">显示函数调用次数</label>
+		<select name="query[SHOW_FUN_TIMES]" id="SHOW_FUN_TIMES">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+
+	</fieldset>
+</fieldset>
+<!--URL配置-->
+<fieldset>
+	<legend>
+		<a name="url">URL配置</a>
+	</legend>
+	<fieldset>
+		<legend>URL模式</legend>
+		<label for="URL_CASE_INSENSITIVE" class="URL_CASE_INSENSITIVE">URL不区分大小写</label>
+		<select name="query[URL_CASE_INSENSITIVE]" id="URL_CASE_INSENSITIVE">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="URL_PARAMS_BIND" class="URL_PARAMS_BIND">Action参数绑定</label>
+		<select name="query[URL_PARAMS_BIND]" id="URL_PARAMS_BIND">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+
+		<label for="URL_MODEL" class="URL_MODEL">URL模式</label>
+		<select name="query[URL_MODEL]" id="URL_MODEL">
+			<option value="">pathinfo模式</option>
+			<option value="3">兼容模式</option>
+			<option value="0">普通模式</option>
+			<option value="2">rewrite模式</option>
+		</select><br>
+		<label for="URL_PATHINFO_DEPR" class="URL_PATHINFO_DEPR">pathinfo分割符</label>
+		<select name="query[URL_PATHINFO_DEPR]" id="URL_PATHINFO_DEPR">
+			<option value="">/</option>
+			<option value="-">-</option>
+			<option value="~">~</option>
+			<option value="_">_</option>
+		</select><br>
+		<label for="URL_HTML_SUFFIX" class="URL_HTML_SUFFIX">pathinfo伪静态后缀</label>
+		<input type="text" name="query[URL_HTML_SUFFIX]" id="URL_HTML_SUFFIX" onblur="check(this)"><br />
+		<label for="URL_404_REDIRECT" class="URL_404_REDIRECT">404页面</label>
+		<input type="text" name="query[URL_404_REDIRECT]" id="URL_404_REDIRECT" onblur="check(this)"><br />
+	</fieldset>
+	<fieldset id="URL_ROUTE_RULES">
+		<legend>URL路由</legend>
+		<label for="URL_ROUTER_ON" class="URL_ROUTER_ON">开启URL路由</label>
+		<select name="query[URL_ROUTER_ON]" id="URL_ROUTER_ON">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<br />
+		<span class="key_value_div">匹配规则&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=></span><span class="key_value_div">转换目标</span>
+
+		<input type="button" value="新增规则" class="URL_ROUTE_RULES btn btn-primary btn-small" onclick="addRow(this)"><br />
+
+		<div class="URL_ROUTE_RULES key_value_div ">
+			<input type="text" name="query[URL_ROUTE_RULES[k1]" class="URL_ROUTE_RULES">
+			<input type="text" name="query[URL_ROUTE_RULES[v1]" class="URL_ROUTE_RULES"><br />
+		</div>
+	</fieldset>
+</fieldset>
+
+<!--DB配置-->
+<fieldset>
+	<legend>
+		<a name="db">数据库配置</a>
+	</legend>
+	<fieldset>
+		<legend>数据库连接</legend>
+
+		<label for="DB_TYPE" class="DB_TYPE">数据库驱动</label>
+		<select name="query[DB_TYPE]" id="DB_TYPE">
+			<option value="">mysql</option>
+			<option value="mysqli">mysqli</option>
+			<option value="PDO">PDO</option>
+			<option value="Mongo">Mongo</option>
+			<option value="MsSQL">MSsql</option>
+			<option value="Oracle">Oracle</option>
+			<option value="PgSQL">PgSQL</option>
+			<option value="Sqlite">Sqlite</option>
+			<option value="ibase">ibase</option>
+			<option value="SQLsrv">SQLsrv</option>
+		</select><br>
+		<label for="DB_DSN" class="DB_DSN">DSN连接字符串</label>
+		<input type="text" name="query[DB_DSN]" id="DB_DSN"><br />
+		<label for="DB_HOST" class="DB_HOST">数据库主机</label>
+		<input type="text" name="query[DB_HOST]" id="DB_HOST" onblur="check(this)"><br />
+		<label for="DB_NAME" class="DB_NAME">数据库名</label>
+		<input type="text" name="query[DB_NAME]" id="DB_NAME" onblur="check(this)"><br />
+		<label for="DB_USER" class="DB_USER">数据库用户名</label>
+		<input type="text" name="query[DB_USER]" id="DB_USER" onblur="check(this)"><br />
+		<label for="DB_PWD" class="DB_PWD">数据库密码</label>
+		<input type="text" name="query[DB_PWD]" id="DB_PWD" onblur="check(this)"><br />
+		<label for="DB_PORT" class="DB_PORT">数据库端口</label>
+		<input type="text" name="query[DB_PORT]" id="DB_PORT" onblur="check(this)"><br />
+		<label for="DB_PREFIX" class="DB_PREFIX">数据表前缀</label>
+		<input type="text" name="query[DB_PREFIX]" id="DB_PREFIX" onblur="check(this)"><br />
+		<label for="DB_CHARSET" class="DB_CHARSET">数据表字符集</label>
+		<select name="query[DB_CHARSET]" id="DB_CHARSET">
+			<option value="">utf8</option>
+			<option value="gb2312">gb2312</option>
+			<option value="gbk">gbk</option>
+			<option value="big5">big5</option>
+			<option value="latin1">latin1</option>
+		</select><br>
+	</fieldset>
+	<fieldset>
+		<legend>分布式数据库</legend>
+		<label for="DB_DEPLOY_TYPE" class="DB_DEPLOY_TYPE">数据库模式</label>
+		<select name="query[DB_DEPLOY_TYPE]" id="DB_DEPLOY_TYPE">
+			<option value="">单服务器</option>
+			<option value="1">主从模式</option>
+		</select><br />
+		<label for="DB_RW_SEPARATE" class="DB_RW_SEPARATE">主从读写分离</label>
+		<select name="query[DB_RW_SEPARATE]" id="DB_RW_SEPARATE">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+		<label for="DB_MASTER_NUM" class="DB_MASTER_NUM">主服务器数量</label>
+		<input type="text" name="query[DB_MASTER_NUM]" id="DB_MASTER_NUM" onblur="check(this)"><br />
+		<label for="DB_SLAVE_NO" class="DB_SLAVE_NO">读服务器序号</label>
+		<input type="text" name="query[DB_SLAVE_NO]" id="DB_SLAVE_NO" onblur="check(this)"><br />
+	</fieldset>
+	<fieldset>
+		<legend>Model配置</legend>
+
+		<label for="DB_SQL_BUILD_CACHE" class="DB_SQL_BUILD_CACHE">SQL语句缓存</label>
+		<select name="query[DB_SQL_BUILD_CACHE]" id="DB_SQL_BUILD_CACHE">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+		<label for="DB_SQL_BUILD_QUEUE" class="DB_SQL_BUILD_QUEUE">SQL语句缓存方式</label>
+		<select name="query[DB_SQL_BUILD_QUEUE]" id="DB_SQL_BUILD_QUEUE">
+			<option value="">file</option>
+			<option value="xcache">xcache</option>
+			<option value="apc">apc</option>
+		</select><br>
+		<label for="DB_SQL_BUILD_LENGTH" class="DB_SQL_BUILD_LENGTH">SQL语句缓存数量</label>
+		<input type="text" name="query[DB_SQL_BUILD_LENGTH]" id="DB_SQL_BUILD_LENGTH" onblur="check(this)"><br />
+		<label for="DB_SQL_LOG" class="DB_SQL_LOG">SQL执行Trace</label>
+		<select name="query[DB_SQL_LOG]" id="DB_SQL_LOG">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+
+		<label for="DB_FIELDTYPE_CHECK" class="DB_FIELDTYPE_CHECK">字段类型检查</label>
+		<select name="query[DB_FIELDTYPE_CHECK]" id="DB_FIELDTYPE_CHECK">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+		<label for="DB_FIELDS_CACHE" class="DB_FIELDS_CACHE">开启字段缓存</label>
+		<select name="query[DB_FIELDS_CACHE]" id="DB_FIELDS_CACHE">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br>
+		<label for="DB_LIKE_FIELDS" class="DB_LIKE_FIELDS">LIKE查询的字段</label>
+		<input type="text" name="query[DB_LIKE_FIELDS]" id="DB_LIKE_FIELDS" onblur="check(this)"><br>
+	</fieldset>
+</fieldset>
+
+<!--APP配置-->
+<fieldset>
+	<legend>
+		<a name="other">其他配置</a>
+	</legend>
+	<fieldset>
+		<legend>输入输出</legend>
+		<label for="TMPL_CONTENT_TYPE" class="TMPL_CONTENT_TYPE">MIME输出类型</label>
+		<input type="text" name="query[TMPL_CONTENT_TYPE"
+				id="TMPL_CONTENT_TYPE"
+				onblur="check(this)"><br />
+		<label for="DEFAULT_CHARSET" class="DEFAULT_CHARSET">默认输出编码</label>
+		<select name="query[DEFAULT_CHARSET]" id="DEFAULT_CHARSET">
+			<option value="">utf-8</option>
+			<option value="gb2312">gb2312</option>
+			<option value="gbk">gbk</option>
+			<option value="big5">big5</option>
+			<option value="latin1">latin1</option>
+		</select><br>
+		<label for="HTTP_CACHE_CONTROL" class="HTTP_CACHE_CONTROL">HTTP缓存Header</label>
+		<select name="query[HTTP_CACHE_CONTROL]" id="HTTP_CACHE_CONTROL">
+			<option value="">private</option>
+			<option value="no-cache">no-cache</option>
+			<option value="must-revalidate">must-revalidate</option>
+			<option value="max-age">max-age</option>
+			<option value="min-fresh">min-fresh</option>
+			<option value="max-stale">max-stale</option>
+			<option value="no-store">no-store</option>
+		</select><br>
+		<label for="OUTPUT_ENCODE" class="OUTPUT_ENCODE">启用输出压缩</label>
+		<select name="query[OUTPUT_ENCODE]" id="OUTPUT_ENCODE">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+		<label for="DEFAULT_TIMEZONE" class="DEFAULT_TIMEZONE">默认时区</label>
+		<input type="text" name="query[DEFAULT_TIMEZONE]" id="DEFAULT_TIMEZONE" onblur="check(this)"><br />
+
+		<label for="DEFAULT_AJAX_RETURN" class="DEFAULT_AJAX_RETURN">默认ajax返回类型</label>
+
+		<select name="query[DEFAULT_AJAX_RETURN]" id="DEFAULT_AJAX_RETURN">
+			<option value="">JSON</option>
+			<option value="jsonp">jsonp</option>
+			<option value="xml">XML</option>
+			<option value="eval">EVAL</option>
+		</select><br>
+
+	</fieldset>
+	<fieldset>
+		<legend>函数和变量</legend>
+		<label for="DEFAULT_JSONP_HANDLER" class="DEFAULT_JSONP_HANDLER">默认jsonp处理函数</label>
+		<input type="text" name="query[DEFAULT_JSONP_HANDLER]" id="DEFAULT_JSONP_HANDLER" onblur="check(this)"><br />
+		<label for="DEFAULT_FILTER" class="DEFAULT_FILTER">默认变量过滤函数</label>
+		<input type="text" name="query[DEFAULT_FILTER]" id="DEFAULT_FILTER" onblur="check(this)"><br>
+		<label for="VAR_FILTERS" class="VAR_FILTERS">全局变量过滤函数</label>
+		<input type="text" name="query[VAR_FILTERS]" id="VAR_FILTERS"
+				onblur="check(this)"><br>
+		<label for="VAR_AJAX_SUBMIT" class="VAR_AJAX_SUBMIT">isAjax标记变量</label>
+		<input type="text" name="query[VAR_AJAX_SUBMIT]" id="VAR_AJAX_SUBMIT"
+				onblur="check(this)"><br />
+		<label for="VAR_JSONP_HANDLER" class="VAR_JSONP_HANDLER">jsonp请求标记变量</label>
+		<input type="text" name="query[VAR_JSONP_HANDLER]" id="VAR_JSONP_HANDLER"
+				onblur="check(this)"><br />
+		<label for="LOAD_EXT_FILE" class="LOAD_EXT_FILE">自动载入函数库文件</label>
+		<input type="text" name="query[LOAD_EXT_FILE]" id="LOAD_EXT_FILE" onblur="check(this)">
+		<br />
+	</fieldset>
+	<fieldset id="LOAD_EXT_CONFIG">
+		<legend>动态配置文件</legend>
+		<span class="key_value_div">KEY或NumberIndex&nbsp;&nbsp;&nbsp;&nbsp;   => </span><span class="key_value_div">配置文件名</span>
+		<input type="button" value="新增" class="LOAD_EXT_CONFIG btn btn-small btn-primary" onclick="addRow(this)"><br />
+
+		<div class="LOAD_EXT_CONFIG key_value_div">
+			<input type="text" name="query[LOAD_EXT_CONFIG[k1]" class="LOAD_EXT_CONFIG" onblur="updateid(this);check(this);" onkeyup="updateid(this)">
+			<input type="text" name="query[LOAD_EXT_CONFIG[v1]" class="LOAD_EXT_CONFIG" onblur="check(this)"><br />
+		</div>
+	</fieldset>
+
+</fieldset>
+
+<!--分组配置-->
+<fieldset>
+	<legend>
+		<a name="group">分组配置</a>
+	</legend>
+	<fieldset>
+		<label for="APP_GROUP_LIST" class="APP_GROUP_LIST">分组列表</label>
+		<input type="text" name="query[APP_GROUP_LIST]" id="APP_GROUP_LIST" onblur="check(this)"><br>
+		<label for="DEFAULT_GROUP" class="DEFAULT_GROUP">默认分组</label>
+		<input type="text" name="query[DEFAULT_GROUP]" id="DEFAULT_GROUP" onblur="check(this)"><br />
+		<label for="APP_GROUP_MODE" class="APP_GROUP_MODE">分组模式</label>
+		<select name="query[APP_GROUP_MODE]" id="APP_GROUP_MODE">
+			<option value="">普通分组</option>
+			<option value="1">独立分组</option>
+		</select><br />
+		<label for="APP_GROUP_PATH" class="APP_GROUP_PATH">独立分组目录名</label>
+		<input type="text" name="query[APP_GROUP_PATH]" id="APP_GROUP_PATH" onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+
+<!--缓存配置-->
+<fieldset>
+	<legend><a name="cache">缓存配置</a></legend>
+	<fieldset>
+
+		<label for="DATA_CACHE_TIME" class="DATA_CACHE_TIME">缓存有效期</label>
+		<input type="text" name="query[DATA_CACHE_TIME]" id="DATA_CACHE_TIME" onblur="check(this)"><br />
+		<label for="DATA_CACHE_PREFIX" class="DATA_CACHE_PREFIX">缓存前缀</label>
+		<input type="text" name="query[DATA_CACHE_PREFIX]" id="DATA_CACHE_PREFIX" onblur="check(this)"><br />
+		<label for="DATA_CACHE_TYPE" class="DATA_CACHE_TYPE">缓存类型</label>
+		<select name="query[DATA_CACHE_TYPE]" id="DATA_CACHE_TYPE">
+			<option value="">File</option>
+			<option value="Db">Db</option>
+			<option value="Apc">Apc</option>
+			<option value="Memcache">Memcache</option>
+			<option value="Shmop">Shmop</option>
+			<option value="Sqlite">Sqlite</option>
+			<option value="Xcache">Xcache</option>
+			<option value="Apachenote">Apachenote</option>
+			<option value="Eaccelerator">Eaccelerator</option>
+		</select><br>
+
+		<label for="DATA_CACHE_COMPRESS" class="DATA_CACHE_COMPRESS">数据缓存是否压缩</label>
+		<select name="query[DATA_CACHE_COMPRESS]" id="DATA_CACHE_COMPRESS">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+		<label for="DATA_CACHE_CHECK" class="DATA_CACHE_CHECK">数据缓存是否校验</label>
+		<select name="query[DATA_CACHE_CHECK]" id="DATA_CACHE_CHECK">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br>
+		<label for="DATA_CACHE_PATH" class="DATA_CACHE_PATH">缓存存放目录</label>
+		<input type="text" name="query[DATA_CACHE_PATH]" id="DATA_CACHE_PATH" onblur="check(this)"><br />
+		<label for="DATA_CACHE_SUBDIR" class="DATA_CACHE_SUBDIR">数据缓存使用子目录</label>
+		<select name="query[DATA_CACHE_SUBDIR]" id="DATA_CACHE_SUBDIR">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="DATA_PATH_LEVEL" class="DATA_PATH_LEVEL">子目录缓存深度</label>
+		<input type="text" name="query[DATA_PATH_LEVEL]" id="DATA_PATH_LEVEL" onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+
+
+<!--错误和日志配置-->
+<fieldset>
+	<legend>
+		<a name="error_log">错误和日志配置</a>
+	</legend>
+	<fieldset>
+		<label for="TMPL_EXCEPTION_FILE" class="TMPL_EXCEPTION_FILE">异常页面模板</label>
+		<input type="text" name="query[TMPL_EXCEPTION_FILE]" id="TMPL_EXCEPTION_FILE" onblur="check(this)"><br />
+		<label for="SHOW_ERROR_MSG" class="SHOW_ERROR_MSG">显示错误信息</label>
+		<select name="query[SHOW_ERROR_MSG]" id="SHOW_ERROR_MSG">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="ERROR_MESSAGE" class="ERROR_MESSAGE">默认错误信息</label>
+		<input type="text" name="query[ERROR_MESSAGE]" id="ERROR_MESSAGE" onblur="check(this)"><br />
+		<label for="ERROR_PAGE" class="ERROR_PAGE">错误重定向页面</label>
+		<input type="text" name="query[ERROR_PAGE]" id="ERROR_PAGE" onblur="check(this)"><br />
+
+		<label for="TRACE_EXCEPTION" class="TRACE_EXCEPTION">trace信息抛出异常</label>
+		<select name="query[TRACE_EXCEPTION]" id="TRACE_EXCEPTION">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="LOG_RECORD" class="LOG_RECORD">是否开启日志记录</label>
+		<select name="query[LOG_RECORD]" id="LOG_RECORD">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="LOG_TYPE" class="LOG_TYPE">日志记录类型</label>
+		<select name="query[LOG_TYPE]" id="LOG_TYPE">
+			<option value="">文件</option>
+			<option value="0">系统</option>
+			<option value="1">邮件</option>
+			<option value="4">SAPI</option>
+		</select><br>
+		<label for="LOG_DEST" class="LOG_DEST">日志记录目标</label>
+		<input type="text" name="query[LOG_DEST]" id="LOG_DEST"><br />
+		<label for="LOG_EXTRA" class="LOG_EXTRA">日记记录额外信息</label>
+		<input type="text" name="query[LOG_EXTRA]" id="LOG_EXTRA"><br />
+		<label for="LOG_LEVEL" class="LOG_LEVEL">日志记录级别</label>
+		<input type="text" name="query[LOG_LEVEL]" id="LOG_LEVEL" onblur="check(this)"><br />
+		<label for="LOG_FILE_SIZE" class="LOG_FILE_SIZE">日志文件最大值</label>
+		<input type="text" name="query[LOG_FILE_SIZE]" id="LOG_FILE_SIZE" onblur="check(this)"><br />
+
+		<label for="LOG_EXCEPTION_RECORD" class="LOG_EXCEPTION_RECORD">是否记录异常信息日志</label>
+		<select name="query[LOG_EXCEPTION_RECORD]" id="LOG_EXCEPTION_RECORD">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="APP_STATUS" class="APP_STATUS">调试状态</label>
+		<input type="text" name="query[APP_STATUS]" id="APP_STATUS" onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+
+<!--session配置-->
+<fieldset id="SESSION_OPTIONS">
+	<legend>
+		<a name="session">SESSION配置</a>
+	</legend>
+	<fieldset><label for="SESSION_AUTO_START" class="SESSION_AUTO_START">自动开启session</label>
+		<select name="query[SESSION_AUTO_START]" id="SESSION_AUTO_START">
+			<option value="">默认</option>
+			<option value="true">true</option>
+			<option value="false">false</option>
+		</select><br />
+
+		<label for="SESSION_OPTIONS_id" class="SESSION_OPTIONS">id</label>
+		<input type="text" name="query[SESSION_OPTIONS[id]"
+				id="SESSION_OPTIONS_id"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_name" class="SESSION_OPTIONS_name">name</label>
+		<input type="text" name="query[SESSION_OPTIONS[name]"
+				id="SESSION_OPTIONS_name"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_expire" class="SESSION_OPTIONS_expire">expire</label>
+		<input type="text" name="query[SESSION_OPTIONS[expire]"
+				id="SESSION_OPTIONS_expire"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_path" class="SESSION_OPTIONS_path">path</label>
+		<input type="text" name="query[SESSION_OPTIONS[path]"
+				id="SESSION_OPTIONS_path"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_prefix" class="SESSION_OPTIONS_prefix">prefix</label>
+		<input type="text" name="query[SESSION_OPTIONS[prefix]"
+				id="SESSION_OPTIONS_prefix"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_domain" class="SESSION_OPTIONS_domain">domain</label>
+		<input type="text" name="query[SESSION_OPTIONS[domain]"
+				id="SESSION_OPTIONS_domain"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_cache_expire" class="SESSION_OPTIONS_cache_expire">cache_expire</label>
+		<input type="text"
+				name="query[SESSION_OPTIONS[cache_expire]"
+				id="SESSION_OPTIONS_cache_expire"
+				onblur="check(this)"><br />
+		<label for="SESSION_OPTIONS_cache_limiter" class="SESSION_OPTIONS_cache_limiter">cache_limiter</label>
+		<select
+				name="query[SESSION_OPTIONS[cache_limiter]]" id="SESSION_OPTIONS_cache_limiter">
+			<option value="">默认</option>
+			<option value="nocache">nocache</option>
+			<option value="public">public</option>
+			<option value="private_no_expire">private_no_expire</option>
+			<option value="private">private</option>
+		</select><br>
+		<label for="SESSION_OPTIONS_co" class="SESSION_OPTIONS_co">use_cookies</label>
+		<select name="query[SESSION_OPTIONS[use_cookies]]" id="SESSION_OPTIONS_co">
+			<option value="">默认</option>
+			<option value="1">强制为是</option>
+			<option value="0">强制为否</option>
+		</select><br />
+		<label for="SESSION_OPTIONS_sid" class="SESSION_OPTIONS_sid">use_trans_sid</label>
+		<select name="query[SESSION_OPTIONS[use_trans_sid]]" id="SESSION_OPTIONS_sid">
+			<option value="">默认</option>
+			<option value="0">强制为否</option>
+			<option value="1">强制为是</option>
+		</select><br />
+		<label for="SESSION_OPTIONS_type" class="SESSION_OPTIONS_type">type</label>
+		<input type="text" name="query[SESSION_OPTIONS[type]"
+				id="SESSION_OPTIONS_type"
+				onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+<!--<label for="SESSION_PREFIX" class="SESSION_PREFIX">session前缀</label><input type="text" name="query[SESSION_PREFIX]" id="SESSION_PREFIX"-->
+<!--onblur="check(this)"><br />-->
+<!--<label for="SESSION_TYPE" class="SESSION_TYPE">SESSION Handler</label><input type="text" name="query[SESSION_TYPE]" id="SESSION_TYPE"-->
+<!--onblur="check(this)"><br />-->
+
+<fieldset>
+	<legend>
+		<a name="cookie">Cookie配置</a>
+	</legend>
+	<fieldset>
+		<label for="COOKIE_EXPIRE" class="COOKIE_EXPIRE">Cookie有效期</label>
+		<input type="text" name="query[COOKIE_EXPIRE]" id="COOKIE_EXPIRE" onblur="check(this)"><br />
+		<label for="COOKIE_DOMAIN" class="COOKIE_DOMAIN">Cookie作用域</label>
+		<input type="text" name="query[COOKIE_DOMAIN]" id="COOKIE_DOMAIN" onblur="check(this)"><br />
+		<label for="COOKIE_PATH" class="COOKIE_PATH">Cookie作用路径</label>
+		<input type="text" name="query[COOKIE_PATH]" id="COOKIE_PATH" onblur="check(this)"><br />
+		<label for="COOKIE_PREFIX" class="COOKIE_PREFIX">Cookie前缀</label>
+		<input type="text" name="query[COOKIE_PREFIX]" id="COOKIE_PREFIX" onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+
+<!--视图配置-->
+<fieldset>
+	<legend>
+		<a name="think">THINK引擎配置</a>
+	</legend>
+	<fieldset>
+		<legend>常规配置</legend>
+		<label for="TMPL_TEMPLATE_SUFFIX" class="TMPL_TEMPLATE_SUFFIX">模板文件后缀</label>
+		<input type="text" name="query[TMPL_TEMPLATE_SUFFIX"
+				id="TMPL_TEMPLATE_SUFFIX"
+				onblur="check(this)"><br />
+		<label for="TMPL_DETECT_THEME" class="TMPL_DETECT_THEME">自动侦测模板主题</label>
+		<select name="query[TMPL_DETECT_THEME]" id="TMPL_DETECT_THEME">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="TMPL_FILE_DEPR" class="TMPL_FILE_DEPR">模板文件分隔符</label>
+		<select name="query[TMPL_FILE_DEPR]" id="TMPL_FILE_DEPR">
+			<option value="">/</option>
+			<option value="-">-</option>
+			<option value="_">_</option>
+			<option value="~">~</option>
+		</select><br>
+		<label for="TMPL_ACTION_ERROR" class="TMPL_ACTION_ERROR">错误跳转页面模板</label>
+		<input type="text" name="query[TMPL_ACTION_ERROR"
+				id="TMPL_ACTION_ERROR"
+				onblur="check(this)"><br />
+		<label for="TMPL_ACTION_SUCCESS" class="TMPL_ACTION_SUCCESS">成功跳转页面模板</label>
+		<input type="text" name="query[TMPL_ACTION_SUCCESS"
+				id="TMPL_ACTION_SUCCESS"
+				onblur="check(this)"><br />
+
+
+		<label for="TMPL_DENY_PHP" class="TMPL_DENY_PHP">禁用原生PHP代码</label>
+		<select name="query[TMPL_DENY_PHP]" id="TMPL_DENY_PHP">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="TMPL_DENY_FUNC_LIST" class="TMPL_DENY_FUNC_LIST">模板引擎禁用函数</label>
+		<input type="text" name="query[TMPL_DENY_FUNC_LIST"
+				id="TMPL_DENY_FUNC_LIST" onblur="check(this)"><br>
+
+		<label for="TMPL_L_DELIM" class="TMPL_L_DELIM">模板标签左符号</label>
+		<input type="text" name="query[TMPL_L_DELIM]" id="TMPL_L_DELIM" onblur="check(this)"><br />
+		<label for="TMPL_R_DELIM" class="TMPL_R_DELIM">模板标签右符号</label>
+		<input type="text" name="query[TMPL_R_DELIM]" id="TMPL_R_DELIM" onblur="check(this)"><br />
+		<label for="TMPL_VAR_IDENTIFY" class="TMPL_VAR_IDENTIFY">模板变量点语法</label>
+		<select name="query[TMPL_VAR_IDENTIFY]" id="TMPL_VAR_IDENTIFY">
+			<option value="">自动判断</option>
+			<option value="array">适用array</option>
+			<option value="obj">适用obj</option>
+		</select><br>
+	</fieldset>
+	<fieldset id="TMPL_PARSE_STRING">
+		<legend>模板内容替换</legend>
+		<span class="key_value_div">KEY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自动替换为=></span><span class="key_value_div">VALUE</span>
+		<input type="button" value="新增一行" class="TMPL_PARSE_STRING btn btn-small btn-primary" onclick="addRow(this)"><br />
+
+		<div class="TMPL_PARSE_STRING key_value_div">
+			<input type="text" name="query[TMPL_PARSE_STRING[k1]" class="TMPL_PARSE_STRING" onblur="updateid(this);check(this);"
+					onkeyup="updateid(this)">
+			<input type="text" name="query[TMPL_PARSE_STRING[v1]" class="TMPL_PARSE_STRING"><br />
+		</div>
+
+	</fieldset>
+
+
+	<fieldset>
+		<legend>模板编译行为</legend>
+		<label for="TMPL_STRIP_SPACE" class="TMPL_STRIP_SPACE">移除空白和换行</label>
+		<select name="query[TMPL_STRIP_SPACE]" id="TMPL_STRIP_SPACE">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+		<label for="TMPL_CACHE_ON" class="TMPL_CACHE_ON">开启模板编译缓存</label>
+		<select name="query[TMPL_CACHE_ON]" id="TMPL_CACHE_ON">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+		<label for="TMPL_CACHFILE_SUFFIX" class="TMPL_CACHFILE_SUFFIX">模板缓存文件扩展名</label>
+		<input type="text" name="query[TMPL_CACHFILE_SUFFIX"
+				id="TMPL_CACHFILE_SUFFIX" onblur="check(this)"><br />
+		<label for="TMPL_CACHE_PREFIX" class="TMPL_CACHE_PREFIX">模板缓存前缀</label>
+		<input type="text" name="query[TMPL_CACHE_PREFIX]" id="TMPL_CACHE_PREFIX"
+				onblur="check(this)"><br />
+		<label for="TMPL_CACHE_TIME" class="TMPL_CACHE_TIME">模板缓存有效期</label>
+		<input type="text" name="query[TMPL_CACHE_TIME]" id="TMPL_CACHE_TIME"
+				onblur="check(this)"><br />
+	</fieldset>
+
+
+	<fieldset>
+		<legend>布局配置</legend>
+		<label for="LAYOUT_ON" class="LAYOUT_ON">开启模板布局</label>
+		<select name="query[LAYOUT_ON]" id="LAYOUT_ON">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+		<label for="LAYOUT_NAME" class="LAYOUT_NAME">默认布局名称</label>
+		<input type="text" name="query[LAYOUT_NAME]" id="LAYOUT_NAME"
+				onblur="check(this)"><br />
+		<label for="TMPL_LAYOUT_ITEM" class="TMPL_LAYOUT_ITEM">布局模板内容标识</label>
+		<input type="text" name="query[TMPL_LAYOUT_ITEM]" id="TMPL_LAYOUT_ITEM"
+				onblur="check(this)"><br />
+	</fieldset>
+	<fieldset>
+		<legend>标签配置</legend>
+		<label for="TAGLIB_BUILD_IN" class="TAGLIB_BUILD_IN">内置标签库列表</label>
+		<input type="text" name="query[TAGLIB_BUILD_IN]" id="TAGLIB_BUILD_IN"
+				onblur="check(this)"><br>
+		<label for="TAGLIB_PRE_LOAD" class="TAGLIB_PRE_LOAD">其他标签库</label>
+		<input type="text" name="query[TAGLIB_PRE_LOAD]" id="TAGLIB_PRE_LOAD"
+				onblur="check(this)"><br />
+		<label for="TAGLIB_BEGIN" class="TAGLIB_BEGIN">标签起始符</label>
+		<input type="text" name="query[TAGLIB_BEGIN]" id="TAGLIB_BEGIN"
+				onblur="check(this)"><br />
+		<label for="TAGLIB_END" class="TAGLIB_END">标签结束符</label>
+		<input type="text" name="query[TAGLIB_END]" id="TAGLIB_END" onblur="check(this)"><br />
+		<label for="TAGLIB_LOAD" class="TAGLIB_LOAD">是否使用扩展标签库</label>
+		<select name="query[TAGLIB_LOAD]" id="TAGLIB_LOAD">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+	</fieldset>
+
+</fieldset>
+
+
+<!--其他-->
+<fieldset>
+	<legend>
+		<a name="htmlcache">静态缓存配置</a>
+	</legend>
+	<fieldset>  <!--ReadHtmlCacheBehavior-->
+		<label for="HTML_CACHE_ON" class="HTML_CACHE_ON">开启静态缓存</label>
+		<select name="query[HTML_CACHE_ON]" id="HTML_CACHE_ON">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="HTML_FILE_SUFFIX" class="HTML_FILE_SUFFIX">静态缓存扩展名</label>
+		<input type="text" name="query[HTML_FILE_SUFFIX"
+				id="HTML_FILE_SUFFIX" onblur="check(this)"><br />
+		<label for="HTML_CACHE_TIME" class="HTML_CACHE_TIME">静态缓存时间</label>
+		<input type="text" name="query[HTML_CACHE_TIME]" id="HTML_CACHE_TIME"
+				onblur="check(this)"><br />
+
+		<!--HTML_CACHE_RULES 二维数组-->
+	</fieldset>
+	<fieldset id="HTML_CACHE_RULES">
+		<legend>静态缓存规则</legend>
+		<span class="key_value_div">Module:Acton&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=></span><span class="key_value_div">静态规则,有效期,附加规则</span>
+		<input type="button" value="新增一行" class="HTML_CACHE_RULES btn btn-small btn-primary" onclick="addRow(this)"><br />
+
+		<div class="HTML_CACHE_RULES key_value_div">
+			<input type="text" name="query[HTML_CACHE_RULES[k1]" class="HTML_CACHE_RULES">
+			<input type="text" name="query[HTML_CACHE_RULES[v1]" class="HTML_CACHE_RULES"><br />
+		</div>
+	</fieldset>
+
+</fieldset>
+<fieldset>
+	<legend><a name="token">表单token</a></legend>
+	<!--TOKEN-->
+	<fieldset><label for="TOKEN_ON" class="TOKEN_ON">开启token</label>
+		<select name="query[TOKEN_ON]" id="TOKEN_ON">
+			<option value="">false</option>
+			<option value="true">true</option>
+		</select><br />
+		<label for="TOKEN_RESET" class="TOKEN_RESET">令牌错误后是否重置</label>
+		<select name="query[TOKEN_RESET]" id="TOKEN_RESET">
+			<option value="">true</option>
+			<option value="false">false</option>
+		</select><br />
+		<label for="TOKEN_TYPE" class="TOKEN_TYPE">令牌生成函数</label>
+		<input type="text" name="query[TOKEN_TYPE]" id="TOKEN_TYPE" onblur="check(this)"><br />
+		<label for="TOKEN_NAME" class="TOKEN_NAME">表单隐藏字段名称</label>
+		<input type="text" name="query[TOKEN_NAME]" id="TOKEN_NAME" onblur="check(this)"><br />
+	</fieldset>
+</fieldset>
+
+<!--REST-->
+<fieldset>
+	<legend><a name="rest">REST配置</a></legend>
+	<fieldset>
+		<label for="REST_METHOD_LIST" class="REST_METHOD_LIST">允许的请求类型</label>
+		<input type="text" name="query[REST_METHOD_LIST]" id="REST_METHOD_LIST" onblur="check(this)"><br />
+		<label for="REST_DEFAULT_METHOD" class="REST_DEFAULT_METHOD">默认请求类型</label>
+		<select name="query[REST_DEFAULT_METHOD]" id="REST_DEFAULT_METHOD">
+			<option value="">get</option>
+			<option value="post">post</option>
+			<option value="put">put</option>
+			<option value="delete">delete</option>
+		</select><br>
+
+		<label for="REST_CONTENT_TYPE_LIST" class="REST_CONTENT_TYPE_LIST">资源类型列表</label>
+		<input type="text" name="query[REST_CONTENT_TYPE_LIST]" id="REST_CONTENT_TYPE_LIST" onblur="check(this)"><br />
+		<label for="REST_DEFAULT_TYPE" class="REST_DEFAULT_TYPE">默认资源类型</label>
+		<select name="query[REST_DEFAULT_TYPE]" id="REST_DEFAULT_TYPE">
+			<option value="">html</option>
+			<option value="xml">xml</option>
+			<option value="json">json</option>
+			<option value="rss">rss</option>
+		</select><br>
+
+	</fieldset>
+	<fieldset id="REST_OUTPUT_TYPE">
+		<legend>资源输出类型</legend>
+		<span class="key_value_div">资源类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=></span><span class="key_value_div">MIME</span>
+		<input type="button" value="新增一行" class="REST_OUTP btn btn-small btn-primary " onclick="addRow(this)"><br />
+
+		<div class="REST_OUTPUT_TYPE key_value_div">
+			<input type="text" name="query[REST_OUTPUT_TYPE[k1]" class="REST_OUTPUT_TYPE" onblur="updateid(this);check(this);"
+					onkeyup="updateid(this)">
+			<input type="text" name="query[REST_OUTPUT_TYPE[v1]" class="REST_OUTPUT_TYPE" onblur="check(this)"><br />
+		</div>
+	</fieldset>
+</fieldset>
+<input type="submit" value="提交" class="btn btn-large btn-block btn-primary">
+</form>
+</div>
+</div>
+</div>

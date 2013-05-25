@@ -1,0 +1,66 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'>
+<div class="control-group hidden">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+<input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="userid">用户</label>
+    <div class="controls">
+        <input type="text" class="{digits:true,range:[0,4294967295]}"  value="{$data.userid}" name="userid" id="userid" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="numb">护照编号</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:50,}"  value="{$data.numb}" name="numb" id="numb" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="xing">姓</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:20,}"  value="{$data.xing}" name="xing" id="xing" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="ming">名</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:20,}"  value="{$data.ming}" name="ming" id="ming" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="sex">性别</label>
+    <div class="controls">
+<select id="sex" name="sex" class="selected" data-value="{$data.sex}">
+                            <option value ="男">男</option>            <option value ="女">女</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="birthday">出生日期</label>
+    <div class="controls">
+<input type="text" value="{$data.birthday}" class="datepicker {}" name="birthday" id="birthday"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="birth_place">出生地</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}"  value="{$data.birth_place}" name="birth_place" id="birth_place" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="issue_place">签发地</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}"  value="{$data.issue_place}" name="issue_place" id="issue_place" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="issue_date">签发日期</label>
+    <div class="controls">
+<input type="text" value="{$data.issue_date}" class="datepicker {}" name="issue_date" id="issue_date"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="expiry">过期日期</label>
+    <div class="controls">
+<input type="text" value="{$data.expiry}" class="datepicker {}" name="expiry" id="expiry"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="authority">签发机关</label>
+    <div class="controls">
+        <input type="text" class="{maxlength:100,}"  value="{$data.authority}" name="authority" id="authority" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>
