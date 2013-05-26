@@ -915,6 +915,80 @@ CREATE TABLE `user` (
 
 </div>
 </div>
+
+<h3>动态查询</h3>
+<p>在列表列中有一列“查询”，用来设置某个字段是否是查询字段。设置可查询后，在前台的列表中，会生成查询条件。样式如下</p>
+<div class="bs-docs-example">
+  <div class="row-fluid">
+    <div class="well well-small">
+      用户名<input type="text" class="input-small">
+      类型  <select class="span2">
+      <option>option</option>
+      <option>option</option>
+    </select> 
+      是否<input type="checkbox">
+      时间范围<input type="text" class="input-small {$vo.validate}" name="date1" id="date1"  rel="datepicker" data-date="2012-09-01" data-date-format="yyyy-mm-dd hh:ii:ss"> - <input type="text" class="input-small {$vo.validate}" name="date2" id="date2"  rel="datepicker" data-date="2013-09-01" data-date-format="yyyy-mm-dd">
+      <a class="btn btn-small"><i class="icon-search"></i></a>
+    </div>
+  </div>
+</div>
+<h3>查询条件生成规则</h3>
+<p><strong>控件类型：同添加界面的控件类型</strong></p>
+<p><strong>数据来源(主要是select和引用的数据来源)</strong></p>
+<ul>
+  <li>数据表字段的enmu类型值</li>
+  <li>函数，比如获取某个表字段的所有值</li>
+  <li>引用，引用的字段做为查询条件时，弹出引用对话框，选择即可</li>
+</ul>
+<p><strong>匹配方式</strong> 参照<a href="http://doc.thinkphp.cn/manual/query.html">表达式查询</a> ，实际使用时，只用前3种：eq(默认),between和like</p>
+<table class="data-table table table-bordered table-striped table-condensed table-hover">  
+  <tr>    
+    <th>表达式</th>    
+    <th>含义</th>  
+  </tr>  
+  <tr>   
+   <td>EQ</td>    
+   <td>等于（=）</td>  
+ </tr>
+ <tr>    
+  <td>BETWEEN</td>    
+  <td>区间查询</td>  
+</tr> 
+ <tr>    
+  <td>LIKE</td>    
+  <td>模糊查询</td>  
+</tr>  
+<tr>    
+  <td>NEQ</td>    
+  <td>不等于（&lt;&gt;）</td>  
+</tr>  
+<tr>    
+  <td>GT</td>    
+  <td>大于（&gt;）</td>  
+</tr>  
+<tr>    
+  <td>EGT</td>    
+  <td>大于等于（&gt;=）</td>  
+</tr>  
+<tr>    
+  <td>LT</td>    
+  <td>小于（&lt;）</td>  
+</tr>  
+<tr>    
+  <td>ELT</td>    
+  <td>小于等于（&lt;=）</td>  
+</tr>   
+<tr>    
+  <td>[NOT]&nbsp;IN</td>    
+  <td>（不在）IN&nbsp;查询</td>  
+</tr>  
+<tr>    
+  <td>EXP</td>    
+  <td>表达式查询，支持SQL语法</td>  
+</tr></table>
+<br>
+<label class="label label-info">Heads up!</label>  匹配方式between时系统会生成2个控件
+
 <h3>表间关系</h3>
 <p>
 在建立表结构时，如果同时建立了表间的关联，则系统在生成模板时能够自动生成表关系。否则，需要在这里进行表间关系设计。</p>
