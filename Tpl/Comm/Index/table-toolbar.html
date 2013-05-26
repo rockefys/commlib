@@ -2,7 +2,7 @@
 <div class="span6 pull-left">
 	<form class="form-inline" id="table-toolbar">
 		<div class="btn-group ">
-			<a data-href="{:U($operate.'index')}" data-target="#add-modal" role="button" data-original-title="Edit" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U('save')}" data-id=""><i class="icon-th-list"></i></a>
+			
 			<a data-href="{:U($operate.'add')}" data-url="{:U($operate.'save')}" data-target="#add-modal" data-toggle="modal" role="button"  data-original-title="Add" rel="tooltip" data-placement="bottom" class="btn btn-add btn-large btn-tool"><i class="icon-plus"></i></a>
 			<a data-href="{:U($operate.'edit')}" data-target="#add-modal" role="button" data-original-title="Edit" rel="tooltip"  data-placement="bottom" class="btn btn-large btn-edit btn-tool" data-url="{:U($operate.'save')}" data-id=""><i class="icon-edit"></i></a>
 			<a data-href="{:U($operate.'delete')}" data-original-title="Delete" rel="tooltip" data-placement="bottom" class="btn btn-large btn-delete btn-tool"><i class="icon-trash"></i></a>
@@ -63,7 +63,7 @@
 </ul>
 
 <div class="btn-group pull-right">
-	<a id="pre-page" data-original-data="Newer" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$prePage}><i class="icon-chevron-left"></i></a>
+	<a id="prev-page" data-original-data="Newer" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$prePage}><i class="icon-chevron-left"></i></a>
 	<a id="next-page" data-original-data="Older" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$nextPage}><i class="icon-chevron-right"></i></a>
 </div>
 </div>

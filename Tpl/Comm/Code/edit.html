@@ -5,6 +5,7 @@
 <div class="control-group <eq name='vo.control_type' value='hidden'>hidden</eq>">
     <label class="control-label" for="{$vo.field}">{$vo.title}</label>
     <div class="controls">
+        
     <notempty name="refers[$vo['field']]">
     <div class="input-append" id="{$refers[$vo['field']]['id']}">
         <input type="hidden" value="" name="{$vo.field}" id="{$vo.field}" data-target="{$refers[$vo['field']]['fk']}" class="{$vo.validate}" placeholder="">

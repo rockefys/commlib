@@ -7,7 +7,7 @@
 		$key='*M3~A0!R9@C1"#H7%s2^o/f4-t?3';
 		return md5(md5($str.$key).$key);
 	}
-    function getTime(){
+    function get_time(){
         return date('Y-m-d H:i:s',time());
     }
     
@@ -73,9 +73,9 @@
     //POST数据处理
     //未输入值的txtbox为空，应当移除
     //复选框未选择，则不会出现在post中，应添加条件并赋值为false
-    function queryFilter($data,$columns){
+    function queryFilter($data){
         foreach ($data as $key => $value) {
-            if($value===''){
+            if(empty($value) || empty($value[1])){
                 unset($data[$key]);
             }
         }
@@ -137,17 +137,17 @@
     }
     function control_type($vo){
         if($vo['Key']==='PRI')$type='hidden';
-        else if(strpos($vo['Type'],'char')!==false)$type='text';
-        else if(strpos($vo['Type'],'text')!==false)$type='area';
-        else if(strpos($vo['Type'],'enum')!==false)$type='select';
-        else if(strpos($vo['Type'],'datetime')!==false)$type='datetime';
-        else if(strpos($vo['Type'],'date')!==false)$type='date';
-        else if(strpos($vo['Type'],'time')!==false)$type='time';
-        else if(strpos($vo['Type'],'bit')!==false)$type='checkbox';
+        elseif(strpos($vo['Type'],'char')!==false)$type='text';
+        elseif(strpos($vo['Type'],'text')!==false)$type='area';
+        elseif(strpos($vo['Type'],'enum')!==false)$type='select';
+        elseif($vo['Type']=='datetime' || $vo['Type']=='timestamp')$type='datetime';
+        elseif($vo['Type']=='date')             $type='date';
+        elseif($vo['Type']=='time')             $type='time';
+        elseif(strpos($vo['Type'],'bit')!==false)$type='checkbox';
         //else if(strpos($vo['type'],'set')!==false)$type='checkboxs';
         else if(
                 strpos($vo['Type'],'int')!==false 
-            ||  strpos($vo['Type'],'decimail')!==false 
+            ||  strpos($vo['Type'],'decimal')!==false 
             ||  strpos($vo['Type'],'float')!==false 
             ||  strpos($vo['Type'],'double')!==false
             )

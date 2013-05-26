@@ -20,12 +20,13 @@ return array(
 'DB_SQL_BUILD_LENGTH'=>	20,			// SQL缓存的队列长度	20
 'DB_SQL_LOG'		=>	FALSE,		// 是否开启SQL日志记录（3.1新增）	FALSE
 
-'PAGE_SIZE'			=>	15,
+'PAGE_SIZE'			=>	10,
 'MAX_UPLOAD_FILE_SIZE'	=>	10485760,	//允许最大上传文件大小 1048576 1M
 
 'LIMIT_PROXY_VISIT'=>true,			//禁止代理访问
 'LIMIT_ROBOT_VISIT' =>  true,		//禁止机器人访问
 'LIMIT_REFLESH_TIME'=>'1',			//浏览器防刷新检测
+'VAR_FILTERS'		=>'urldecode,addslashes,htmlspecialchar',
 //CHARSET
 'OUTPUT_CHARSET'	=>	'utf-8',	// 输出编码设置   
 'DB_CHARSET'		=>	'utf-8',	// 数据库编码设置   
@@ -36,8 +37,8 @@ return array(
 'DEFAULT_GROUP'  	=> 	'Comm',	// 默认分组
 'DEFAULT_THEME' 	=> 	'',
 
-'EMPTY_MODULE'		=>	'Department,Role',
-'EMPTY_ACTION'		=>	'',
+'EMPTY_MODULE'		=>	'Department,Role,Broadband,Broadband_cat,Passport,Parameters,Log,',	//允许通过EmptyAction处理的模块，注意以,结尾
+'EMPTY_ACTION'		=>	'index,add,edit,save,delete,refer,view,',//允许通过EmptyAction处理的Action，注意以,结尾
 
 'LazyInc'			=>	'6',
 
@@ -120,7 +121,7 @@ return array(
 //'HTML_CACHE_ON'		=>	FALSE,		// 是否开启静态缓存
 //'HTML_CACHE_RULES'	=>	,		// 静态缓存规则	array()
 //'HTML_CACHE_TIME'	=>	60,			// 静态缓存有效期（秒）
-'HTML_FILE_SUFFIX'	=>	'html',		// 静态缓存后缀
+'HTML_FILE_SUFFIX'	=>	'htm',		// 静态缓存后缀
 
 //LOG
 //'LOG_RECORD'			=>	TRUE,	// 是否记录日志信息

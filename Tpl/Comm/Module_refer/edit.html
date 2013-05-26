@@ -3,42 +3,63 @@
 <div class="control-group hidden">
     <label class="control-label" for="id"></label>
     <div class="controls">
+        
     <input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,maxlength:100,}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="module">参照表名</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:100,}"  value="{$data.module}" name="module" id="module" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="fk">参照外键</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:45,}"  value="{$data.fk}" name="fk" id="fk" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="module_refer">被参照表</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:100,}"  value="{$data.module_refer}" name="module_refer" id="module_refer" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="pk">参照主键</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:45,}"  value="{$data.pk}" name="pk" id="pk" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="condition">参照条件</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:100,}"  value="{$data.condition}" name="condition" id="condition" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="refer_type">参照类型</label>
     <div class="controls">
-            <input type="text" class="{maxlength:45,}"  value="{$data.refer_type}" name="refer_type" id="refer_type" placeholder="">        <label class="help-inline"></label>
+        
+    <select id="refer_type" name="refer_type" class="selected" data-value="{$data.refer_type}">
+                            <option value ="INNER">INNER</option>            <option value ="LEFT">LEFT</option>            <option value ="RIGHT">RIGHT</option>            <option value ="FULL">FULL</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="as_fields">映射字段</label>
+    <div class="controls">
+        
+            <input type="text" class="{maxlength:1000,}"  value="{$data.as_fields}" name="as_fields" id="as_fields" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="field_show">显示字段</label>
     <div class="controls">
+        
             <input type="text" class="{maxlength:45,}"  value="{$data.field_show}" name="field_show" id="field_show" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="limit">关联条目</label>
+    <div class="controls">
+        
+            <input type="text" class="{maxlength:45,}"  value="{$data.limit}" name="limit" id="limit" placeholder="">        <label class="help-inline"></label>
     </div>
 </div>
 </form>

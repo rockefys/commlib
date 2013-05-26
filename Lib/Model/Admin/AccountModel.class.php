@@ -1,9 +1,9 @@
 <?php
-class Module_referModel extends Model {
+class AccountModel extends Model {
 
-    protected $insertFields = array('id','module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
-    protected $updateFields = array('module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
-    protected $readonlyField = array('id');
+    protected $insertFields = array('id','admin_profile','activation_key','reset_token','last_login_date','last_modified','last_failed_attempt','last_login_ip','failed_logins','lockout_expires','last_failed_ip');
+    protected $updateFields = array('id','admin_profile','activation_key','reset_token','last_login_date','last_modified','last_failed_attempt','last_login_ip','failed_logins','lockout_expires','last_failed_ip');
+    protected $readonlyField = array();
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
     protected $_validate = array(

@@ -1,8 +1,8 @@
 <?php
-class Module_referModel extends Model {
+class LogModel extends Model {
 
-    protected $insertFields = array('id','module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
-    protected $updateFields = array('module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
+    protected $insertFields = array('id','operate','para','content','result','ip','update_user','update_time','status');
+    protected $updateFields = array('operate','para','content','result','ip','update_user','update_time','status');
     protected $readonlyField = array('id');
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
@@ -24,7 +24,8 @@ class Module_referModel extends Model {
         'default'=>array(
             'where'=>array('is_deleted'=>'0'),
             'order'=>'id DESC',
-            
+            "join"=>array("join user on log.id=user.update_user "),
+"field"=>"log.*,user.username",
         ),
         'latest'=>array(
             'where'=>array('is_deleted'=>'0'),

@@ -8,14 +8,7 @@ class DatabaseAction extends Action {
         }
         $M= M('Backup');
         $select=$M->where($data)->join()->order();
-        R('Comm/Comm/page',array($select));
-    }
-    public function table(){
-        $module='Database';
-        $pk='Name';
-        $M= M();
-        $select=$M->query('SHOW TABLE STATUS');
-        R('Comm/Table/index',array($select,null,'index',true,$module,$pk));
+        R('Comm/Comm/page',array($select,null,'null'));
     }
     public function backup(){
     	$br='\n';
@@ -78,11 +71,11 @@ class DatabaseAction extends Action {
 
     public function addRecord(){
     	$M=M('backup');
-    	$M->backup_time=$this->config['time'];
+    	$M->backup_time=get_time();
     	$M->path=$this->config['path'];
     	$M->desc=session('username');
     	$M->add();
-    	$this->success('备份成功', 'Database:index');
+    	$this->success('备份成功', U('Database/index'));
     }
     /**
      * @description 获取当前数据库的所有表名。

@@ -40,13 +40,26 @@
     <label class="control-label" for="refer_type">参照类型</label>
     <div class="controls">
 
-            <input type="text" class="{maxlength:45,}"  value="" name="refer_type" id="refer_type" placeholder="">        <label class="help-inline"></label>
+    <select id="refer_type" name="refer_type" class="selected" data-value="INNER">
+                            <option value ="INNER">INNER</option>            <option value ="LEFT">LEFT</option>            <option value ="RIGHT">RIGHT</option>            <option value ="FULL">FULL</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="as_fields">映射字段</label>
+    <div class="controls">
+
+            <input type="text" class="{maxlength:1000,}"  value="" name="as_fields" id="as_fields" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="field_show">显示字段</label>
     <div class="controls">
 
             <input type="text" class="{maxlength:45,}"  value="" name="field_show" id="field_show" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="limit">关联条目</label>
+    <div class="controls">
+
+            <input type="text" class="{maxlength:45,}"  value="" name="limit" id="limit" placeholder="">        <label class="help-inline"></label>
     </div>
 </div>
 </form>

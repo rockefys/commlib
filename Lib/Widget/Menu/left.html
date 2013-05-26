@@ -25,7 +25,11 @@
 </div>
 <script>
   $(function () {
-  	var cur=$("#nav_link_{:W('Nav',array('link'=>(MODULE_NAME.'/'.ACTION_NAME),'type'=>'pid'),false)}");
+  	var left_cur=$("#nav_link_{:W('Nav',array('link'=>(MODULE_NAME.'/'.ACTION_NAME),'type'=>'id','level'=>1),false)}");
+  	left_cur.closest('.tab-pane').addClass('active');
+	left_cur.parent('li').addClass("active");
+	left_cur.children('i').addClass('icon-white');
+  	var cur=$("#nav_link_{:W('Nav',array('link'=>(MODULE_NAME.'/'.ACTION_NAME),'type'=>'pid','level'=>2),false)}");
     cur.closest('.tab-pane').addClass('active');
 	cur.parent('li').addClass("active");
 	cur.children('i').addClass('icon-white');

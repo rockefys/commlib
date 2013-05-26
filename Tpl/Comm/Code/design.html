@@ -99,7 +99,7 @@ $('#btn-view,#btn-edit').on('click',function(){
     <thead>
         <tr>
             <th colspan="6">字段</th>
-            <th colspan="3">列表</th>
+            <th colspan="4">列表</th>
             <th colspan="5">添加</th>
         </tr>
         <tr>
@@ -112,6 +112,7 @@ $('#btn-view,#btn-edit').on('click',function(){
             <th>顺序</th>
             <th>显示</th>
             <th>查询</th>
+            <th>匹配方式</th>
             <th>表单类型</th>
             <th>显示</th>
             <th>顺序</th>
@@ -139,14 +140,27 @@ $('#btn-view,#btn-edit').on('click',function(){
             <td><input name="query[{$i-1}][list_show]" type="checkbox" {$checked[$vo['list_show']]}></td>
             <td><input name="query[{$i-1}][query_able]" type="checkbox" {$checked[$vo['query_able']]}></td>
             <td>
+                <select name="query[{$i-1}][query_type]" class="span12 selected" data-value="{$vo.query_type}">
+                    <option value ="eq" >等于</option>
+                    <option value ="like" >模糊匹配</option>
+                    <option value ="between" >区间匹配</option>
+                </select>
+            </td>
+            <td>
                 <select name="query[{$i-1}][control_type]" class="span12 selected" data-value="{$vo.control_type}">
                     <option value ="text" >文本框</option>
                     <option value ="area" >多行文本框</option>
                     <option value ="select" >列表框</option>
-                    <option value ="date" >日期控件</option>
+                    <option value ="datetime" >日期时间</option>
+                    <option value ="date" >日期</option>
+                    <option value ="time" >时间</option>
                     <option value ="checkbox" >复选框</option>
                     <option value ="digit" >数字输入框</option>
                     <option value ="hidden" >隐藏控件</option>
+                    <notempty name="refer[$vo['field']]">
+                        <option value="refer">引用框</option>
+                        <option value="getField">数据列表框</option>
+                    </notempty>
                 </select>
             </td>
             <td><input name="query[{$i-1}][add_show]" type="checkbox" {$checked[$vo['add_show']]}></td>

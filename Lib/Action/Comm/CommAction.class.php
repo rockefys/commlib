@@ -5,18 +5,32 @@ class CommAction extends Action {
     }
 
     public function _empty($action){
-       
+       $this->error('Unknow handle.',U('index'));
     } 
     
     public function index(){ 
         $condition = $this->_param('query');
         if(!empty($condition)){
-            $condition = queryFilter($condition);
+            $query    = C("query.".MODULE_NAME);
+            foreach ($query as $key => $v) {
+                switch ($v['query_type']) {
+                    case 'eq':
+                        $map[$key]=array($v['query_type'],$condition[$key]);
+                        break;
+                    case 'like':
+                        $map[$key]=array($v['query_type'],'%'.$condition[$key].'%');
+                        break;
+                    case 'between':
+                        $map[$key]=array($v['query_type'],$condition[$key].','.$condition[$key].'_1');
+                        break;
+                }
+            }
+            $map = queryFilter($map);
         }
         $M =  D(MODULE_NAME);
         $condition['is_deleted']='0';
-        $select = $M->scope('default')->join()->where()->order();
-        $this->page($select,$condition); 
+        $select = $M->scope('default')->join()->where($map)->order();
+        $this->page($select,$map); 
     }
 
     public function refer(){
@@ -133,12 +147,12 @@ class CommAction extends Action {
         if(empty($M->$id)){
             $result = $M->add();
             $data = $M->find($id);
-            //logs($data,$result);
+            logs($data,$result);
         }
         else{
             $result = $M->save();
             $data = $M->find($M->$id);
-            //logs($data,$result);
+            logs($data,$result);
         }
         
         if($this->isAjax())

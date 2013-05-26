@@ -148,7 +148,7 @@ function onRemove(e, treeId, treeNode) {
 	  	url: "nodes",
 	  	data: { id: treeNode.id, type: "del" },
 	  	success:(function(msg) {
-	  		return(msg==1);
+	  		alert(msg);
 	})});
 }
 

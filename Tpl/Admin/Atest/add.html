@@ -4,12 +4,7 @@
     <label class="control-label" for="id"></label>
     <div class="controls">
 
-    <div class="input-append" id="atest-user_id-user-id">
-        <input type="hidden" value="" name="id" id="id" data-target="user_id" class="{required:true,digits:true,range:[-2147483648,2147483647]}" placeholder="">
-        <input type="text" value="" data-target="username" class="{required}" placeholder="" readonly="">
-        <a href="/User/refer/refer/atest-user_id-user-id.html"data-target="#modal-refer"  data-toggle="modal"><span class="add-on"><i class="icon-search"></i></span></a>
-    </div>
-            <label class="help-inline"></label>
+    <input type="hidden" value="" name="id" id="id" class="{required:true,digits:true,range:[-2147483648,2147483647]}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="user_id">用户名</label>
@@ -34,13 +29,19 @@
     <label class="control-label" for="datetime">日期时间</label>
     <div class="controls">
 
-            <input type="text" class="{dateISO:true,date:true,}"  value="" name="datetime" id="datetime" placeholder="">        <label class="help-inline"></label>
+    <input type="text" class="{dateISO:true,date:true,}" name="datetime" id="datetime"  rel="datepicker" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
     <label class="control-label" for="checkbox">复选框</label>
     <div class="controls">
 
             <input name="checkbox" id="checkbox" class="{}" type="checkbox" >        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="time">时间</label>
+    <div class="controls">
+
+    <input type="text" class="{date:true,}" name="time" id="time"   rel="datepicker" data-date="" data-date-format="hh:ii:ss">        <label class="help-inline"></label>
     </div>
 </div>
 </form>

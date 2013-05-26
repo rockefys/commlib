@@ -1,13 +1,6 @@
 <?php
 class MenuAction extends CommAction {
 	
-	public function indexs($n){
-		$M=M(MODULE_NAME);
-		$menu=$M->field("link")->where("id=$n")->find();
-        $tabs=$M->field("id,level,pid,name,title")->where("pid=$n")->select();
-		R($menu['link']);
-	}
-
     public function index(){ 
         $condition = $this->_param('query');
         if(!empty($condition)){
@@ -58,12 +51,11 @@ class MenuAction extends CommAction {
                 $this->error('Fail');
             }                     
     }
-
-	public function tree1(){
-        $this->display("Index:tree1");
-    }
     public function tree(){
-        $this->display("Index:treeedit");
+        $this->display("Comm:Index:tree");
+    }
+    public function treeedit(){
+        $this->display("Comm:Index:treeedit");
     }
     public function sidebar(){
         $M=M(MODULE_NAME);
@@ -90,7 +82,7 @@ class MenuAction extends CommAction {
     		$this->show($data,$ary[$key],$index,$i,$j,$content);
     		break;
     	}
-    	echo $content;
+        layout(!$this->isAjax());
     	$this->display('Index:sidebar');
     }
 
@@ -138,19 +130,17 @@ class MenuAction extends CommAction {
         }
         else{
             $M= M(MODULE_NAME);
-            $result=$M->field("id,name,pId")->select();
+            $map=array('status'=>'1','is_deleted'=>0);
+            $result=$M->field("id,name,pId")->where($map)->select();
         }
         $this->ajaxReturn($result,'JSON');
      }
     public function nodes(){
-        if(!$this->isAjax()){
-            //return;
-        }
-        $id=htmlentities($_POST['id']);
-        $type=htmlentities($_POST['type']);
-        $data['name']=htmlentities($_POST['name']);
-        $data['pid']=htmlentities($_POST['pid']);
-        $M=M('MODULE_NAME');
+        $id=$this->_param('id');
+        $type=$this->_param('type');
+        $data['name']=$this->_param('name');
+        $data['pid']=$this->_param('pid');
+        $M=M(MODULE_NAME);
         if(empty($type)){
             if(empty($id))$id=0;
             $result=$M->field("id,name,pid")->where('pid='.$id)->select();
@@ -164,7 +154,7 @@ class MenuAction extends CommAction {
         }else if($type=='del'){
             $result=$M->where('id='.$id)->delete();
         }
-        $this->ajaxReturn($result,'JSON');
+        $this->ajaxReturn($result!==false?'Success':'Fail');
         
     }
 }

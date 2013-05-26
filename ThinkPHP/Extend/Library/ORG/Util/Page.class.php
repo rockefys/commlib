@@ -106,19 +106,19 @@ class Page {
         $upRow          =   $this->nowPage-1;
         $downRow        =   $this->nowPage+1;
         if ($upRow>0){
-            $upPage     =   "<li><a href='".str_replace('__PAGE__',$upRow,$url)."'>".$this->config['prev']."</a></li>";
+            $upPage     =   "<li><a id='up-page' href='".str_replace('__PAGE__',$upRow,$url)."'>".$this->config['prev']."</a></li>";
             $this->prePage= "href='".str_replace('__PAGE__',$upRow,$url)."'";
         }else{
-            $upPage     =   "<li class='disabled'><a>".$this->config['prev']."</a></li>";
-            $this->prePage='disabled';
+            $upPage     =   "<li class='disabled'><a id='up-page'>".$this->config['prev']."</a></li>";
+            $this->prePage='disabled="disabled"';
         }
 
         if ($downRow <= $this->totalPages){
-            $downPage   =   "<li><a href='".str_replace('__PAGE__',$downRow,$url)."'>".$this->config['next']."</a></li>";
+            $downPage   =   "<li><a id='down-page' href='".str_replace('__PAGE__',$downRow,$url)."'>".$this->config['next']."</a></li>";
             $this->nextPage="href='".str_replace('__PAGE__',$downRow,$url)."'";
         }else{
-            $downPage   =    "<li class='disabled'><a>".$this->config['next']."</a></li>";
-            $this->nextPage='disabled';
+            $downPage   =    "<li class='disabled'><a id='down-page'>".$this->config['next']."</a></li>";
+            $this->nextPage='disabled="disabled"';
         }
         // << < > >>
         if($this->nowPage<($this->rollPage/2+1)){
@@ -163,8 +163,8 @@ class Page {
         if($this->target){
                 $ajax = <<<eco
      <script>
-         //$(function(){
-            $('#{$this->pagesId} a,#pre-page,#next-page').click(function(){
+         $(function(){
+            $('#{$this->pagesId} a,#prev-page,#next-page').click(function(){
                 var link=$(this).attr('href');
                 if(!link)return false;
                 $.ajax({
@@ -175,12 +175,33 @@ class Page {
                     async:true,
                     success: function(html){
                         $("#{$this->target}").html(html);
-                        return false;
+                        var href=$('#down-page').attr('href');
+                        var next=$('#next-page');
+                        if (typeof href !== 'undefined' && href !== false) {
+                            next.attr('href',href);
+                            next.removeAttr('disabled');
+                        }
+                        else{
+                            $('#next-page').removeAttr('href');
+                            $('#next-page').attr('disabled','disabled');
+                        }
+
+                        href=$('#up-page').attr('href');
+                        var prev=$('#prev-page');
+                        if (typeof href !== 'undefined' && href !== false) {
+                            prev.attr('href',href);
+                            prev.removeAttr('disabled');
+                        }
+                        else{
+                            prev.removeAttr('href');
+                            prev.attr('disabled','disabled');
+                        }
+                        finish();
                     }
                 });
                 return false;
             });
-         //});
+         });
      </script>
 eco;
             }

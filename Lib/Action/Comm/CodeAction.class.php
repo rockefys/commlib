@@ -21,6 +21,7 @@ class CodeAction extends Action {
 		$data=array();
 		foreach ($table_detail as $k => $v) {
 			$data[$k]['name'] 			=$v['Name'];
+			$data[$k]['title']			=$v['Comment'];
 			$data[$k]['rows']			=$v['Rows'];
 			$data[$k]['engine']			=$v['Engine'];
 			$data[$k]['collation']		=$v['Collation'];
@@ -28,7 +29,7 @@ class CodeAction extends Action {
 			$data[$k]['index_length']	=$v['Index_length'];
 			$data[$k]['create_time']	=$v['Create_time'];
 			$data[$k]['update_time']	=$v['Update_time'];
-			$M->save($data);
+			$M->save($data[$k]);
 		}
 		$this->get_refer();
 		$this->showpk=1;
@@ -52,30 +53,39 @@ class CodeAction extends Action {
         $M =M('module_column');
         $map['module']=$module;
         $result=$M->where($map)->order('list_order')->select();
-        if(empty($result) || $refresh===true){
+        if(empty($result) || $refresh==true){
         	$this->build_column($module,$refresh);
 			$this->data=$M->where($map)->order('list_order')->select();
 		}
 		else{
 			$this->data=$result;
 		}
+
+		$M=M('module_refer');
+		$this->refer=$M->where("module='%s'",$module)->getField('fk,pk,module_refer,field_show');
+
 		$this->type=ACTION_NAME.'-'.($this->isAjax()?'ajax':'');
 		layout(!$this->isAjax());
 		$this->display('design');
 	}
 	protected function build_column($module,$refresh=false){
+
+		$M=M('module_refer');
+		$refer=$M->where("module='%s'",$module)->getField('fk,pk,module_refer,field_show');
+
 		$M=M('module_column');
 		$column_saved=$M->where("module='%s'",$module)->getField('field,field,type');
 		$result = $M->query("SHOW FULL COLUMNS FROM `{$module}`");
+
         foreach ($result as $k=>$v){
         	//字段存在且类型无变化
-        	if($v['Type']===$column_saved[$v['Field']['type']] && !$refresh)continue;
+        	if(!empty($column_saved) && $v['Type']===$column_saved[$v['Field']]['type'] && $refresh!=true)continue;
         	$show=true;
         	if($v['Key']==='PRI'){
         		$show=false;
         	}
         		//如果类型有变化或不存在，则添加
-        	if($v['Type']!==$column_saved[$v['Field']['type']]){
+        	if($v['Type']!==$column_saved[$v['Field']]['type']){
 	        	$data[$k]['id']=$module.'.'.$v['Field'];
 		        $data[$k]['module']=$module;
 		        $data[$k]['field']=$v['Field'];
@@ -85,7 +95,8 @@ class CodeAction extends Action {
 		        $data[$k]['pk']=$v['Key'];
 		        $data[$k]['default']=$v['Default'];
 
-		        $data[$k]['query_able']= $show;
+		        $data[$k]['query_able']= false;
+		        $data[$k]['query_type']= strpos($v['Type'], 'date')!==false?'between':'eq';
 		        $data[$k]['insert_able']=true;
 		        $data[$k]['update_able']=$show;
 		        $data[$k]['readonly']=false;
@@ -94,17 +105,23 @@ class CodeAction extends Action {
 				$data[$k]['add_show']=$show;
 		        $data[$k]['add_order']=$k;
 		        $data[$k]['control_type']=control_type($v);
+		        
+		        if(!empty($refer[$v['Field']])){
+		        	$data[$k]['control_type']='refer';
+		        }
 		        $data[$k]['validate']=validator($v);
 		        $data[$k]['tips']='';
 		        $data[$k]['status']='1';
 		        $result=$M->add($data[$k],$options=array(),$replace=true);
 		    }
 		    else
-		    if($refresh===true){
+		    if($refresh==true){
         		$data[$k]['id']=$module.'.'.$v['Field'];
         		$data[$k]['title']=$v['Comment'];
         		$data[$k]['type']=$v['Type'];
         		$data[$k]['control_type']=control_type($v);
+        		if(!empty($refer[$v['Field']]))
+		        	$data[$k]['control_type']='refer';
 	        	$data[$k]['validate']=validator($v);
 	        	$result=$M->save($data[$k]);
         	}
@@ -308,6 +325,7 @@ class CodeAction extends Action {
         }
 
         layout(!$this->isAjax());
+
         $msg=$result?'Success':'Fail';
         $this->redirect('Code/edit',array('name' => $module),2,$msg);
 	}
@@ -363,6 +381,17 @@ class CodeAction extends Action {
 			$this->edit=htmlentities($this->edit_show);
 			$this->action=htmlentities($this->fetch('action'));
 			$this->model=htmlentities($this->fetch('model'));
+			$M=M($module);
+			$this->data=$M->limit(10)->select();
+			$this->module   = $module;
+	        $this->columns  = C("columns.".$module);
+	        $this->query    = C("query.".$module);
+	        $this->toolbar_tr =array(
+    	  		'view',
+    	  		'edit',
+    	  		'delete'
+    	  	);
+    	  	$this->index=$this->fetch('Comm:Index:table-admin');
 		}
 		layout(!$this->isAjax());
 		$this->display();
@@ -411,7 +440,7 @@ class CodeAction extends Action {
 			if($data['type']!=='system'){
 				$this->build_code($data['group'],$data['module']);
 				layout(!$this->isAjax());
-				$this->redirect(ucwords($module).'/index', array(), 3, 'success');
+				$this->redirect(ucwords($module).'/index',null, 2, 'Success');
 			}
 			else{
 				$this->error("Sorry, please don't rewrite the system module $module.");
@@ -434,7 +463,7 @@ class CodeAction extends Action {
 		$this->module=$module;
 
 		$M=M('module_refer');
-		$this->refers=$M->where("module='%s'",$module)->getField('pk,fk,id,module,module_refer,field_show',true);
+		$this->refers=$M->where("module='%s'",$module)->getField('pk,fk,id,module,module_refer,field_show');
 		
 		$this->build_tpl($group,$module);
 		$this->build_model($group,$module);
@@ -518,7 +547,10 @@ class CodeAction extends Action {
 	}
 	protected function build_config($group ,$module){
 		$M=M('module_column');
-		$data = $M->where("module='%s' and (list_show=1 or query_able=1) ",strtolower($module))->order('list_order')->select();
+		$data = $M->where("module='%s'",strtolower($module))->order('list_order')->select();
+		$M=M('module_refer');
+		$refer = $M->where("module='%s'",strtolower($module))->getField('fk,id,module_refer,pk,field_show');
+
 		$columns=array();
 		$query=array();
 		$join=array();
@@ -532,11 +564,26 @@ class CodeAction extends Action {
 				else
 					$columns[$v['field']]=$v['title'];
 			}
+
 			if($v['query_able']==1){
+				if(empty($refer[$v['field']])){
+				 	if($v['control_type']==="select"){
+				 		if(strpos($v['type'],'enum')!==false){
+				 			$value= str_replace("'",'',substr($v['type'],5,-1));
+				 		}
+				 	}
+				}
+				elseif($v['control_type']==='refer')
+			 			$value=$refer[$v['field']]['id'].','.$refer[$v['field']]['pk'].','.$refer[$v['field']]['field_show'].','.ucwords($refer[$v['field']]['module_refer']).'/refer';
+			 	elseif($v['control_type']==='getField'){
+			 			$value=ucwords($refer[$v['field']]['module_refer']).'.'.$refer[$v['field']]['pk'].','.$refer[$v['field']]['field_show'];
+			 			dump($refer[$v['field']]);
+			 	}
 				$query[$v['field']]=array(
 					'title' => $v['title'], 
-					'type'	=>'eq',
-					'value' =>''
+					'query_type'	=>$v['query_type'],		//eq,between,like
+					'control_type'	=>$v['control_type'],	//input select checkboc refer getField
+					'value'		=>$value,
 				);
 			}
 		}

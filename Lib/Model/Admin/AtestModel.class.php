@@ -1,8 +1,8 @@
 <?php
-class Module_referModel extends Model {
+class AtestModel extends Model {
 
-    protected $insertFields = array('id','module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
-    protected $updateFields = array('module','fk','module_refer','pk','condition','fk_id','pk_id','relation_table','map_name','map_type','refer_type','map_fields','as_fields','field_show','order','limit','status','type');
+    protected $insertFields = array('id','user_id','textbox','select','textarea','datetime','checkbox','decimal','smallint','tinytext','time');
+    protected $updateFields = array('user_id','textbox','select','textarea','datetime','checkbox','decimal','smallint','tinytext','time');
     protected $readonlyField = array('id');
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
