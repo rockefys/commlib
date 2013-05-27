@@ -30,6 +30,7 @@ class CommAction extends Action {
         $M =  D(MODULE_NAME);
         $condition['is_deleted']='0';
         $select = $M->scope('default')->join()->where($map)->order();
+        //dump($M->buildSql());exit();
         $this->page($select,$map); 
     }
 
@@ -199,6 +200,7 @@ class CommAction extends Action {
         $this->module   = $module;
         $this->columns  = C("columns.".$module);
         $this->query    = C("query.".$module);
+        $this->pill     = C("pill.".$module);
 
         if(isset($select)){
             if(!$result)

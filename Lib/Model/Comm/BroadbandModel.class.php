@@ -1,8 +1,8 @@
 <?php
 class BroadbandModel extends Model {
 
-    protected $insertFields = array('id','user_id','phone','cat_id','start_date','end_date','use_during','cost','manager','memo','username','password','status','update_user','update_time','is_deleted');
-    protected $updateFields = array('user_id','phone','cat_id','start_date','end_date','use_during','cost','manager','memo','username','password','status','update_user','update_time','is_deleted');
+    protected $insertFields = array('id','user_id','phone','cat_id','start_date','end_date','use_during','cost','manager','memo','broadband_username','broadband_password','status','update_user','update_time','is_deleted');
+    protected $updateFields = array('user_id','phone','cat_id','start_date','end_date','use_during','cost','manager','memo','broadband_username','broadband_password','status','update_user','update_time','is_deleted');
     protected $readonlyField = array('id');
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
@@ -24,8 +24,8 @@ class BroadbandModel extends Model {
         'default'=>array(
             'where'=>array('is_deleted'=>'0'),
             'order'=>'id DESC',
-            "join"=>array("join user on broadband.id=user.user_id "),
-"field"=>"broadband.*,user.username",
+            "join"=>array("join broadband_cat on broadband.cat_id=broadband_cat.id ","join user on broadband.user_id=user.id "),
+"field"=>"broadband.*,broadband_cat.name,user.username",
         ),
         'latest'=>array(
             'where'=>array('is_deleted'=>'0'),

@@ -4,7 +4,7 @@ class CodeAction extends Action {
 		$M= M('Module_table');
 		$count=$M->count();
 		$table_detail=$M->query('SHOW TABLE STATUS');
-        //$M->where("name!=''")->setField('status','0');
+        if($refresh===true)$M->where("name!=''")->setField('status','0');
 
 		foreach ($table_detail as $k => $v) {
 			$data[$k]['name'] 			= $v['Name'];
@@ -12,12 +12,13 @@ class CodeAction extends Action {
 			$data[$k]['module']			= ucwords($v['Name']);
 			$data[$k]['group']			= 'Admin';
 			$data[$k]['build']			=0;
-			$data[$k]['status']			='0';
+			$data[$k]['status']			='1';
 			if($refresh && $count!=='0')
 				$result = $M->add($data[$k]);
 		}
-		if($count==='0') {$M->addAll($data);}
 
+		if($count==='0') {$M->addAll($data);}
+		if($refresh){$M->where("status='0'")->delete();}
 		$data=array();
 		foreach ($table_detail as $k => $v) {
 			$data[$k]['name'] 			=$v['Name'];
@@ -75,6 +76,7 @@ class CodeAction extends Action {
 
 		$M=M('module_column');
 		$column_saved=$M->where("module='%s'",$module)->getField('field,field,type');
+		if($refresh===true)$M->where("module='%s'",$module)->setField('status','0');
 		$result = $M->query("SHOW FULL COLUMNS FROM `{$module}`");
 
         foreach ($result as $k=>$v){
@@ -124,6 +126,7 @@ class CodeAction extends Action {
 		        	$data[$k]['control_type']='refer';
 	        	$data[$k]['validate']=validator($v);
 	        	$result=$M->save($data[$k]);
+	        	$M->where("status='0'")->delete();
         	}
 		}
 		$M=M('module_table');
@@ -371,7 +374,7 @@ class CodeAction extends Action {
 			$this->data = $M->where("module='%s'",$module)->order('add_order')->select();
 			
 			$M=M('module_refer');
-			$this->refers=$M->where("module='%s'",$module)->getField('pk,fk,id,module,module_refer,field_show',true);
+			$this->refers=$M->where("module='%s'",$module)->getField('fk,pk,id,module,module_refer,field_show');
 
 			$module = ucwords($module);
 			layout(false);
@@ -463,7 +466,7 @@ class CodeAction extends Action {
 		$this->module=$module;
 
 		$M=M('module_refer');
-		$this->refers=$M->where("module='%s'",$module)->getField('pk,fk,id,module,module_refer,field_show');
+		$this->refers=$M->where("module='%s'",$module)->getField('fk,pk,id,module,module_refer,field_show');
 		
 		$this->build_tpl($group,$module);
 		$this->build_model($group,$module);
@@ -510,7 +513,7 @@ class CodeAction extends Action {
 
 		$refers=$this->refers;
 		foreach ($refers as $key => $v) {
-			$scope[]='"join '.$v['module_refer'].' on '.$v['module'].'.'.$v['pk'].'='.$v['module_refer'].'.'.$v['fk'].' '.$v['condition'].'"';
+			$scope[]='"join '.$v['module_refer'].' on '.$v['module'].'.'.$v['fk'].'='.$v['module_refer'].'.'.$v['pk'].' '.$v['condition'].'"';
 			$refer_fields[]=$v['module_refer'].'.'.$v['field_show'];
 		}
 		if(count($scope)>0){
@@ -549,13 +552,13 @@ class CodeAction extends Action {
 		$M=M('module_column');
 		$data = $M->where("module='%s'",strtolower($module))->order('list_order')->select();
 		$M=M('module_refer');
-		$refer = $M->where("module='%s'",strtolower($module))->getField('fk,id,module_refer,pk,field_show');
+		$refer = $this->refers;
 
 		$columns=array();
 		$query=array();
 		$join=array();
 		foreach ($this->refers as $key => $v) {
-			$join[$v['pk']]=$v['fk'];
+			$join[$v['fk']]=$v['field_show'];
 		}
 		foreach ($data as $key => $v) {
 			if($v['list_show']==1 || $v['pk']=='PRI'){

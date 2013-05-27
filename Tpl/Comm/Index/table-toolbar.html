@@ -54,13 +54,7 @@
 	</form>
 </div>
 <div class="span6 text-inline">
-<ul class="nav nav-pills pull-left" id="nav-pill">
-	<li class="active"><a href="{:U($vo['link'])}" target="{$vo['target']}">全部</a></li>
-	<li><a href="#" target="{$vo['target']}">已发货</a></li>
-	<li><a href="#" target="{$vo['target']}">未发货</a></li>
-	<li><a href="#" target="{$vo['target']}">已取消</a></li>
-	<li><a href="#" target="{$vo['target']}">已关闭</a></li>
-</ul>
+<include file="Comm:Index:pill" />
 
 <div class="btn-group pull-right">
 	<a id="prev-page" data-original-data="Newer" rel="tooltip" data-placement="bottom" class="btn btn-large" {:$prePage}><i class="icon-chevron-left"></i></a>

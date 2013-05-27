@@ -1,8 +1,8 @@
 <?php
-class LogModel extends Model {
+class User_roleModel extends Model {
 
-    protected $insertFields = array('id','operate','para','content','result','ip','update_user','update_time','status');
-    protected $updateFields = array('operate','para','content','result','ip','update_user','update_time','status');
+    protected $insertFields = array('id','uid','rid','status');
+    protected $updateFields = array('uid','rid','status');
     protected $readonlyField = array('id');
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])
@@ -24,8 +24,8 @@ class LogModel extends Model {
         'default'=>array(
             'where'=>array('is_deleted'=>'0'),
             'order'=>'id DESC',
-            "join"=>array("join user on log.id=user.update_user "),
-"field"=>"log.*,user.username",
+            "join"=>array("join role on user_role.rid=role.id ","join user on user_role.uid=user.id "),
+"field"=>"user_role.*,role.name,user.username",
         ),
         'latest'=>array(
             'where'=>array('is_deleted'=>'0'),

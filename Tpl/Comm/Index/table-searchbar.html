@@ -57,10 +57,12 @@
             <select name="query[{$key}]" class="span2">
                 <option value ="">全部</option>
                 <volist name="items" id="op">
-                    <option value ="{$op}">{$op}</option>
+                    <option value ="{$key}">{$op}</option>
                 </volist>
             </select>
         </case>
+        <default/>
+            &nbsp;&nbsp;{$vo['title']} <input type="txt" name="query[{$key}]" class="input-small">
     </switch>
 </volist>
    <button type="button" data-href="{:U('index')}" onclick="" id="btn-query" class="btn btn-tool"><i class="icon-search"></i></button>
