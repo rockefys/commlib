@@ -1,0 +1,72 @@
+<div class="row-fluid">
+<form class="form-inline form-horizontal" action="{:U('save')}" method="post" id='form'>
+<div class="control-group hidden">
+    <label class="control-label" for="id"></label>
+    <div class="controls">
+        
+    <input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,65535]}" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="available"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,maxlength:255,}"  value="{$data.available}" name="available" id="available" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="type"></label>
+    <div class="controls">
+        
+    <select id="type" name="type" class="selected" data-value="{$data.type}">
+                            <option value ="user">user</option>            <option value ="system">system</option>        </select>        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="name"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,maxlength:50,}"  value="{$data.name}" name="name" id="name" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="filename"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,maxlength:255,}"  value="{$data.filename}" name="filename" id="filename" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="lastrun"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,digits:true,range:[0,4294967295]}"  value="{$data.lastrun}" name="lastrun" id="lastrun" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="nextrun"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,digits:true,range:[0,4294967295]}"  value="{$data.nextrun}" name="nextrun" id="nextrun" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="weekday"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,digits:true,range:[-128,127]}"  value="{$data.weekday}" name="weekday" id="weekday" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="day"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,digits:true,range:[-128,127]}"  value="{$data.day}" name="day" id="day" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="hour"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,digits:true,range:[-128,127]}"  value="{$data.hour}" name="hour" id="hour" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="minute"></label>
+    <div class="controls">
+        
+            <input type="text" class="{required:true,maxlength:36,}"  value="{$data.minute}" name="minute" id="minute" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div>
+</form>
+</div>

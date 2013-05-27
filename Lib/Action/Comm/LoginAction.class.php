@@ -24,7 +24,7 @@ class LoginAction extends Action {
 
 					$M=M('log');
 					$M->update_user = session('userid');
-					$M->update_time = gettime();
+					$M->update_time = get_time();
 					$M->operate 	= 'login';
 					$M->ip 			= get_client_ip();
 					$M->status 		= '0';

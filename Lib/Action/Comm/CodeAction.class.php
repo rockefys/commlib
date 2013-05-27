@@ -440,7 +440,7 @@ class CodeAction extends Action {
 			if($data['type']!=='system'){
 				$this->build_code($data['group'],$data['module']);
 				layout(!$this->isAjax());
-				$this->redirect(ucwords($module).'/index',null, 2, 'Success');
+				$this->redirect($data['group'].'/'.ucwords($module).'/index',null, 2, 'Success');
 			}
 			else{
 				$this->error("Sorry, please don't rewrite the system module $module.");
