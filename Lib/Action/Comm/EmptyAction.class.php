@@ -1,4 +1,5 @@
 <?php
+import('@.Action.CommAction');
 class EmptyAction extends Action {
 	/*
 	* 如果对于一个Module仅具有CommAction的功能，则可以无须其实体Action文件存在，通过EmptyAction跳转即可
