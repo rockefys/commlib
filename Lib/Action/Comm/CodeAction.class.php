@@ -364,25 +364,61 @@ class CodeAction extends Action {
 
 	public function view(){
 		$M=M('module_table');
+		$this->pk=$M->getPk();
 		$this->modules = $M->getField($M->getPk(),true);
 		$module=$this->_param($M->getPk());
 		$result=$M->find($module);
 		
 		if(!empty($result)){
 			$M=M('module_column');
-			$this->module=$module;
+			$this->name=$module;
 			$this->data = $M->where("module='%s'",$module)->order('add_order')->select();
 			
 			$M=M('module_refer');
 			$this->refers=$M->where("module='%s'",$module)->getField('fk,pk,id,module,module_refer,field_show');
 
-			$module = ucwords($module);
+			$this->module = ucwords($module);
 			layout(false);
 			$this->add_show= $this->fetch('add');
 			$this->edit_show=$this->fetch('edit');
 			$this->add= htmlentities($this->add_show);
 			$this->edit=htmlentities($this->edit_show);
 			$this->action=htmlentities($this->fetch('action'));
+			$data=$this->data;
+			foreach ($data as $key => $v) {
+				if($v['insert_able']==1 || $v['pk']=='PRI'){
+					$insert_fields[]="'".$v['field']."'";
+				}
+				if($v['update_able']==1){
+					$update_fields[]="'".$v['field']."'";
+				}
+				if($v['insert_able']==1 && $v['update_able']==0){
+					$readonly_fields[]="'".$v['field']."'";
+				}
+			}
+
+			$M=M('module_table');
+			$module=$name;
+			$result=$M->getByModule($module);
+			$data['validate']=$result['validate'];
+			$data['auto']=$result['auto'];
+
+			$refers=$this->refers;
+			foreach ($refers as $key => $v) {
+				$scope[]='"join '.$v['module_refer'].' on '.$v['module'].'.'.$v['fk'].'='.$v['module_refer'].'.'.$v['pk'].' '.$v['condition'].'"';
+				$refer_fields[]=$v['module_refer'].'.'.$v['field_show'];
+			}
+			if(count($scope)>0){
+				$data['scope']='"join"=>array('.implode(",", $scope)."),\n";
+				$data['scope'].='"field"=>"'.$result['name'].'.*,'.implode(",", $refer_fields).'",';
+			}
+			
+			$M=M($module);
+			$this->pk=$M->getPk();
+			$data['insert_fields']=implode(",", $insert_fields);
+			$data['update_fields']=implode(",", $update_fields);
+			$data['readonly_fields']=implode(",", $readonly_fields);
+			$this->data=$data;
 			$this->model=htmlentities($this->fetch('model'));
 			$M=M($module);
 			$this->data=$M->limit(10)->select();
@@ -395,6 +431,8 @@ class CodeAction extends Action {
     	  		'delete'
     	  	);
     	  	$this->index=$this->fetch('Comm:Index:table-admin');
+    	  	$M=M('module_table');
+			$this->pk=$M->getPk();
 		}
 		layout(!$this->isAjax());
 		$this->display();
@@ -402,32 +440,36 @@ class CodeAction extends Action {
 
 	//生成模块结构信息 app/分组/模块/方法
 	public function fetch_module(){
-		$M = M('Module');
-		$M->query("truncate table module");
+		
 		$app = $this->getAppName();
 		$groups = $this->getGroup();
+		$M = M('module');
+		$map=array('app' =>$app);
+		$M->where($map)->delete();//先删除当前项目已经生成的节点数据
 		$n=0;
 		foreach ($groups as $group) {
-			$data[++$n]['group'] = $group;
 			$modules = $this->getModule($group);
 			foreach ($modules as $module) {
-				$data[++$n]['module'] = $module;
 				$module_name=$app.'://'.$group.'/'.$module;
 				$functions = $this->getFunction($module_name);
 				foreach ($functions as $function) {
-					$data[++$n]['app'] = $app;
+					$data[$n]['app'] = $app;
 					$data[$n]['group'] = $group;
 					$data[$n]['module'] = $module;
 					$data[$n]['function'] = $function;
+					$data[$n]['url']		= $group.'/'.$module.'/'.$function;
+					++$n;
 				}
 			}
 		}
 		$M->addAll($data);
-		$this->success('所有分组/模块/方法已成功读取到module表中.');
+		dump($data);exit();
+		$this->success('所有分组/模块/方法已成功读取到module表中.',null,30);
 	}
 	public function build_all(){
 		$M=M('module_table');
-		$modules=$M->where("type='custom'")->getField('name,group');
+		$modules=$M->where("type='customer'")->getField('name,group');
+		$this->get_refer();
 		foreach ($modules as $module => $group) {
 			$this->build_column($module);
 			$this->build_code($group,$module);
@@ -473,7 +515,6 @@ class CodeAction extends Action {
 		$this->build_action($group,$module);
 		$this->build_config($group,$module);
 	}
-
 	protected function build_tpl($group,$module){
 		$path = TMPL_PATH."$group/$module/";
 		if(!file_exists($path)){
@@ -634,7 +675,7 @@ class CodeAction extends Action {
 		$inherents_functions = array(
 			'_initialize','__construct','getActionName','isAjax','display','show','fetch',
 			'buildHtml','assign','__set','get','__get','__isset',
-			'__call','error','success','ajaxReturn','redirect','__destruct'
+			'__call','error','success','ajaxReturn','redirect','__destruct','_empty','__hack_module','__hack_action'
 		);
 
 		foreach ($functions as $func){

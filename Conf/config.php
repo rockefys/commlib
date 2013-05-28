@@ -8,7 +8,7 @@ return array(
 'DB_HOST'   		=> 	'localhost',// 服务器地址
 'DB_NAME'   		=> 	'commlib', 	// 数据库名
 'DB_USER'   		=> 	'root', 	// 用户名
-'DB_PWD'    		=> 	'sanyue%', 	// 密码
+'DB_PWD'    		=> 	'', 	// 密码
 'DB_PORT'   		=> 	3306, 		// 端口
 'DB_PREFIX' 		=> 	'', 		// 数据库表前缀
 'DB_DEPLOY_TYPE'	=>	0,			// 数据库部署方式 0 集中式 1 分布式	0
@@ -38,11 +38,11 @@ return array(
 'DEFAULT_THEME' 	=> 	'',
 
 'EMPTY_MODULE'		=>	'Department,Role,Broadband,Broadband_cat,Passport,Parameters,Log,',	//允许通过EmptyAction处理的模块，注意以,结尾
-'EMPTY_ACTION'		=>	'index,add,edit,save,delete,refer,view,',//允许通过EmptyAction处理的Action，注意以,结尾
+'EMPTY_ACTION'		=>	'index,add,edit,save,delete,refer,view,operate,',//允许通过EmptyAction处理的Action，注意以,结尾
 
 'LazyInc'			=>	'6',
 
-'LOAD_EXT_CONFIG'=>'columns,query',
+'LOAD_EXT_CONFIG'=>'columns,query,pill',
 
 'TMPL_SIRIP_SPACE'=>false,
 //LAYOUT
@@ -87,10 +87,10 @@ return array(
 */
 //URL设置
 'URL_CASE_INSENSITIVE'	=>FALSE,	// URL是否不区分大小写	false
-'URL_MODEL'			=>2,			// URL访问模式支持 0 (普通模式); 1 (PATHINFO 模式); 2 (REWRITE  模式);3 (兼容模式)	
+'URL_MODEL'			=>1,			// URL访问模式支持 0 (普通模式); 1 (PATHINFO 模式); 2 (REWRITE  模式);3 (兼容模式)	
 //'URL_PATHINFO_DEPR'	=> 	'/',		// PATHINFO模式下的参数分割符	/
 //'URL_PATHINFO_FETCH'=>,			// 用于兼容判断PATH_INFO 参数的SERVER替代变量列表 ORIG_PATH_INFO;REDIRECT_PATH_INFO;REDIRECT_URL
-//'URL_HTML_SUFFIX'	=>'htm',				// URL伪静态后缀设置	 
+'URL_HTML_SUFFIX'	=>'jsp',				// URL伪静态后缀设置	 
 //'URL_404_REDIRECT'	=>,				// 404跳转页面 部署模式有效（3.1新增）	 
 //'URL_PARAMS_BIND'	=>,				// URL变量绑定到Action方法参数（3.1新增）	true
 

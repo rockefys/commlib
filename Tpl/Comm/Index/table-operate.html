@@ -15,7 +15,7 @@
     <volist name="data" id="vo" key="row">
     <tr>
       <volist name="columns" id="col" offset="0" length='1'>
-          <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" />{$row}</label></td>
+          <td><label class="checkbox"><input type="checkbox" id="{$vo[$key]}" data-id="{$pk}" />{$row}</label></td>
           {~$values[$key]=$vo[$key]}
       </volist>
       <volist name="columns" id="col" offset="abs($showpk-1)">

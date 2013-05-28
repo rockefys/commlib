@@ -1,0 +1,1 @@
+<?php	return array ('pill' => array ( 'Role' => array('status=1'=>'已启用','stauts=0'=>'已禁用',), ),);?>

@@ -8,7 +8,7 @@ class CommAction extends Action {
        $this->error('Unknow handle.',U('index'));
     } 
     
-    public function index(){ 
+    public function index(){
         $condition = $this->_param('query');
         if(!empty($condition)){
             $query    = C("query.".MODULE_NAME);
@@ -27,10 +27,20 @@ class CommAction extends Action {
             }
             $map = queryFilter($map);
         }
+        else{
+            $condition = $this->_param('pill');
+             if(!empty($condition)){
+                $para=explode('&', urldecode($condition));
+                foreach ($para as $key => $v) {
+                    $cond=explode('=', $v);
+                    if(count($cond)===2)
+                        $map[$cond[0]]=$cond[1];
+                }
+            }
+        }
         $M =  D(MODULE_NAME);
         $condition['is_deleted']='0';
         $select = $M->scope('default')->join()->where($map)->order();
-        //dump($M->buildSql());exit();
         $this->page($select,$map); 
     }
 
@@ -203,8 +213,10 @@ class CommAction extends Action {
         $this->pill     = C("pill.".$module);
 
         if(isset($select)){
-            if(!$result)
+            if(!$result){
               $this->data = $select->page($p.','.$page_size)->where($condition)->select();
+              $this->pk=$select->getPk();
+            }
             else{
                 $M = M();
                 $this->data = $M->query($select->options['table']);

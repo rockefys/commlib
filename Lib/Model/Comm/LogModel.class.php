@@ -24,7 +24,7 @@ class LogModel extends Model {
         'default'=>array(
             'where'=>array('is_deleted'=>'0'),
             'order'=>'id DESC',
-            "join"=>array("join user on log.id=user.update_user "),
+            "join"=>array("join user on log.update_user=user.id "),
 "field"=>"log.*,user.username",
         ),
         'latest'=>array(

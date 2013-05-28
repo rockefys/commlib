@@ -7,7 +7,7 @@
     <input type="hidden" value="{$data.id}" name="id" id="id" class="{required:true,digits:true,range:[0,4294967295]}" placeholder="">        <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
-    <label class="control-label" for="uid">用户ID</label>
+    <label class="control-label" for="uid">用户</label>
     <div class="controls">
         
     <div class="input-append" id="user_role-uid-user-id">
@@ -18,7 +18,7 @@
             <label class="help-inline"></label>
     </div>
 </div><div class="control-group ">
-    <label class="control-label" for="rid">角色ID</label>
+    <label class="control-label" for="rid">角色</label>
     <div class="controls">
         
     <div class="input-append" id="user_role-rid-role-id">
@@ -33,6 +33,12 @@
     <div class="controls">
         
             <input type="text" class="{maxlength:20,}"  value="{$data.status}" name="status" id="status" placeholder="">        <label class="help-inline"></label>
+    </div>
+</div><div class="control-group ">
+    <label class="control-label" for="is_deleted"></label>
+    <div class="controls">
+        
+            <input name="is_deleted" id="is_deleted" class="{}" type="checkbox" $checked[$data['"is_deleted"']]}">        <label class="help-inline"></label>
     </div>
 </div>
 </form>
