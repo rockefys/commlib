@@ -75,6 +75,7 @@
     <div class="row">
       <div class="span3 bs-docs-sidebar">
         <ul class="nav nav-list bs-docs-sidenav">
+        <li><a href="#"><i class="icon-chevron-right"></i> 概览</a></li>
           <li><a href="#db"><i class="icon-chevron-right"></i> 数据库设计</a></li>
           <li><a href="#module"><i class="icon-chevron-right"></i> 模块设计</a></li>
           <li><a href="#code"><i class="icon-chevron-right"></i> 生成代码</a></li>
@@ -85,6 +86,66 @@
       <div class="span9">
 
 
+
+        <section id="summary">
+          <div class="page-header">
+            <h1>概览</h1>
+          </div>
+          <h2>前言</h2>
+          <p>这个代码生成器其实并不难，我只是把一个简单的应有的东西理清罢了。如果你看了这个功能觉得很不错，想加入到你的系统里面，或者你的开发框架是其它的比如Yii、Ci、Yaf、Zend，或者跟PHP都不搭边，也没事，让我来告诉你怎么使用或者如何做你自己的代码生成器。</p>
+          <p><label class="label label-info">强烈欢迎和建议将感兴趣的同学把这个东西移植到其它框架下面。</label></p>
+          <h3>生成目标与内容</h3>
+          <p>代码生成器生成的内容：</p>
+          <ul>
+            <li>基本MVC，完成CURD（增删改查）</li>
+            <li>表间关系 </li>
+            <li>动态查询与显示</li>
+          </ul>
+          
+          <h3>基本MVC</h3>
+            <p>PHP的一些主流框架都可以做到通用的单表增删改查，这里不再赘述。
+              前台视图我提一下，最多就四个界面：列表、添加、修改和查看。
+              列表是表格，功能就一个显示和查询，难的地方在于自定义显示和查询的字段，这个后面具体会提到。
+              添加和修改界面生成时只要将数据库表字段类型与表单类型对应即可，比如varchar生成文本框，enum生成列表框。
+            </p>
+
+          <h3>表间关系处理</h3>
+            <p>这里以用户角色表为例，用户ID和角色ID分别是关联用户表和角色表</p>
+            <pre class="prettyprint linenums">
+              CREATE TABLE `user_role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL COMMENT '用户ID',
+  `rid` int(11) unsigned NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_uid_rid` (`uid`,`rid`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='用户角色'$$
+            </pre>
+            生成时，我做了如下的处理：
+            <dl>
+              <dt>1、查找当前表外键</dt>
+              <dd>从数据库表间关系中(这个可以查到)查找当前表的外键，然后前台生成添加、修改或者查询界面时这个字段就不再生成一个简单的文本框，而是生成一个引用框或者列表框。</dd>
+            </dl>
+           
+            <dl>
+              <dt>2、设置外键字段在列表中的显示字段。</dt>
+              <dd> 前台列表界面显示时，如果这个外键是要显示的字段，不能直接显示，否则显示的就是用户ID或者角色ID，应该显示的字段是用户名和角色名称，这个叫显示字段。我做的生成器是这个字段可以在表间关系界面中设置，默认显示第二个字段(一般第一个字段是主键)。然后在列表中显示时显示用户名。</dd>
+            </dl>
+            <img src="assets/img/refer.png" class="img-polaroid">
+            
+             <dl>
+              <dt>3、在Model中，写入用户表和角色表的关联和显示字段。</dt>
+              <dd>将以上两条所提到的信息保存下来，用于编辑和列表界面的数据显示。</dd>
+            </dl>
+            <img src="assets/img/model.png" class="img-polaroid">
+          <h3>动态查询与显示</h3>
+            <p>想要动态，也就是随时可以修改和重新设置，那么就得把查询和显示的字段信息作为参数存下来，不能硬编码写到代码里面。条件
+              动态显示是这样，动态查询的话稍微复杂一点，因为查询条件的处理要复杂一点：查询的匹配方式主要有三种，等于、模糊和区间查询，区间查询的话需要生成2个控件，这个让用户在选择查询字段的时候选择。如果是外键字段，那么生成一个查找带回框或者列表框都可以。
+            </p>
+            <img src="assets/img/form.png" class="img-polaroid">
+            <h3>最终的效果</h3>
+            <img src="assets/img/add.png" class="img-polaroid">
+            <img src="assets/img/query.png" class="img-polaroid">
+        </section>
 
         <!-- Global Bootstrap settings
         ================================================== -->

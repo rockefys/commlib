@@ -80,6 +80,7 @@
           <li><a href="#contents"><i class="icon-chevron-right"></i> 功能与组件</a></li>
           <li><a href="#download-bootstrap"><i class="icon-chevron-right"></i> 下载</a></li>
           <li><a href="#file-structure"><i class="icon-chevron-right"></i> 文件结构</a></li>
+          <li><a href="#notice"><i class="icon-chevron-right"></i> 注意事项</a></li>
           <li><a href="#plan"><i class="icon-chevron-right"></i> 开发计划</a></li>
           <li><a href="#xietong"><i class="icon-chevron-right"></i> 功能认领</a></li>
           <li><a href="#what-next"><i class="icon-chevron-right"></i> 下一步?</a></li>
@@ -192,6 +193,24 @@
 </pre>
           
         </section>
+
+<section id="notice">
+          <div class="page-header">
+            <h1>部署注意事项</h1>
+          </div>
+          <h4>数据库</h4>
+          <p>数据库脚本路径： <code>Data/commlib.sql</code></p>
+          <p>编码设置：如果导入数据库后菜单项显示<code>????</code>是编码问题
+            <pre class="prettyprint linenums">
+character_set_server=utf8
+character_set_client=utf8
+            </pre>
+          <h4>数据库连接不上?</h4>
+            请修改<code>Conf/config.php</code>中的数据库连接字符
+          <h4>生成后访问页面空白？</h4>
+            目前代码生成只支持Comm分组，放在其它分组下面不能正常访问，后面1.5版本中会解决此问题
+
+         </section> 
 
 
 
