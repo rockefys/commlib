@@ -1,8 +1,8 @@
 <?php
 class User_roleModel extends Model {
 
-    protected $insertFields = array('id','uid','rid','status','is_deleted');
-    protected $updateFields = array('uid','rid','status','is_deleted');
+    protected $insertFields = array('id','uid','rid','status','update_time');
+    protected $updateFields = array('uid','rid','status','update_time','is_deleted');
     protected $readonlyField = array('id');
 
     //array(验证字段,验证规则,错误提示,[验证条件,附加规则,验证时间])

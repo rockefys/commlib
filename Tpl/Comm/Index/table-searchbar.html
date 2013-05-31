@@ -3,7 +3,7 @@
 <form class="form-inline well well-small" action="{:U('query')}" method="POST" id="table-searchbar">
 <div class="row-fluid">
 <volist name="query" id="vo">
-    <eq name="i" value="5"></div><br><div class="row-fluid"></eq>
+    <eq name="i" value=""></div><br><div class="row-fluid"></eq>
      <switch name="vo['control_type']">
         <case value="null|text|area">
             &nbsp;&nbsp;{$vo['title']} <input type="txt" name="query[{$key}]" class="input-small">

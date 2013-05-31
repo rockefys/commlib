@@ -621,7 +621,6 @@ class CodeAction extends Action {
 			 			$value=$refer[$v['field']]['id'].','.$refer[$v['field']]['pk'].','.$refer[$v['field']]['field_show'].','.ucwords($refer[$v['field']]['module_refer']).'/refer';
 			 	elseif($v['control_type']==='getField'){
 			 			$value=ucwords($refer[$v['field']]['module_refer']).'.'.$refer[$v['field']]['pk'].','.$refer[$v['field']]['field_show'];
-			 			dump($refer[$v['field']]);
 			 	}
 				$query[$v['field']]=array(
 					'title' => $v['title'], 
