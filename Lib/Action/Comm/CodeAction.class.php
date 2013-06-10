@@ -10,7 +10,7 @@ class CodeAction extends Action {
 			$data[$k]['name'] 			= $v['Name'];
 			$data[$k]['title']			=$v['Comment'];
 			$data[$k]['module']			= ucwords($v['Name']);
-			$data[$k]['group']			= 'Admin';
+			$data[$k]['group']			= 'Comm';
 			$data[$k]['build']			=0;
 			$data[$k]['status']			='1';
 			if($refresh && $count!=='0')
@@ -376,14 +376,13 @@ class CodeAction extends Action {
 			
 			$M=M('module_refer');
 			$this->refers=$M->where("module='%s'",$module)->getField('fk,pk,id,module,module_refer,field_show');
-
 			$this->module = ucwords($module);
 			layout(false);
 			$this->add_show= $this->fetch('add');
 			$this->edit_show=$this->fetch('edit');
-			$this->add= htmlentities($this->add_show);
-			$this->edit=htmlentities($this->edit_show);
-			$this->action=htmlentities($this->fetch('action'));
+			$this->add= htmlentities($this->add_show,ENT_NOQUOTES,"utf-8");
+			$this->edit=htmlentities($this->edit_show,ENT_NOQUOTES,"utf-8");
+			$this->action=htmlentities($this->fetch('action'),ENT_NOQUOTES,"utf-8");
 			$data=$this->data;
 			foreach ($data as $key => $v) {
 				if($v['insert_able']==1 || $v['pk']=='PRI'){
@@ -419,7 +418,7 @@ class CodeAction extends Action {
 			$data['update_fields']=implode(",", $update_fields);
 			$data['readonly_fields']=implode(",", $readonly_fields);
 			$this->data=$data;
-			$this->model=htmlentities($this->fetch('model'));
+			$this->model=htmlentities($this->fetch('model'),ENT_NOQUOTES,"utf-8");
 			$M=M($module);
 			$this->data=$M->limit(10)->select();
 			$this->module   = $module;
