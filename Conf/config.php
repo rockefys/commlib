@@ -29,7 +29,7 @@ return array(
 'VAR_FILTERS'		=>'urldecode,addslashes,htmlspecialchar',
 //CHARSET
 'OUTPUT_CHARSET'	=>	'utf-8',	// 输出编码设置   
-'DB_CHARSET'		=>	'utf-8',	// 数据库编码设置   
+'DB_CHARSET'		=>	'utf8',	// 数据库编码设置   
 'TEMPLATE_CHARSET' 	=>	'utf-8',	// 模板编码设置  
 'DEFAULT_CHARSET'	=>	'utf-8',	// 默认编码
 //Group
