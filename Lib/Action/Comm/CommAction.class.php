@@ -21,7 +21,7 @@ class CommAction extends Action {
                         $map[$key]=array($v['query_type'],'%'.$condition[$key].'%');
                         break;
                     case 'between':
-                        $map[$key]=array($v['query_type'],$condition[$key].','.$condition[$key].'_1');
+                        $map[$key]=array($v['query_type'],$condition[$key].','.$condition[$key.'_1']);
                         break;
                 }
             }
