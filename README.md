@@ -1,4 +1,4 @@
-[commLib](http://https://github.com/rockefys/commlib) [![Build Status](https://secure.travis-ci.org/twitter/bootstrap.png)](http://travis-ci.org/twitter/bootstrap)
+[commLib](http://https://github.com/rockefys/commlib) 
 =================
 
 Commlib is a common php web admin library build on [ThinkPHP](https://github.com/liu21st/thinkphp) and [Bootstrap](https://github.com/twitter/bootstrap)
