@@ -182,8 +182,8 @@ class CommAction extends Action {
         $M      =  D(MODULE_NAME);
         $id     = $M->getPk();
         $data=array('is_deleted'=>1);
-        $result = $M->where($id.' in('.$ids.')')->save($data);//逻辑删除
-        //$result = $M->where($id.' in('.$ids.')')->delete();
+        //$result = $M->where($id.' in('.$ids.')')->save($data);//逻辑删除
+        $result = $M->where($id.' in('.$ids.')')->delete();
         logs($ids,$result);
         if($this->isAjax())
   			$this->ajaxReturn($result?'Success':'Fail');
